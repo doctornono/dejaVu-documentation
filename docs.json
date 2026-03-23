@@ -1,0 +1,158 @@
+{
+  "$schema": "https://mintlify.com/docs.json",
+  "theme": "aspen",
+  "name": "dejaVu API v1",
+  "colors": {
+    "primary": "#16A34A",
+    "light": "#07C983",
+    "dark": "#15803D"
+  },
+  "favicon": "/favicon.svg",
+  "navigation": {
+    "tabs": [
+      {
+        "tab": "Guides",
+        "groups": [
+          {
+            "group": "Getting started",
+            "pages": [
+              "index",
+              "quickstart",
+              "development"
+            ]
+          },
+          {
+            "group": "Customization",
+            "pages": [
+              "essentials/settings",
+              "essentials/navigation"
+            ]
+          },
+          {
+            "group": "Writing content",
+            "pages": [
+              "essentials/markdown",
+              "essentials/code",
+              "essentials/images",
+              "essentials/reusable-snippets"
+            ]
+          },
+          {
+            "group": "AI tools",
+            "pages": [
+              "ai-tools/cursor",
+              "ai-tools/claude-code",
+              "ai-tools/windsurf"
+            ]
+          }
+        ]
+      },
+      {
+        "tab": "API reference",
+        "groups": [
+          {
+            "group": "Introduction",
+            "pages": [
+              "api-reference/introduction"
+            ]
+          },
+          {
+            "group": "Collection",
+            "pages": [
+              "api-reference/collection/get-collection",
+              "api-reference/collection/add-to-collection",
+              "api-reference/collection/remove-from-collection"
+            ]
+          },
+          {
+            "group": "History",
+            "pages": [
+              "api-reference/history/get-history",
+              "api-reference/history/add-to-history",
+              "api-reference/history/remove-from-history"
+            ]
+          },
+          {
+            "group": "Favorites",
+            "pages": [
+              "api-reference/favorites/get-favorites",
+              "api-reference/favorites/add-to-favorites",
+              "api-reference/favorites/remove-from-favorites"
+            ]
+          },
+          {
+            "group": "Ratings",
+            "pages": [
+              "api-reference/ratings/get-ratings",
+              "api-reference/ratings/upsert-rating",
+              "api-reference/ratings/delete-rating"
+            ]
+          },
+          {
+            "group": "Watchlist",
+            "pages": [
+              "api-reference/watchlist/get-watchlist",
+              "api-reference/watchlist/add-to-watchlist",
+              "api-reference/watchlist/remove-from-watchlist"
+            ]
+          },
+          {
+            "group": "Scrobble",
+            "pages": [
+              "api-reference/scrobble/get-scrobble-sessions",
+              "api-reference/scrobble/update-scrobble",
+              "api-reference/scrobble/delete-scrobble"
+            ]
+          },
+          {
+            "group": "Up Next",
+            "pages": [
+              "api-reference/upnext/get-up-next"
+            ]
+          },
+          {
+            "group": "Lists",
+            "pages": [
+              "api-reference/lists/get-lists",
+              "api-reference/lists/create-list",
+              "api-reference/lists/get-list-items",
+              "api-reference/lists/add-item-to-list",
+              "api-reference/lists/remove-item-from-list"
+            ]
+          }
+        ]
+      }
+    ],
+    "global": {
+      "anchors": [
+        {
+          "anchor": "Documentation",
+          "href": "https://mintlify.com/docs",
+          "icon": "book-open-cover"
+        }
+      ]
+    }
+  },
+  "logo": {
+    "light": "/logo/light.svg",
+    "dark": "/logo/dark.svg"
+  },
+  "navbar": {
+    "links": [
+      {
+        "label": "Support",
+        "href": "mailto:hi@mintlify.com"
+      }
+    ],
+    "primary": {
+      "type": "button",
+      "label": "Dashboard",
+      "href": "https://dashboard.mintlify.com"
+    }
+  },
+  "footer": {
+    "socials": {
+      "github": "https://github.com/doctornono"
+    }
+  }
+}

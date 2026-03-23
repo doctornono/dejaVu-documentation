@@ -1,0 +1,1458 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DejaVu API V1",
+    "description": "API pour gérer votre collection, historique, favoris, notes, watchlist, scrobble et listes de films et séries TV.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://v0-watchy-gamma.vercel.app/api/v1",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    { "ApiKeyHeader": [] },
+    { "ApiKeyQuery": [] },
+    { "BearerAuth": [] }
+  ],
+  "tags": [
+    {
+      "name": "Collection",
+      "description": "Gérez votre collection personnelle de films et séries vus ou possédés."
+    },
+    {
+      "name": "History",
+      "description": "Consultez et gérez votre historique de visionnage."
+    },
+    {
+      "name": "Favorites",
+      "description": "Ajoutez et retirez des films et séries de vos favoris."
+    },
+    {
+      "name": "Ratings",
+      "description": "Notez et rédigez des avis sur vos films, séries, saisons et épisodes."
+    },
+    {
+      "name": "Watchlist",
+      "description": "Gérez votre liste de contenus à regarder."
+    },
+    {
+      "name": "Scrobble",
+      "description": "Suivez la progression de lecture en temps réel."
+    },
+    {
+      "name": "Up Next",
+      "description": "Obtenez les prochains épisodes à regarder pour les séries que vous suivez."
+    },
+    {
+      "name": "Lists",
+      "description": "Créez et gérez des listes personnalisées de films et séries."
+    },
+    {
+      "name": "User",
+      "description": "Informations de compte et statistiques."
+    },
+    {
+      "name": "Search",
+      "description": "Recherche de contenus TMDB avec état utilisateur."
+    },
+    {
+      "name": "Webhooks",
+      "description": "Notifications en temps réel vers des services externes."
+    },
+    {
+      "name": "Auth",
+      "description": "Authentification des appareils et gestion des jetons."
+    }
+  ],
+  "paths": {
+    "/auth/device/code": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Demander un code d'appareil (Device Flow)",
+        "description": "Première étape de l'authentification pour les appareils sans clavier (TV, etc.).",
+        "operationId": "requestDeviceCode",
+        "responses": {
+          "200": {
+            "description": "Codes générés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "device_code": { "type": "string" },
+                    "user_code": { "type": "string" },
+                    "verification_uri": { "type": "string" },
+                    "expires_in": { "type": "integer" },
+                    "interval": { "type": "integer" }
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/device/token": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Échanger le code d'appareil contre un jeton",
+        "description": "Étape de 'polling' pour vérifier si l'utilisateur a autorisé l'appareil.",
+        "operationId": "exchangeDeviceToken",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "device_code": { "type": "string" }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Jeton (clé API secrète) délivré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "access_token": { "type": "string" },
+                    "token_type": { "type": "string" }
+                  }
+                }
+              }
+            }
+          },
+          "400": { "description": "En attente, expiré ou refusé" }
+        }
+      }
+    },
+    "/collection": {
+      "get": {
+        "tags": ["Collection"],
+        "summary": "Récupérer la collection",
+        "description": "Retourne l'ensemble des éléments de votre collection avec pagination optionnelle.",
+        "operationId": "getCollection",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type de contenu",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "movie", "tv"],
+              "default": "all"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Numéro de page (commence à 1)",
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Nombre d'éléments par page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Tri (ex: addedAt:desc, addedAt:asc)",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Filtrer par format (bluray, dvd, digital, 4k)",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des éléments de la collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/CollectionItem" }
+                    },
+                    "pagination": { "$ref": "#/components/schemas/Pagination" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Collection"],
+        "summary": "Ajouter à la collection",
+        "description": "Ajoute un film ou une série à votre collection. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToCollection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/CollectionInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Élément ajouté à la collection",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/CollectionItem" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["Collection"],
+        "summary": "Supprimer de la collection",
+        "description": "Retire un élément de votre collection. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromCollection",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["movie", "tv"] }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "ID TMDB du contenu",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Élément supprimé de la collection" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/collection/batch": {
+      "post": {
+        "tags": ["Collection"],
+        "summary": "Ajout par lots à la collection",
+        "description": "Permet d'ajouter plusieurs films ou séries en une seule requête. Requiert une clé secrète.",
+        "operationId": "batchAddToCollection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["type", "id"],
+                      "properties": {
+                        "type": { "type": "string", "enum": ["movie", "tv"] },
+                        "id": { "type": "integer" },
+                        "format": { "type": "string" },
+                        "notes": { "type": "string" }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Succès du lot" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      }
+    },
+    "/history": {
+      "get": {
+        "tags": ["History"],
+        "summary": "Récupérer l'historique de visionnage",
+        "description": "Retourne l'historique de visionnage de l'utilisateur.",
+        "operationId": "getHistory",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "movie", "tv", "episode"],
+              "default": "all"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Tri (ex: watchedAt:desc, watchedAt:asc)",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historique de visionnage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/HistoryItem" }
+                    },
+                    "pagination": { "$ref": "#/components/schemas/Pagination" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["History"],
+        "summary": "Ajouter à l'historique",
+        "description": "Enregistre un visionnage dans l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToHistory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/HistoryInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Visionnage enregistré" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["History"],
+        "summary": "Supprimer de l'historique",
+        "description": "Supprime une entrée de l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromHistory",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["movie", "tv", "episode"] }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Entrée supprimée de l'historique" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/favorites": {
+      "get": {
+        "tags": ["Favorites"],
+        "summary": "Récupérer les favoris",
+        "description": "Retourne la liste des favoris de l'utilisateur.",
+        "operationId": "getFavorites",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "movie", "tv"],
+              "default": "all"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/MediaItem" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Favorites"],
+        "summary": "Ajouter aux favoris",
+        "description": "Ajoute un film ou une série aux favoris. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToFavorites",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/MediaInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Ajouté aux favoris" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["Favorites"],
+        "summary": "Supprimer des favoris",
+        "description": "Retire un élément des favoris. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromFavorites",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["movie", "tv"] }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Retiré des favoris" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/ratings": {
+      "get": {
+        "tags": ["Ratings"],
+        "summary": "Récupérer les notes",
+        "description": "Retourne les notes données par l'utilisateur.",
+        "operationId": "getRatings",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "movie", "tv", "season", "episode"],
+              "default": "all"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des notes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/RatingItem" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Ratings"],
+        "summary": "Ajouter ou modifier une note",
+        "description": "Attribue ou met à jour une note (1-10) avec avis optionnel. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "upsertRating",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/RatingInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Note enregistrée" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["Ratings"],
+        "summary": "Supprimer une note",
+        "description": "Supprime une note existante. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "deleteRating",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "tv", "season", "episode"]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Note supprimée" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/watchlist": {
+      "get": {
+        "tags": ["Watchlist"],
+        "summary": "Récupérer la watchlist",
+        "description": "Retourne la liste des contenus à regarder.",
+        "operationId": "getWatchlist",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type",
+            "schema": {
+              "type": "string",
+              "enum": ["all", "movie", "tv"],
+              "default": "all"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Tri (ex: addedAt:desc, priority:desc)",
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Watchlist de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/WatchlistItem" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Watchlist"],
+        "summary": "Ajouter à la watchlist",
+        "description": "Ajoute un film ou une série à la watchlist. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToWatchlist",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/WatchlistInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Ajouté à la watchlist" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["Watchlist"],
+        "summary": "Supprimer de la watchlist",
+        "description": "Retire un élément de la watchlist. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromWatchlist",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["movie", "tv"] }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Retiré de la watchlist" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/scrobble": {
+      "get": {
+        "tags": ["Scrobble"],
+        "summary": "Sessions de lecture en cours",
+        "description": "Retourne les sessions de lecture actives (lecture en cours).",
+        "operationId": "getScrobbleSessions",
+        "responses": {
+          "200": {
+            "description": "Sessions actives",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/ScrobbleSession" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Scrobble"],
+        "summary": "Mettre à jour la progression de lecture",
+        "description": "Met à jour la progression de lecture d'un film ou épisode. Si la progression dépasse **90%**, le contenu est automatiquement marqué comme vu dans l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "updateScrobble",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ScrobbleInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Progression mise à jour. Si > 90%, marqué comme vu automatiquement."
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["Scrobble"],
+        "summary": "Supprimer une session de lecture",
+        "description": "Met fin à une session de lecture sans la marquer comme vue. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "deleteScrobble",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["movie", "episode"] }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Session supprimée" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/upnext": {
+      "get": {
+        "tags": ["Up Next"],
+        "summary": "Séries à suivre (Up Next)",
+        "description": "Retourne les prochains épisodes à regarder pour les séries en cours.",
+        "operationId": "getUpNext",
+        "parameters": [
+          {
+            "name": "limit",
+            "in": "query",
+            "description": "Nombre maximum de séries à retourner",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 50,
+              "default": 10
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prochains épisodes à regarder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/UpNextItem" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": ["User"],
+        "summary": "Récupérer le profil et les statistiques du compte",
+        "description": "Retourne les informations du profil utilisateur ainsi que ses statistiques globales (temps passé, nombre de films, etc.).",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "description": "Profil et statistiques utilisateur",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/search": {
+      "get": {
+        "tags": ["Search"],
+        "summary": "Recherche unifiée (TMDB + État Utilisateur)",
+        "description": "Recherche des films et séries sur TMDB et retourne les résultats enrichis avec l'état de l'utilisateur (en collection, dans la watchlist).",
+        "operationId": "searchUnified",
+        "parameters": [
+          {
+            "name": "query",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "default": 1 }
+          },
+          {
+            "name": "Accept-Language",
+            "in": "header",
+            "description": "Langue préférée (ex: fr-FR, en-US)",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Résultats de recherche enrichis",
+            "content": {
+              "application/json": {
+                "schema": { "type": "object" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      }
+    },
+    "/webhooks": {
+      "get": {
+        "tags": ["Webhooks"],
+        "summary": "Lister les webhooks",
+        "description": "Retourne la liste des webhooks configurés par l'utilisateur.",
+        "operationId": "listWebhooks",
+        "responses": {
+          "200": {
+            "description": "Liste de webhooks",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": {
+                    "type": "object",
+                    "properties": {
+                      "id": { "type": "string" },
+                      "url": { "type": "string" },
+                      "events": {
+                        "type": "array",
+                        "items": { "type": "string" }
+                      },
+                      "active": { "type": "boolean" }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Webhooks"],
+        "summary": "Créer un webhook",
+        "description": "Enregistre une nouvelle URL de webhook pour les événements spécifiés. Requiert une clé secrète.",
+        "operationId": "createWebhook",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["url", "events"],
+                "properties": {
+                  "url": { "type": "string", "format": "uri" },
+                  "events": {
+                    "type": "array",
+                    "items": { "type": "string" },
+                    "description": "Liste des événements (movie.added, tv.added, etc.)"
+                  },
+                  "secret": {
+                    "type": "string",
+                    "description": "Secret optionnel pour signer les payloads"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": { "description": "Webhook créé" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" }
+        }
+      },
+      "delete": {
+        "tags": ["Webhooks"],
+        "summary": "Supprimer un webhook",
+        "description": "Supprime un webhook existant. Requiert une clé secrète.",
+        "operationId": "deleteWebhook",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Supprimé" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    },
+    "/lists": {
+      "get": {
+        "tags": ["Lists"],
+        "summary": "Récupérer les listes",
+        "description": "Retourne toutes les listes personnalisées de l'utilisateur.",
+        "operationId": "getLists",
+        "responses": {
+          "200": {
+            "description": "Listes de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "array",
+                  "items": { "$ref": "#/components/schemas/List" }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        }
+      },
+      "post": {
+        "tags": ["Lists"],
+        "summary": "Créer une liste",
+        "description": "Crée une nouvelle liste personnalisée. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "createList",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListInput" }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Liste créée",
+            "content": {
+              "application/json": {
+                "schema": { "$ref": "#/components/schemas/List" }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      }
+    },
+    "/lists/{id}/items": {
+      "get": {
+        "tags": ["Lists"],
+        "summary": "Récupérer les éléments d'une liste",
+        "description": "Retourne les éléments d'une liste avec pagination.",
+        "operationId": "getListItems",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Identifiant de la liste",
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": { "type": "integer", "minimum": 1, "default": 1 }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": { "type": "boolean", "default": false }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Éléments de la liste",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": { "$ref": "#/components/schemas/ListItem" }
+                    },
+                    "pagination": { "$ref": "#/components/schemas/Pagination" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      },
+      "post": {
+        "tags": ["Lists"],
+        "summary": "Ajouter un élément à une liste",
+        "description": "Ajoute un film ou une série à une liste. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addItemToList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": { "$ref": "#/components/schemas/ListItemInput" }
+            }
+          }
+        },
+        "responses": {
+          "200": { "description": "Élément ajouté à la liste" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" },
+          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
+        }
+      },
+      "delete": {
+        "tags": ["Lists"],
+        "summary": "Retirer un élément d'une liste",
+        "description": "Retire un film ou une série d'une liste. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeItemFromList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": { "type": "string" }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": { "type": "string", "enum": ["movie", "tv"] }
+          },
+          {
+            "name": "id_item",
+            "in": "query",
+            "required": true,
+            "description": "ID TMDB de l'élément à retirer",
+            "schema": { "type": "integer" }
+          }
+        ],
+        "responses": {
+          "200": { "description": "Élément retiré de la liste" },
+          "401": { "$ref": "#/components/responses/Unauthorized" },
+          "403": { "$ref": "#/components/responses/Forbidden" },
+          "404": { "$ref": "#/components/responses/NotFound" }
+        }
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Clé API transmise via le header HTTP. Supporte les clés publiques (`pk_...`) et secrètes (`sk_...`)."
+      },
+      "ApiKeyQuery": {
+        "type": "apiKey",
+        "in": "query",
+        "name": "api_key",
+        "description": "Clé API transmise via query string. Supporte les clés publiques (`pk_...`) et secrètes (`sk_...`)."
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Token Bearer pour les sessions utilisateur authentifiées."
+      }
+    },
+    "schemas": {
+      "MediaItem": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer", "description": "ID TMDB" },
+          "type": { "type": "string", "enum": ["movie", "tv"] },
+          "title": { "type": "string" },
+          "posterPath": { "type": "string", "nullable": true }
+        }
+      },
+      "MediaInput": {
+        "type": "object",
+        "required": ["type", "id"],
+        "properties": {
+          "type": { "type": "string", "enum": ["movie", "tv"] },
+          "id": { "type": "integer", "description": "ID TMDB du contenu" }
+        }
+      },
+      "CollectionItem": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "type": "object",
+            "properties": {
+              "format": {
+                "type": "string",
+                "description": "Format de stockage (Blu-ray, DVD, etc.)",
+                "nullable": true
+              },
+              "notes": { "type": "string", "nullable": true },
+              "addedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "CollectionInput": {
+        "type": "object",
+        "required": ["type", "id"],
+        "properties": {
+          "type": { "type": "string", "enum": ["movie", "tv"] },
+          "id": { "type": "integer", "description": "ID TMDB" },
+          "format": {
+            "type": "string",
+            "description": "Format de stockage (ex: Blu-ray, DVD, digital)"
+          },
+          "notes": { "type": "string" }
+        }
+      },
+      "HistoryItem": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "type": "object",
+            "properties": {
+              "watchedAt": { "type": "string", "format": "date-time" },
+              "count": {
+                "type": "integer",
+                "description": "Nombre de fois vu",
+                "default": 1
+              },
+              "episodeId": { "type": "integer", "nullable": true },
+              "seasonNumber": { "type": "integer", "nullable": true },
+              "episodeNumber": { "type": "integer", "nullable": true }
+            }
+          }
+        ]
+      },
+      "HistoryInput": {
+        "type": "object",
+        "required": ["type", "id"],
+        "properties": {
+          "type": { "type": "string", "enum": ["movie", "tv", "episode"] },
+          "id": { "type": "integer", "description": "ID TMDB" },
+          "count": {
+            "type": "integer",
+            "default": 1,
+            "description": "Nombre de visionnages à enregistrer"
+          },
+          "watchedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date et heure du visionnage (défaut: maintenant)"
+          }
+        }
+      },
+      "RatingItem": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "type": "object",
+            "properties": {
+              "rating": { "type": "integer", "minimum": 1, "maximum": 10 },
+              "review": { "type": "string", "nullable": true },
+              "ratedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "RatingInput": {
+        "type": "object",
+        "required": ["type", "id", "rating"],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv", "season", "episode"]
+          },
+          "id": { "type": "integer", "description": "ID TMDB" },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Note de 1 à 10"
+          },
+          "review": {
+            "type": "string",
+            "description": "Avis textuel (optionnel)"
+          },
+          "tvShowId": {
+            "type": "integer",
+            "description": "Requis pour les saisons et épisodes",
+            "nullable": true
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "description": "Requis pour les saisons",
+            "nullable": true
+          }
+        }
+      },
+      "WatchlistItem": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "type": "object",
+            "properties": {
+              "priority": {
+                "type": "integer",
+                "description": "Ordre de priorité",
+                "nullable": true
+              },
+              "notes": { "type": "string", "nullable": true },
+              "addedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "WatchlistInput": {
+        "type": "object",
+        "required": ["type", "id"],
+        "properties": {
+          "type": { "type": "string", "enum": ["movie", "tv"] },
+          "id": { "type": "integer" },
+          "priority": {
+            "type": "integer",
+            "description": "Priorité (plus petit = plus prioritaire)"
+          },
+          "notes": { "type": "string" }
+        }
+      },
+      "ScrobbleSession": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "integer" },
+          "type": { "type": "string", "enum": ["movie", "episode"] },
+          "mediaId": { "type": "integer" },
+          "title": { "type": "string" },
+          "progress": { "type": "integer", "description": "Secondes lues" },
+          "duration": {
+            "type": "integer",
+            "description": "Durée totale en secondes"
+          },
+          "progressPercent": {
+            "type": "number",
+            "description": "Pourcentage de progression (0-100)"
+          },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ScrobbleInput": {
+        "type": "object",
+        "required": ["type", "id", "progress", "duration"],
+        "properties": {
+          "type": { "type": "string", "enum": ["movie", "episode"] },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du film ou de l'épisode"
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Secondes déjà lues"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Durée totale du contenu en secondes"
+          }
+        }
+      },
+      "UpNextItem": {
+        "type": "object",
+        "properties": {
+          "showId": { "type": "integer" },
+          "showTitle": { "type": "string" },
+          "posterPath": { "type": "string", "nullable": true },
+          "nextEpisode": {
+            "type": "object",
+            "properties": {
+              "id": { "type": "integer" },
+              "seasonNumber": { "type": "integer" },
+              "episodeNumber": { "type": "integer" },
+              "title": { "type": "string" },
+              "airDate": {
+                "type": "string",
+                "format": "date",
+                "nullable": true
+              }
+            }
+          }
+        }
+      },
+      "List": {
+        "type": "object",
+        "properties": {
+          "id": { "type": "string" },
+          "name": { "type": "string" },
+          "description": { "type": "string", "nullable": true },
+          "visibility": {
+            "type": "string",
+            "enum": ["PRIVATE", "PUBLIC", "FRIENDS"]
+          },
+          "itemCount": { "type": "integer" },
+          "createdAt": { "type": "string", "format": "date-time" },
+          "updatedAt": { "type": "string", "format": "date-time" }
+        }
+      },
+      "ListInput": {
+        "type": "object",
+        "required": ["name"],
+        "properties": {
+          "name": { "type": "string", "description": "Nom de la liste" },
+          "description": { "type": "string" },
+          "visibility": {
+            "type": "string",
+            "enum": ["PRIVATE", "PUBLIC", "FRIENDS"],
+            "default": "PRIVATE"
+          }
+        }
+      },
+      "ListItem": {
+        "allOf": [
+          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "type": "object",
+            "properties": {
+              "notes": { "type": "string", "nullable": true },
+              "position": {
+                "type": "integer",
+                "description": "Position dans la liste"
+              },
+              "addedAt": { "type": "string", "format": "date-time" }
+            }
+          }
+        ]
+      },
+      "ListItemInput": {
+        "type": "object",
+        "required": ["type", "id"],
+        "properties": {
+          "type": { "type": "string", "enum": ["movie", "tv"] },
+          "id": { "type": "integer", "description": "ID TMDB" },
+          "notes": { "type": "string" },
+          "position": {
+            "type": "integer",
+            "description": "Position souhaitée dans la liste"
+          }
+        }
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": { "type": "integer" },
+          "pageSize": { "type": "integer" },
+          "totalItems": { "type": "integer" },
+          "totalPages": { "type": "integer" }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": ["error", "message"],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Code d'erreur machine-readable"
+          },
+          "message": {
+            "type": "string",
+            "description": "Description lisible de l'erreur"
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Authentification requise. Fournissez une clé API valide via le header `x-api-key` ou le paramètre `api_key`.",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": {
+              "error": "UNAUTHORIZED",
+              "message": "API key is missing or invalid."
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Accès refusé. Cette opération nécessite une **clé secrète** (`sk_...`).",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": {
+              "error": "FORBIDDEN",
+              "message": "A secret key (sk_...) is required for write operations."
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Ressource introuvable.",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": {
+              "error": "NOT_FOUND",
+              "message": "The requested resource was not found."
+            }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Données de requête invalides.",
+        "content": {
+          "application/json": {
+            "schema": { "$ref": "#/components/schemas/Error" },
+            "example": {
+              "error": "VALIDATION_ERROR",
+              "message": "The field 'rating' must be between 1 and 10."
+            }
+          }
+        }
+      }
+    }
+  }
+}
