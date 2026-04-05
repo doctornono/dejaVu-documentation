@@ -3,9 +3,9 @@
   "theme": "aspen",
   "name": "dejaVu API v1",
   "colors": {
-    "primary": "#16A34A",
-    "light": "#07C983",
-    "dark": "#15803D"
+    "primary": "#a0020f",
+    "light": "#a0020f",
+    "dark": "#a0020f"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -14,31 +14,24 @@
         "tab": "Guides",
         "groups": [
           {
-            "group": "Getting started",
+            "group": "Démarrage",
+            "pages": ["index", "quickstart", "development"]
+          },
+          {
+            "group": "Personnalisation",
+            "pages": ["essentials/settings", "essentials/dashboard"]
+          },
+          {
+            "group": "Importation",
             "pages": [
-              "index",
-              "quickstart",
-              "development"
+              "essentials/import",
+              "essentials/tmdb",
+              "essentials/trakt",
+              "essentials/imdb"
             ]
           },
           {
-            "group": "Customization",
-            "pages": [
-              "essentials/settings",
-              "essentials/navigation"
-            ]
-          },
-          {
-            "group": "Writing content",
-            "pages": [
-              "essentials/markdown",
-              "essentials/code",
-              "essentials/images",
-              "essentials/reusable-snippets"
-            ]
-          },
-          {
-            "group": "AI tools",
+            "group": "API",
             "pages": [
               "ai-tools/cursor",
               "ai-tools/claude-code",
@@ -52,8 +45,15 @@
         "groups": [
           {
             "group": "Introduction",
+            "pages": ["api-reference/introduction"]
+          },
+          {
+            "group": "Auth",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/auth/request-device-code",
+              "api-reference/auth/exchange-device-token",
+              "api-reference/auth/verify-device-code",
+              "api-reference/auth/approve-device-code"
             ]
           },
           {
@@ -106,9 +106,7 @@
           },
           {
             "group": "Up Next",
-            "pages": [
-              "api-reference/upnext/get-up-next"
-            ]
+            "pages": ["api-reference/upnext/get-up-next"]
           },
           {
             "group": "Lists",
@@ -119,19 +117,14 @@
               "api-reference/lists/add-item-to-list",
               "api-reference/lists/remove-item-from-list"
             ]
+          },
+          {
+            "group": "User",
+            "pages": ["api-reference/user/get-profile"]
           }
         ]
       }
-    ],
-    "global": {
-      "anchors": [
-        {
-          "anchor": "Documentation",
-          "href": "https://mintlify.com/docs",
-          "icon": "book-open-cover"
-        }
-      ]
-    }
+    ]
   },
   "logo": {
     "light": "/logo/light.svg",

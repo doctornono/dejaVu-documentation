@@ -3,18 +3,24 @@
   "info": {
     "title": "DejaVu API V1",
     "description": "API pour gérer votre collection, historique, favoris, notes, watchlist, scrobble et listes de films et séries TV.",
-    "version": "1.0.0"
+    "version": "1.0.1"
   },
   "servers": [
     {
-      "url": "https://v0-watchy-gamma.vercel.app/api/v1",
+      "url": "https://dejavu.plus/api/v1",
       "description": "Production"
     }
   ],
   "security": [
-    { "ApiKeyHeader": [] },
-    { "ApiKeyQuery": [] },
-    { "BearerAuth": [] }
+    {
+      "ApiKeyHeader": []
+    },
+    {
+      "ApiKeyQuery": []
+    },
+    {
+      "BearerAuth": []
+    }
   ],
   "tags": [
     {
@@ -54,14 +60,6 @@
       "description": "Informations de compte et statistiques."
     },
     {
-      "name": "Search",
-      "description": "Recherche de contenus TMDB avec état utilisateur."
-    },
-    {
-      "name": "Webhooks",
-      "description": "Notifications en temps réel vers des services externes."
-    },
-    {
       "name": "Auth",
       "description": "Authentification des appareils et gestion des jetons."
     }
@@ -80,12 +78,32 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": ["success", "data"],
                   "properties": {
-                    "device_code": { "type": "string" },
-                    "user_code": { "type": "string" },
-                    "verification_uri": { "type": "string" },
-                    "expires_in": { "type": "integer" },
-                    "interval": { "type": "integer" }
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "device_code": {
+                          "type": "string"
+                        },
+                        "user_code": {
+                          "type": "string"
+                        },
+                        "verification_uri": {
+                          "type": "string"
+                        },
+                        "expires_in": {
+                          "type": "integer"
+                        },
+                        "interval": {
+                          "type": "integer"
+                        }
+                      }
+                    }
                   }
                 }
               }
@@ -107,7 +125,9 @@
               "schema": {
                 "type": "object",
                 "properties": {
-                  "device_code": { "type": "string" }
+                  "device_code": {
+                    "type": "string"
+                  }
                 }
               }
             }
@@ -120,15 +140,31 @@
               "application/json": {
                 "schema": {
                   "type": "object",
+                  "required": ["success", "data"],
                   "properties": {
-                    "access_token": { "type": "string" },
-                    "token_type": { "type": "string" }
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "access_token": {
+                          "type": "string"
+                        },
+                        "token_type": {
+                          "type": "string"
+                        }
+                      }
+                    }
                   }
                 }
               }
             }
           },
-          "400": { "description": "En attente, expiré ou refusé" }
+          "400": {
+            "description": "En attente, expiré ou refusé"
+          }
         }
       }
     },
@@ -153,7 +189,11 @@
             "name": "page",
             "in": "query",
             "description": "Numéro de page (commence à 1)",
-            "schema": { "type": "integer", "minimum": 1, "default": 1 }
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
           },
           {
             "name": "pageSize",
@@ -170,19 +210,26 @@
             "name": "sort",
             "in": "query",
             "description": "Tri (ex: addedAt:desc, addedAt:asc)",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "format",
             "in": "query",
             "description": "Filtrer par format (bluray, dvd, digital, 4k)",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "minimal",
             "in": "query",
             "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -195,16 +242,38 @@
                   "properties": {
                     "data": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/CollectionItem" }
+                      "items": {
+                        "$ref": "#/components/schemas/CollectionItem"
+                      }
                     },
-                    "pagination": { "$ref": "#/components/schemas/Pagination" }
-                  }
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["success", "data", "pagination"]
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Collection"],
@@ -215,7 +284,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/CollectionInput" }
+              "schema": {
+                "$ref": "#/components/schemas/CollectionInput"
+              }
             }
           }
         },
@@ -224,14 +295,33 @@
             "description": "Élément ajouté à la collection",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/CollectionItem" }
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionItem"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Collection"],
@@ -243,60 +333,59 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["movie", "tv"] }
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "tv"]
+            }
           },
           {
             "name": "id",
             "in": "query",
             "required": true,
             "description": "ID TMDB du contenu",
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Élément supprimé de la collection" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
-      }
-    },
-    "/collection/batch": {
-      "post": {
-        "tags": ["Collection"],
-        "summary": "Ajout par lots à la collection",
-        "description": "Permet d'ajouter plusieurs films ou séries en une seule requête. Requiert une clé secrète.",
-        "operationId": "batchAddToCollection",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": ["type", "id"],
-                      "properties": {
-                        "type": { "type": "string", "enum": ["movie", "tv"] },
-                        "id": { "type": "integer" },
-                        "format": { "type": "string" },
-                        "notes": { "type": "string" }
-                      }
+          "200": {
+            "description": "Élément supprimé de la collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
                     }
                   }
                 }
               }
             }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
           }
         },
-        "responses": {
-          "200": { "description": "Succès du lot" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" }
-        }
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/history": {
@@ -318,19 +407,28 @@
           {
             "name": "page",
             "in": "query",
-            "schema": { "type": "integer", "minimum": 1, "default": 1 }
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
           },
           {
             "name": "sort",
             "in": "query",
             "description": "Tri (ex: watchedAt:desc, watchedAt:asc)",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "minimal",
             "in": "query",
             "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -343,16 +441,38 @@
                   "properties": {
                     "data": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/HistoryItem" }
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryItem"
+                      }
                     },
-                    "pagination": { "$ref": "#/components/schemas/Pagination" }
-                  }
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["success", "data", "pagination"]
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["History"],
@@ -363,16 +483,50 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/HistoryInput" }
+              "schema": {
+                "$ref": "#/components/schemas/HistoryInput"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Visionnage enregistré" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "200": {
+            "description": "Visionnage enregistré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["History"],
@@ -384,21 +538,58 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["movie", "tv", "episode"] }
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "tv", "episode"]
+            }
           },
           {
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Entrée supprimée de l'historique" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+          "200": {
+            "description": "Entrée supprimée de l'historique",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/favorites": {
@@ -422,7 +613,10 @@
             "name": "minimal",
             "in": "query",
             "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -431,14 +625,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/MediaItem" }
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MediaItem"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Favorites"],
@@ -449,16 +668,50 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/MediaInput" }
+              "schema": {
+                "$ref": "#/components/schemas/MediaInput"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Ajouté aux favoris" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "200": {
+            "description": "Ajouté aux favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Favorites"],
@@ -470,21 +723,58 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["movie", "tv"] }
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "tv"]
+            }
           },
           {
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Retiré des favoris" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+          "200": {
+            "description": "Retiré des favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/ratings": {
@@ -508,7 +798,10 @@
             "name": "minimal",
             "in": "query",
             "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -517,14 +810,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/RatingItem" }
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RatingItem"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Ratings"],
@@ -535,16 +853,50 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/RatingInput" }
+              "schema": {
+                "$ref": "#/components/schemas/RatingInput"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Note enregistrée" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "200": {
+            "description": "Note enregistrée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Ratings"],
@@ -565,15 +917,49 @@
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Note supprimée" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+          "200": {
+            "description": "Note supprimée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/watchlist": {
@@ -597,13 +983,18 @@
             "name": "minimal",
             "in": "query",
             "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           },
           {
             "name": "sort",
             "in": "query",
             "description": "Tri (ex: addedAt:desc, priority:desc)",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "responses": {
@@ -612,14 +1003,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/WatchlistItem" }
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WatchlistItem"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Watchlist"],
@@ -630,16 +1046,50 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/WatchlistInput" }
+              "schema": {
+                "$ref": "#/components/schemas/WatchlistInput"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Ajouté à la watchlist" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "200": {
+            "description": "Ajouté à la watchlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Watchlist"],
@@ -651,21 +1101,58 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["movie", "tv"] }
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "tv"]
+            }
           },
           {
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Retiré de la watchlist" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+          "200": {
+            "description": "Retiré de la watchlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/scrobble": {
@@ -680,14 +1167,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/ScrobbleSession" }
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScrobbleSession"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Scrobble"],
@@ -698,18 +1210,50 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ScrobbleInput" }
+              "schema": {
+                "$ref": "#/components/schemas/ScrobbleInput"
+              }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Progression mise à jour. Si > 90%, marqué comme vu automatiquement."
+            "description": "Progression mise à jour. Si > 90%, marqué comme vu automatiquement.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Scrobble"],
@@ -721,21 +1265,58 @@
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["movie", "episode"] }
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "episode"]
+            }
           },
           {
             "name": "id",
             "in": "query",
             "required": true,
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Session supprimée" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+          "200": {
+            "description": "Session supprimée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/upnext": {
@@ -763,14 +1344,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/UpNextItem" }
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UpNextItem"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/me": {
@@ -784,143 +1390,39 @@
             "description": "Profil et statistiques utilisateur",
             "content": {
               "application/json": {
-                "schema": { "type": "object" }
-              }
-            }
-          },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      }
-    },
-    "/search": {
-      "get": {
-        "tags": ["Search"],
-        "summary": "Recherche unifiée (TMDB + État Utilisateur)",
-        "description": "Recherche des films et séries sur TMDB et retourne les résultats enrichis avec l'état de l'utilisateur (en collection, dans la watchlist).",
-        "operationId": "searchUnified",
-        "parameters": [
-          {
-            "name": "query",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "page",
-            "in": "query",
-            "schema": { "type": "integer", "default": 1 }
-          },
-          {
-            "name": "Accept-Language",
-            "in": "header",
-            "description": "Langue préférée (ex: fr-FR, en-US)",
-            "schema": { "type": "string" }
-          },
-          {
-            "name": "minimal",
-            "in": "query",
-            "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
-          }
-        ],
-        "responses": {
-          "200": {
-            "description": "Résultats de recherche enrichis",
-            "content": {
-              "application/json": {
-                "schema": { "type": "object" }
-              }
-            }
-          },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      }
-    },
-    "/webhooks": {
-      "get": {
-        "tags": ["Webhooks"],
-        "summary": "Lister les webhooks",
-        "description": "Retourne la liste des webhooks configurés par l'utilisateur.",
-        "operationId": "listWebhooks",
-        "responses": {
-          "200": {
-            "description": "Liste de webhooks",
-            "content": {
-              "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": {
-                    "type": "object",
-                    "properties": {
-                      "id": { "type": "string" },
-                      "url": { "type": "string" },
-                      "events": {
-                        "type": "array",
-                        "items": { "type": "string" }
-                      },
-                      "active": { "type": "boolean" }
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "user": {
+                      "type": "object"
+                    },
+                    "stats": {
+                      "type": "object"
                     }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
-      },
-      "post": {
-        "tags": ["Webhooks"],
-        "summary": "Créer un webhook",
-        "description": "Enregistre une nouvelle URL de webhook pour les événements spécifiés. Requiert une clé secrète.",
-        "operationId": "createWebhook",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "required": ["url", "events"],
-                "properties": {
-                  "url": { "type": "string", "format": "uri" },
-                  "events": {
-                    "type": "array",
-                    "items": { "type": "string" },
-                    "description": "Liste des événements (movie.added, tv.added, etc.)"
-                  },
-                  "secret": {
-                    "type": "string",
-                    "description": "Secret optionnel pour signer les payloads"
-                  }
-                }
-              }
-            }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
           }
         },
-        "responses": {
-          "201": { "description": "Webhook créé" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" }
-        }
-      },
-      "delete": {
-        "tags": ["Webhooks"],
-        "summary": "Supprimer un webhook",
-        "description": "Supprime un webhook existant. Requiert une clé secrète.",
-        "operationId": "deleteWebhook",
-        "parameters": [
+        "security": [
           {
-            "name": "id",
-            "in": "query",
-            "required": true,
-            "schema": { "type": "string" }
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
           }
-        ],
-        "responses": {
-          "200": { "description": "Supprimé" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+        ]
       }
     },
     "/lists": {
@@ -935,14 +1437,39 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "array",
-                  "items": { "$ref": "#/components/schemas/List" }
+                  "type": "object",
+                  "required": ["success", "data"],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/List"
+                      }
+                    }
+                  }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Lists"],
@@ -953,7 +1480,9 @@
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ListInput" }
+              "schema": {
+                "$ref": "#/components/schemas/ListInput"
+              }
             }
           }
         },
@@ -962,14 +1491,33 @@
             "description": "Liste créée",
             "content": {
               "application/json": {
-                "schema": { "$ref": "#/components/schemas/List" }
+                "schema": {
+                  "$ref": "#/components/schemas/List"
+                }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/lists/{id}/items": {
@@ -984,18 +1532,27 @@
             "in": "path",
             "required": true,
             "description": "Identifiant de la liste",
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "page",
             "in": "query",
-            "schema": { "type": "integer", "minimum": 1, "default": 1 }
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
           },
           {
             "name": "minimal",
             "in": "query",
             "description": "Retourner uniquement type et id",
-            "schema": { "type": "boolean", "default": false }
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
           }
         ],
         "responses": {
@@ -1008,17 +1565,41 @@
                   "properties": {
                     "data": {
                       "type": "array",
-                      "items": { "$ref": "#/components/schemas/ListItem" }
+                      "items": {
+                        "$ref": "#/components/schemas/ListItem"
+                      }
                     },
-                    "pagination": { "$ref": "#/components/schemas/Pagination" }
-                  }
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": ["success", "data", "pagination"]
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "404": { "$ref": "#/components/responses/NotFound" }
-        }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "post": {
         "tags": ["Lists"],
@@ -1030,24 +1611,62 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           }
         ],
         "requestBody": {
           "required": true,
           "content": {
             "application/json": {
-              "schema": { "$ref": "#/components/schemas/ListItemInput" }
+              "schema": {
+                "$ref": "#/components/schemas/ListItemInput"
+              }
             }
           }
         },
         "responses": {
-          "200": { "description": "Élément ajouté à la liste" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" },
-          "422": { "$ref": "#/components/responses/UnprocessableEntity" }
-        }
+          "200": {
+            "description": "Élément ajouté à la liste",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       },
       "delete": {
         "tags": ["Lists"],
@@ -1059,27 +1678,169 @@
             "name": "id",
             "in": "path",
             "required": true,
-            "schema": { "type": "string" }
+            "schema": {
+              "type": "string"
+            }
           },
           {
             "name": "type",
             "in": "query",
             "required": true,
-            "schema": { "type": "string", "enum": ["movie", "tv"] }
+            "schema": {
+              "type": "string",
+              "enum": ["movie", "tv"]
+            }
           },
           {
             "name": "id_item",
             "in": "query",
             "required": true,
             "description": "ID TMDB de l'élément à retirer",
-            "schema": { "type": "integer" }
+            "schema": {
+              "type": "integer"
+            }
           }
         ],
         "responses": {
-          "200": { "description": "Élément retiré de la liste" },
-          "401": { "$ref": "#/components/responses/Unauthorized" },
-          "403": { "$ref": "#/components/responses/Forbidden" },
-          "404": { "$ref": "#/components/responses/NotFound" }
+          "200": {
+            "description": "Élément retiré de la liste",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/device/verify": {
+      "get": {
+        "tags": ["Auth"],
+        "summary": "Vérifier le code utilisateur",
+        "description": "Appelé par le navigateur utilisateur pour valider un `user_code` avant de l'approuver.",
+        "operationId": "verifyDeviceCode",
+        "parameters": [
+          {
+            "name": "user_code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Code valide, informations de l'appareil retournées",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "userCode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Code invalide ou expiré"
+          }
+        }
+      }
+    },
+    "/auth/device/approve": {
+      "post": {
+        "tags": ["Auth"],
+        "summary": "Approuver le code utilisateur",
+        "description": "Appelé depuis le compte de l'utilisateur (requiert une session `BearerAuth`) pour autoriser le device. Délivre ensuite en arrière-plan la clé secrète à l'appareil.",
+        "operationId": "approveDeviceCode",
+        "security": [
+          {
+            "BearerAuth": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": ["user_code"],
+                "properties": {
+                  "user_code": {
+                    "type": "string"
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Appareil autorisé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "404": {
+            "description": "Code invalide ou expiré"
+          }
         }
       }
     }
@@ -1108,23 +1869,42 @@
       "MediaItem": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer", "description": "ID TMDB" },
-          "type": { "type": "string", "enum": ["movie", "tv"] },
-          "title": { "type": "string" },
-          "posterPath": { "type": "string", "nullable": true }
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv"]
+          },
+          "title": {
+            "type": "string"
+          },
+          "posterPath": {
+            "type": "string",
+            "nullable": true
+          }
         }
       },
       "MediaInput": {
         "type": "object",
         "required": ["type", "id"],
         "properties": {
-          "type": { "type": "string", "enum": ["movie", "tv"] },
-          "id": { "type": "integer", "description": "ID TMDB du contenu" }
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv"]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du contenu"
+          }
         }
       },
       "CollectionItem": {
         "allOf": [
-          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
           {
             "type": "object",
             "properties": {
@@ -1133,8 +1913,14 @@
                 "description": "Format de stockage (Blu-ray, DVD, etc.)",
                 "nullable": true
               },
-              "notes": { "type": "string", "nullable": true },
-              "addedAt": { "type": "string", "format": "date-time" }
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
+              "addedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
             }
           }
         ]
@@ -1143,30 +1929,52 @@
         "type": "object",
         "required": ["type", "id"],
         "properties": {
-          "type": { "type": "string", "enum": ["movie", "tv"] },
-          "id": { "type": "integer", "description": "ID TMDB" },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv"]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
           "format": {
             "type": "string",
             "description": "Format de stockage (ex: Blu-ray, DVD, digital)"
           },
-          "notes": { "type": "string" }
+          "notes": {
+            "type": "string"
+          }
         }
       },
       "HistoryItem": {
         "allOf": [
-          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
           {
             "type": "object",
             "properties": {
-              "watchedAt": { "type": "string", "format": "date-time" },
+              "watchedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
               "count": {
                 "type": "integer",
                 "description": "Nombre de fois vu",
                 "default": 1
               },
-              "episodeId": { "type": "integer", "nullable": true },
-              "seasonNumber": { "type": "integer", "nullable": true },
-              "episodeNumber": { "type": "integer", "nullable": true }
+              "episodeId": {
+                "type": "integer",
+                "nullable": true
+              },
+              "seasonNumber": {
+                "type": "integer",
+                "nullable": true
+              },
+              "episodeNumber": {
+                "type": "integer",
+                "nullable": true
+              }
             }
           }
         ]
@@ -1175,8 +1983,14 @@
         "type": "object",
         "required": ["type", "id"],
         "properties": {
-          "type": { "type": "string", "enum": ["movie", "tv", "episode"] },
-          "id": { "type": "integer", "description": "ID TMDB" },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv", "episode"]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
           "count": {
             "type": "integer",
             "default": 1,
@@ -1191,13 +2005,25 @@
       },
       "RatingItem": {
         "allOf": [
-          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
           {
             "type": "object",
             "properties": {
-              "rating": { "type": "integer", "minimum": 1, "maximum": 10 },
-              "review": { "type": "string", "nullable": true },
-              "ratedAt": { "type": "string", "format": "date-time" }
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "review": {
+                "type": "string",
+                "nullable": true
+              },
+              "ratedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
             }
           }
         ]
@@ -1210,7 +2036,10 @@
             "type": "string",
             "enum": ["movie", "tv", "season", "episode"]
           },
-          "id": { "type": "integer", "description": "ID TMDB" },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
           "rating": {
             "type": "integer",
             "minimum": 1,
@@ -1235,7 +2064,9 @@
       },
       "WatchlistItem": {
         "allOf": [
-          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
           {
             "type": "object",
             "properties": {
@@ -1244,8 +2075,14 @@
                 "description": "Ordre de priorité",
                 "nullable": true
               },
-              "notes": { "type": "string", "nullable": true },
-              "addedAt": { "type": "string", "format": "date-time" }
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
+              "addedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
             }
           }
         ]
@@ -1254,23 +2091,42 @@
         "type": "object",
         "required": ["type", "id"],
         "properties": {
-          "type": { "type": "string", "enum": ["movie", "tv"] },
-          "id": { "type": "integer" },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv"]
+          },
+          "id": {
+            "type": "integer"
+          },
           "priority": {
             "type": "integer",
             "description": "Priorité (plus petit = plus prioritaire)"
           },
-          "notes": { "type": "string" }
+          "notes": {
+            "type": "string"
+          }
         }
       },
       "ScrobbleSession": {
         "type": "object",
         "properties": {
-          "id": { "type": "integer" },
-          "type": { "type": "string", "enum": ["movie", "episode"] },
-          "mediaId": { "type": "integer" },
-          "title": { "type": "string" },
-          "progress": { "type": "integer", "description": "Secondes lues" },
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "episode"]
+          },
+          "mediaId": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Secondes lues"
+          },
           "duration": {
             "type": "integer",
             "description": "Durée totale en secondes"
@@ -1279,14 +2135,20 @@
             "type": "number",
             "description": "Pourcentage de progression (0-100)"
           },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "ScrobbleInput": {
         "type": "object",
         "required": ["type", "id", "progress", "duration"],
         "properties": {
-          "type": { "type": "string", "enum": ["movie", "episode"] },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "episode"]
+          },
           "id": {
             "type": "integer",
             "description": "ID TMDB du film ou de l'épisode"
@@ -1304,16 +2166,31 @@
       "UpNextItem": {
         "type": "object",
         "properties": {
-          "showId": { "type": "integer" },
-          "showTitle": { "type": "string" },
-          "posterPath": { "type": "string", "nullable": true },
+          "showId": {
+            "type": "integer"
+          },
+          "showTitle": {
+            "type": "string"
+          },
+          "posterPath": {
+            "type": "string",
+            "nullable": true
+          },
           "nextEpisode": {
             "type": "object",
             "properties": {
-              "id": { "type": "integer" },
-              "seasonNumber": { "type": "integer" },
-              "episodeNumber": { "type": "integer" },
-              "title": { "type": "string" },
+              "id": {
+                "type": "integer"
+              },
+              "seasonNumber": {
+                "type": "integer"
+              },
+              "episodeNumber": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
               "airDate": {
                 "type": "string",
                 "format": "date",
@@ -1326,24 +2203,44 @@
       "List": {
         "type": "object",
         "properties": {
-          "id": { "type": "string" },
-          "name": { "type": "string" },
-          "description": { "type": "string", "nullable": true },
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
           "visibility": {
             "type": "string",
             "enum": ["PRIVATE", "PUBLIC", "FRIENDS"]
           },
-          "itemCount": { "type": "integer" },
-          "createdAt": { "type": "string", "format": "date-time" },
-          "updatedAt": { "type": "string", "format": "date-time" }
+          "itemCount": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
         }
       },
       "ListInput": {
         "type": "object",
         "required": ["name"],
         "properties": {
-          "name": { "type": "string", "description": "Nom de la liste" },
-          "description": { "type": "string" },
+          "name": {
+            "type": "string",
+            "description": "Nom de la liste"
+          },
+          "description": {
+            "type": "string"
+          },
           "visibility": {
             "type": "string",
             "enum": ["PRIVATE", "PUBLIC", "FRIENDS"],
@@ -1353,16 +2250,24 @@
       },
       "ListItem": {
         "allOf": [
-          { "$ref": "#/components/schemas/MediaItem" },
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
           {
             "type": "object",
             "properties": {
-              "notes": { "type": "string", "nullable": true },
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
               "position": {
                 "type": "integer",
                 "description": "Position dans la liste"
               },
-              "addedAt": { "type": "string", "format": "date-time" }
+              "addedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
             }
           }
         ]
@@ -1371,9 +2276,17 @@
         "type": "object",
         "required": ["type", "id"],
         "properties": {
-          "type": { "type": "string", "enum": ["movie", "tv"] },
-          "id": { "type": "integer", "description": "ID TMDB" },
-          "notes": { "type": "string" },
+          "type": {
+            "type": "string",
+            "enum": ["movie", "tv"]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
+          "notes": {
+            "type": "string"
+          },
           "position": {
             "type": "integer",
             "description": "Position souhaitée dans la liste"
@@ -1383,10 +2296,18 @@
       "Pagination": {
         "type": "object",
         "properties": {
-          "page": { "type": "integer" },
-          "pageSize": { "type": "integer" },
-          "totalItems": { "type": "integer" },
-          "totalPages": { "type": "integer" }
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          },
+          "totalItems": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          }
         }
       },
       "Error": {
@@ -1402,6 +2323,30 @@
             "description": "Description lisible de l'erreur"
           }
         }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "required": ["success", "data"],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": true,
+            "description": "Indique si la requête a réussi"
+          }
+        }
+      },
+      "PaginatedSuccessResponse": {
+        "type": "object",
+        "required": ["success", "data", "pagination"],
+        "properties": {
+          "success": {
+            "type": "boolean",
+            "default": true
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          }
+        }
       }
     },
     "responses": {
@@ -1409,7 +2354,9 @@
         "description": "Authentification requise. Fournissez une clé API valide via le header `x-api-key` ou le paramètre `api_key`.",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" },
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
             "example": {
               "error": "UNAUTHORIZED",
               "message": "API key is missing or invalid."
@@ -1421,7 +2368,9 @@
         "description": "Accès refusé. Cette opération nécessite une **clé secrète** (`sk_...`).",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" },
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
             "example": {
               "error": "FORBIDDEN",
               "message": "A secret key (sk_...) is required for write operations."
@@ -1433,7 +2382,9 @@
         "description": "Ressource introuvable.",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" },
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
             "example": {
               "error": "NOT_FOUND",
               "message": "The requested resource was not found."
@@ -1445,7 +2396,9 @@
         "description": "Données de requête invalides.",
         "content": {
           "application/json": {
-            "schema": { "$ref": "#/components/schemas/Error" },
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
             "example": {
               "error": "VALIDATION_ERROR",
               "message": "The field 'rating' must be between 1 and 10."

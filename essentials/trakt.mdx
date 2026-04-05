@@ -1,0 +1,20 @@
+---
+title: "📺 Importer vos données depuis Trakt.tv"
+description: "Trakt offre l'importation la plus complète. Elle nécessite la création d'une 'Application' sur leur portail développeur."
+icon: ""
+---
+
+## 🏗️ Étape 1 : Créer une application sur Trakt
+1.  Allez sur [trakt.tv/oauth/applications](https://trakt.tv/oauth/applications).
+2.  Cliquez sur **"New Application"**.
+3.  Remplissez les champs :
+    *   **Name** : DejaVu
+    *   **Redirect URI** : Renseignez l'URL de votre application suivie de `/api/trakt/callback` (ex: `https://mon-dejavu.com/api/trakt/callback`).
+4.  Cliquez sur **"Save App"**.
+5.  Récupérez votre **Client ID** et votre **Client Secret**.
+
+## 🚀 Étape 2 : Lancer l'importation
+1.  Dans DejaVu, allez sur **Import** > **Trakt**.
+2.  Saisissez le **Client ID** et le **Client Secret**.
+3.  Cliquez sur **Connexion**. Vous serez redirigé vers Trakt pour valider l'accès.
+4.  Une fois connecté, choisissez les éléments à importer (Historique, Notes, etc.).

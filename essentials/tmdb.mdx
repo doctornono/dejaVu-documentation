@@ -1,0 +1,21 @@
+---
+title: "  🎥 Importer vos données depuis TMDb"
+description: "L'importation depuis TMDb nécessite la configuration d'un accès API personnel."
+icon: ""
+---
+
+## 🔑 Étape 1 : Obtenir vos clés API
+1.  Connectez-vous sur [The Movie Database](https://www.themoviedb.org/).
+2.  Allez dans vos **Paramètres** (Settings) > **API**.
+3.  Si vous n'en avez pas, demandez une clé API (choisissez le type "Développeur").
+4.  Une fois validée, récupérez les deux éléments suivants :
+    *   **API Key** (v3 auth)
+    *   **API Read Access Token** (v4 auth) — *Copiez bien ce long code*.
+
+## 🔗 Étape 2 : Configurer DejaVu
+1.  Dans DejaVu, accédez à **Import** > **TMDb**.
+2.  Renseignez votre **API Key** et votre **Read Access Token**.
+3.  Cliquez sur **Connecter**. Vous serez redirigé vers TMDb pour autoriser DejaVu à accéder à vos listes.
+
+> [!IMPORTANT]
+> **Redirect URI** : Si TMDb vous demande une URL de redirection (Callback URL) lors de la création de la clé, renseignez l'URL de votre instance DejaVu suivie de `/api/tmdb/callback`.
