@@ -3,7 +3,7 @@
   "info": {
     "title": "DejaVu API V1",
     "description": "API pour gérer votre collection, historique, favoris, notes, watchlist, scrobble et listes de films et séries TV.",
-    "version": "1.0.1"
+    "version": "1.0.0"
   },
   "servers": [
     {
@@ -54,6 +54,10 @@
     {
       "name": "Lists",
       "description": "Créez et gérez des listes personnalisées de films et séries."
+    },
+    {
+      "name": "Dashboard",
+      "description": "Expose la configuration du tableau de bord et le contenu des widgets."
     },
     {
       "name": "User",
@@ -385,6 +389,195 @@
           {
             "BearerAuth": []
           }
+        ]
+      }
+    },
+    "/collection/batch": {
+      "post": {
+        "tags": ["Collection"],
+        "summary": "Ajout par lots à la collection",
+        "description": "Permet d'ajouter plusieurs films ou séries en une seule requête. Requiert une clé secrète.",
+        "operationId": "batchAddToCollection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "properties": {
+                  "items": {
+                    "type": "array",
+                    "items": {
+                      "type": "object",
+                      "required": ["type", "id"],
+                      "properties": {
+                        "type": {
+                          "type": "string",
+                          "enum": ["movie", "tv"]
+                        },
+                        "id": {
+                          "type": "integer"
+                        },
+                        "format": {
+                          "type": "string"
+                        },
+                        "notes": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Succès du lot",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "ApiKeyQuery": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/dashboard": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Configuration du tableau de bord",
+        "description": "Retourne la configuration des widgets du dashboard de l'utilisateur.",
+        "operationId": "getDashboardConfig",
+        "responses": {
+          "200": {
+            "description": "Configuration du dashboard",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "default": true },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "widgets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": { "type": "string" },
+                              "type": { "type": "string" },
+                              "title": { "type": "string" },
+                              "apiUrl": { "type": "string" }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        },
+        "security": [
+          { "ApiKeyHeader": [] },
+          { "ApiKeyQuery": [] },
+          { "BearerAuth": [] }
+        ]
+      }
+    },
+    "/dashboard/widget": {
+      "get": {
+        "tags": ["Dashboard"],
+        "summary": "Contenu unifié de widget",
+        "description": "Agit comme un proxy pour retourner le contenu d'un widget spécifique.",
+        "operationId": "getDashboardWidgetContent",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "Type de widget",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "listId",
+            "in": "query",
+            "description": "ID de la liste (requis si type=list)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contenu du widget",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": { "type": "boolean", "default": true },
+                    "data": { "type": "array", "items": {} },
+                    "pagination": { "$ref": "#/components/schemas/Pagination" }
+                  }
+                }
+              }
+            }
+          },
+          "401": { "$ref": "#/components/responses/Unauthorized" }
+        },
+        "security": [
+          { "ApiKeyHeader": [] },
+          { "ApiKeyQuery": [] },
+          { "BearerAuth": [] }
         ]
       }
     },

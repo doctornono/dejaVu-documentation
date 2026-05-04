@@ -61,7 +61,8 @@
             "pages": [
               "api-reference/collection/get-collection",
               "api-reference/collection/add-to-collection",
-              "api-reference/collection/remove-from-collection"
+              "api-reference/collection/remove-from-collection",
+              "api-reference/collection/batch-add-to-collection"
             ]
           },
           {
@@ -107,6 +108,13 @@
           {
             "group": "Up Next",
             "pages": ["api-reference/upnext/get-up-next"]
+          },
+          {
+            "group": "Dashboard",
+            "pages": [
+              "api-reference/dashboard/get-dashboard-config",
+              "api-reference/dashboard/get-dashboard-widget-content"
+            ]
           },
           {
             "group": "Lists",
