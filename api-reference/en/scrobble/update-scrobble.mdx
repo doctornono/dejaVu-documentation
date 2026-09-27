@@ -1,0 +1,28 @@
+---
+title: "Update la progress"
+openapi: "POST /scrobble"
+---
+
+## Usage
+
+Creates ou met à jour une playback session et sa progress.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X POST -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/scrobble"
+```
+
+## Parameters and response
+
+Request parameters, request schemas, and responses are defined by the OpenAPI specification displayed on this page. Use the schema fields to build the request.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats. Une réponse `401` indique une authentification absente ou invalide.
+
+## Notes
+
+À partir d’une progress d’au moins 90 %, DejaVu applique le comportement de complétion documenté par l’API.
