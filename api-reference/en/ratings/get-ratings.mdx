@@ -1,0 +1,24 @@
+---
+title: "Get les ratings"
+openapi: "GET /ratings"
+---
+
+## Usage
+
+Retourne les ratings paginées de the authenticated user.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/ratings?page=1&pageSize=20"
+```
+
+## Parameters and response
+
+Les paramètres et schémas de réponse sont définis par la spécification OpenAPI affichée sur cette page. Les ratings peuvent concerner des movies, seriess, saisons ou episodes selon le contexte fourni.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats.
