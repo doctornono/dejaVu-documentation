@@ -1,0 +1,28 @@
+---
+title: "Removesr une session"
+openapi: "DELETE /scrobble"
+---
+
+## Usage
+
+Removes une playback session active.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/scrobble"
+```
+
+## Parameters and response
+
+Request parameters, request schemas, and responses are defined by the OpenAPI specification displayed on this page. Use the schema fields to build the request.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats. Une réponse `401` indique une authentification absente ou invalide.
+
+## Notes
+
+Never expose an `sk_` API key in client-side code or a public repository.
