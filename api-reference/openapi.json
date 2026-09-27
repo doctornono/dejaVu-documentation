@@ -115,6 +115,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/DeviceCodeRequest"
+              },
+              "example": {
+                "client_id": "kodi",
+                "client_name": "DejaVu Kodi"
               }
             }
           }
@@ -135,6 +139,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/DeviceTokenRequest"
+              },
+              "example": {
+                "device_code": "DEVICE_CODE_FROM_PREVIOUS_STEP",
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
               }
             }
           }
@@ -297,6 +305,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/CollectionInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550
               }
             }
           }
@@ -681,6 +693,11 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/HistoryInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "watchedAt": "2026-09-27T12:00:00Z"
               }
             }
           }
@@ -919,6 +936,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/MediaInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550
               }
             }
           }
@@ -1131,6 +1152,11 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/RatingInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "rating": 9
               }
             }
           }
@@ -1379,6 +1405,11 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/WatchlistInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "priority": 1
               }
             }
           }
@@ -1586,6 +1617,12 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ScrobbleInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "progress": 42,
+                "duration": 120
               }
             }
           }
@@ -1929,6 +1966,11 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ListInput"
+              },
+              "example": {
+                "name": "Films à voir",
+                "kind": "MEDIA",
+                "visibility": "PRIVATE"
               }
             }
           }
@@ -2081,6 +2123,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ListItemInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550
               }
             }
           }
@@ -2280,6 +2326,9 @@
                     "type": "string"
                   }
                 }
+              },
+              "example": {
+                "user_code": "ABCD-1234"
               }
             }
           }
@@ -2524,6 +2573,15 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/ConnectorSubmission"
+              },
+              "example": {
+                "name": "Example connector",
+                "domains": [
+                  "example.com"
+                ],
+                "definition": {
+                  "version": 1
+                }
               }
             }
           }
@@ -2572,6 +2630,12 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/KodiImportRequest"
+              },
+              "example": {
+                "importSessionId": "demo-session",
+                "chunk": 1,
+                "totalChunks": 1,
+                "items": []
               }
             }
           }
@@ -2618,6 +2682,10 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/MediaResolveRequest"
+              },
+              "example": {
+                "type": "movie",
+                "tmdbId": 550
               }
             }
           }
@@ -2667,6 +2735,18 @@
             "application/json": {
               "schema": {
                 "$ref": "#/components/schemas/MediaStatusRequest"
+              },
+              "example": {
+                "items": [
+                  {
+                    "type": "movie",
+                    "id": 550
+                  },
+                  {
+                    "type": "tv",
+                    "id": 1399
+                  }
+                ]
               }
             }
           }
