@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "DejaVu API V1",
-    "description": "API publique DejaVu V1 pour intégrer la collection, l’historique, les favoris, les notes, la watchlist, le scrobble, les listes, les chaînes, les connecteurs et les fonctions d’intégration.",
+    "description": "Public DejaVu V1 API for integrating collection, history, favorites, ratings, watchlist, scrobbling, lists, channels, connectors, and integration features.",
     "version": "1.0.0"
   },
   "servers": [
@@ -22,63 +22,63 @@
   "tags": [
     {
       "name": "Collection",
-      "description": "Gérez votre collection personnelle de films et séries vus ou possédés."
+      "description": "Manage your personal collection of watched or owned movies and TV shows."
     },
     {
       "name": "History",
-      "description": "Consultez et gérez votre historique de visionnage."
+      "description": "View and manage your watch history."
     },
     {
       "name": "Favorites",
-      "description": "Ajoutez et retirez des films et séries de vos favoris."
+      "description": "Add and remove movies and TV shows from your favorites."
     },
     {
       "name": "Ratings",
-      "description": "Notez et rédigez des avis sur vos films, séries, saisons et épisodes."
+      "description": "Rate and review your movies, TV shows, seasons, and episodes."
     },
     {
       "name": "Watchlist",
-      "description": "Gérez votre liste de contenus à regarder."
+      "description": "Manage your watchlist."
     },
     {
       "name": "Scrobble",
-      "description": "Suivez la progression de lecture en temps réel."
+      "description": "Track playback progress in real time."
     },
     {
       "name": "Up Next",
-      "description": "Obtenez les prochains épisodes à regarder pour les séries que vous suivez."
+      "description": "Get the next episodes to watch for TV shows you follow."
     },
     {
       "name": "Lists",
-      "description": "Créez et gérez des listes personnalisées de films et séries."
+      "description": "Create and manage custom lists of movies and TV shows."
     },
     {
       "name": "Dashboard",
-      "description": "Expose la configuration du tableau de bord et le contenu des widgets."
+      "description": "Expose dashboard configuration and widget content."
     },
     {
       "name": "User",
-      "description": "Informations de compte et statistiques."
+      "description": "Account information and statistics."
     },
     {
       "name": "Auth",
-      "description": "Authentification des appareils et gestion des jetons."
+      "description": "Device authentication and token management."
     },
     {
       "name": "Channels",
-      "description": "Chaînes et univers accessibles à l’utilisateur."
+      "description": "Channels and universes accessible to the user."
     },
     {
       "name": "Connectors",
-      "description": "Connecteurs utilisés par l’extension navigateur."
+      "description": "Connectors used by the browser extension."
     },
     {
       "name": "Kodi",
-      "description": "Import de bibliothèques Kodi."
+      "description": "Kodi library import."
     },
     {
       "name": "Media",
-      "description": "Résolution et statut de médias."
+      "description": "Media resolution and status."
     }
   ],
   "paths": {
@@ -87,12 +87,12 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Demander un code d'appareil (Device Flow)",
-        "description": "Première étape de l'authentification pour les appareils sans clavier (TV, etc.).",
+        "summary": "Request a device code (Device Flow)",
+        "description": "First authentication step for devices without a keyboard (TV, etc.).",
         "operationId": "requestDeviceCode",
         "responses": {
           "200": {
-            "description": "Codes générés",
+            "description": "Generated codes",
             "content": {
               "application/json": {
                 "schema": {
@@ -102,10 +102,10 @@
             }
           },
           "429": {
-            "description": "Trop de demandes depuis cette adresse IP."
+            "description": "Too many requests from this IP address."
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [],
@@ -130,8 +130,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Échanger le code d'appareil contre un jeton",
-        "description": "Étape de 'polling' pour vérifier si l'utilisateur a autorisé l'appareil.",
+        "summary": "Exchange the device code for a token",
+        "description": "Polling step to check whether the user has authorized the device.",
         "operationId": "exchangeDeviceToken",
         "requestBody": {
           "required": true,
@@ -149,7 +149,7 @@
         },
         "responses": {
           "200": {
-            "description": "Jeton d’accès délivré",
+            "description": "Access token issued",
             "content": {
               "application/json": {
                 "schema": {
@@ -159,16 +159,16 @@
             }
           },
           "400": {
-            "description": "Requête invalide, autorisation en attente, expirée ou invalide."
+            "description": "Invalid request, authorization pending, expired, or invalid."
           },
           "403": {
-            "description": "Demande refusée par l’utilisateur."
+            "description": "Request denied by the user."
           },
           "429": {
-            "description": "Trop de polling pour ce device_code."
+            "description": "Too much polling for this device_code."
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": []
@@ -179,14 +179,14 @@
         "tags": [
           "Collection"
         ],
-        "summary": "Récupérer la collection",
-        "description": "Retourne l'ensemble des éléments de votre collection avec pagination optionnelle.",
+        "summary": "Get collection",
+        "description": "Returns all items in your collection with optional pagination.",
         "operationId": "getCollection",
         "parameters": [
           {
             "name": "type",
             "in": "query",
-            "description": "Filtrer par type de contenu",
+            "description": "Filter by content type",
             "schema": {
               "type": "string",
               "enum": [
@@ -200,7 +200,7 @@
           {
             "name": "page",
             "in": "query",
-            "description": "Numéro de page (commence à 1)",
+            "description": "Page number (starts at 1)",
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -211,7 +211,7 @@
           {
             "name": "pageSize",
             "in": "query",
-            "description": "Nombre d'éléments par page",
+            "description": "Number of items per page",
             "schema": {
               "type": "integer",
               "minimum": 1,
@@ -223,7 +223,7 @@
           {
             "name": "sort",
             "in": "query",
-            "description": "Tri (ex: addedAt:desc, addedAt:asc)",
+            "description": "Sort order (e.g. addedAt:desc, addedAt:asc)",
             "schema": {
               "type": "string",
               "enum": [
@@ -235,7 +235,7 @@
           {
             "name": "format",
             "in": "query",
-            "description": "Filtrer par format (bluray, dvd, digital, 4k)",
+            "description": "Filter by format (bluray, dvd, digital, 4k)",
             "schema": {
               "type": "string"
             }
@@ -243,7 +243,7 @@
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourner uniquement type et id",
+            "description": "Return only type and id",
             "schema": {
               "type": "boolean",
               "default": false
@@ -252,7 +252,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste des éléments de la collection",
+            "description": "Collection items",
             "content": {
               "application/json": {
                 "schema": {
@@ -283,7 +283,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -299,8 +299,8 @@
         "tags": [
           "Collection"
         ],
-        "summary": "Ajouter à la collection",
-        "description": "Ajoute un film ou une série à votre collection. **Requiert une clé secrète** (`sk_...`).",
+        "summary": "Add to collection",
+        "description": "Adds a movie or TV show to your collection. **Requires a secret key** (`sk_...`).",
         "operationId": "addToCollection",
         "requestBody": {
           "required": true,
@@ -318,7 +318,7 @@
         },
         "responses": {
           "200": {
-            "description": "Élément ajouté à la collection",
+            "description": "Item added to collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -329,15 +329,15 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           }
         },
         "security": [
@@ -353,7 +353,7 @@
         "tags": [
           "Collection"
         ],
-        "summary": "Supprimer de la collection",
+        "summary": "Remove from collection",
         "description": "Retire un élément de votre collection. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromCollection",
         "parameters": [
@@ -373,7 +373,7 @@
             "name": "id",
             "in": "query",
             "required": true,
-            "description": "ID TMDB du contenu",
+            "description": "TMDB ID of the content",
             "schema": {
               "type": "integer"
             }
@@ -381,7 +381,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Élément supprimé de la collection",
+            "description": "Item removed from collection",
             "content": {
               "application/json": {
                 "schema": {
@@ -398,15 +398,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -424,12 +424,12 @@
         "tags": [
           "Dashboard"
         ],
-        "summary": "Configuration du tableau de bord",
-        "description": "Retourne la configuration des widgets du dashboard de l'utilisateur.",
+        "summary": "Dashboard configuration",
+        "description": "Returns the user's dashboard widget configuration.",
         "operationId": "getDashboardConfig",
         "responses": {
           "200": {
-            "description": "Configuration du dashboard",
+            "description": "Dashboard configuration",
             "content": {
               "application/json": {
                 "schema": {
@@ -471,7 +471,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -489,15 +489,15 @@
         "tags": [
           "Dashboard"
         ],
-        "summary": "Contenu unifié de widget",
-        "description": "Agit comme un proxy pour retourner le contenu d'un widget spécifique.",
+        "summary": "Unified widget content",
+        "description": "Acts as a proxy to return the content of a specific widget.",
         "operationId": "getDashboardWidgetContent",
         "parameters": [
           {
             "name": "type",
             "in": "query",
             "required": true,
-            "description": "Type de widget",
+            "description": "Widget type",
             "schema": {
               "type": "string"
             },
@@ -506,7 +506,7 @@
           {
             "name": "listId",
             "in": "query",
-            "description": "ID de la liste (requis si type=list)",
+            "description": "List ID (required if type=list)",
             "schema": {
               "type": "string"
             }
@@ -535,13 +535,13 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           }
         ],
         "responses": {
           "200": {
-            "description": "Contenu du widget",
+            "description": "Widget content",
             "content": {
               "application/json": {
                 "schema": {
@@ -565,7 +565,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -583,8 +583,8 @@
         "tags": [
           "History"
         ],
-        "summary": "Récupérer l'historique de visionnage",
-        "description": "Retourne l'historique de visionnage de l'utilisateur.",
+        "summary": "Get watch history",
+        "description": "Returns the user's watch history.",
         "operationId": "getHistory",
         "parameters": [
           {
@@ -615,7 +615,7 @@
           {
             "name": "sort",
             "in": "query",
-            "description": "Tri (ex: watchedAt:desc, watchedAt:asc)",
+            "description": "Sort order (e.g. watchedAt:desc, watchedAt:asc)",
             "schema": {
               "type": "string",
               "enum": [
@@ -628,7 +628,7 @@
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourner uniquement type et id",
+            "description": "Return only type and id",
             "schema": {
               "type": "boolean",
               "default": false
@@ -650,13 +650,13 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           }
         ],
         "responses": {
           "200": {
-            "description": "Historique de visionnage",
+            "description": "Watch history",
             "content": {
               "application/json": {
                 "schema": {
@@ -687,7 +687,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -740,15 +740,15 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           }
         },
         "security": [
@@ -836,15 +836,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -862,7 +862,7 @@
         "tags": [
           "Favorites"
         ],
-        "summary": "Récupérer les favoris",
+        "summary": "Get favorites",
         "description": "Retourne la liste des favoris de l'utilisateur.",
         "operationId": "getFavorites",
         "parameters": [
@@ -883,7 +883,7 @@
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourner uniquement type et id",
+            "description": "Return only type and id",
             "schema": {
               "type": "boolean",
               "default": false
@@ -906,7 +906,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           }
         ],
@@ -939,7 +939,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -955,7 +955,7 @@
         "tags": [
           "Favorites"
         ],
-        "summary": "Ajouter aux favoris",
+        "summary": "Add to favorites",
         "description": "Ajoute un film ou une série aux favoris. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addToFavorites",
         "requestBody": {
@@ -991,15 +991,15 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           }
         },
         "security": [
@@ -1015,7 +1015,7 @@
         "tags": [
           "Favorites"
         ],
-        "summary": "Supprimer des favoris",
+        "summary": "Remove from favorites",
         "description": "Retire un élément des favoris. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromFavorites",
         "parameters": [
@@ -1059,15 +1059,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -1085,7 +1085,7 @@
         "tags": [
           "Ratings"
         ],
-        "summary": "Récupérer les notes",
+        "summary": "Get ratings",
         "description": "Retourne les notes données par l'utilisateur.",
         "operationId": "getRatings",
         "parameters": [
@@ -1108,7 +1108,7 @@
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourner uniquement type et id",
+            "description": "Return only type and id",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1131,7 +1131,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           }
         ],
@@ -1164,7 +1164,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -1217,15 +1217,15 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           }
         },
         "security": [
@@ -1241,7 +1241,7 @@
         "tags": [
           "Ratings"
         ],
-        "summary": "Supprimer une note",
+        "summary": "Remove a rating",
         "description": "Supprime une note existante. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "deleteRating",
         "parameters": [
@@ -1315,15 +1315,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -1341,7 +1341,7 @@
         "tags": [
           "Watchlist"
         ],
-        "summary": "Récupérer la watchlist",
+        "summary": "Get watchlist",
         "description": "Retourne la liste des contenus à regarder.",
         "operationId": "getWatchlist",
         "parameters": [
@@ -1362,7 +1362,7 @@
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourner uniquement type et id",
+            "description": "Return only type and id",
             "schema": {
               "type": "boolean",
               "default": false
@@ -1393,7 +1393,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           }
         ],
@@ -1426,7 +1426,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -1442,7 +1442,7 @@
         "tags": [
           "Watchlist"
         ],
-        "summary": "Ajouter à la watchlist",
+        "summary": "Add to watchlist",
         "description": "Ajoute un film ou une série à la watchlist. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addToWatchlist",
         "requestBody": {
@@ -1479,15 +1479,15 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           }
         },
         "security": [
@@ -1503,7 +1503,7 @@
         "tags": [
           "Watchlist"
         ],
-        "summary": "Supprimer de la watchlist",
+        "summary": "Remove from watchlist",
         "description": "Retire un élément de la watchlist. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromWatchlist",
         "parameters": [
@@ -1547,15 +1547,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -1605,7 +1605,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -1647,7 +1647,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           },
           {
@@ -1703,15 +1703,15 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           }
         },
         "security": [
@@ -1796,15 +1796,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -1843,7 +1843,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           },
           {
@@ -1885,7 +1885,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -1931,7 +1931,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -1949,7 +1949,7 @@
         "tags": [
           "Lists"
         ],
-        "summary": "Récupérer les listes",
+        "summary": "Get lists",
         "description": "Retourne toutes les listes personnalisées de l'utilisateur.",
         "operationId": "getLists",
         "responses": {
@@ -1981,7 +1981,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         },
         "security": [
@@ -2010,7 +2010,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           },
           {
@@ -2029,7 +2029,7 @@
         "tags": [
           "Lists"
         ],
-        "summary": "Créer une liste",
+        "summary": "Create a list",
         "description": "Crée une nouvelle liste personnalisée. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "createList",
         "requestBody": {
@@ -2060,11 +2060,11 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "422": {
             "$ref": "#/components/responses/UnprocessableEntity",
@@ -2086,7 +2086,7 @@
         "tags": [
           "Lists"
         ],
-        "summary": "Récupérer les éléments d'une liste",
+        "summary": "Get list items",
         "description": "Retourne les éléments d'une liste avec pagination.",
         "operationId": "getListItems",
         "parameters": [
@@ -2127,7 +2127,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100).",
+            "description": "Number of items per page (1 à 100).",
             "example": 20
           }
         ],
@@ -2164,11 +2164,11 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -2184,7 +2184,7 @@
         "tags": [
           "Lists"
         ],
-        "summary": "Ajouter un élément à une liste",
+        "summary": "Add an item to a list",
         "description": "Ajoute un film ou une série à une liste. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addItemToList",
         "parameters": [
@@ -2230,19 +2230,19 @@
           },
           "400": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+            "description": "Invalid request: incorrect parameter or request body."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -2312,15 +2312,15 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           },
           "403": {
             "$ref": "#/components/responses/Forbidden",
-            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+            "description": "Valid API key but insufficient permissions for this operation."
           },
           "404": {
             "$ref": "#/components/responses/NotFound",
-            "description": "Ressource demandée introuvable."
+            "description": "Requested resource not found."
           }
         },
         "security": [
@@ -2442,7 +2442,7 @@
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
-            "description": "Authentification absente, invalide ou clé API non autorisée."
+            "description": "Authentication missing, invalid, or API key not authorized."
           }
         }
       }
@@ -2560,7 +2560,7 @@
             "description": "Paramètres invalides"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [
@@ -2578,7 +2578,7 @@
         "tags": [
           "Channels"
         ],
-        "summary": "Récupérer une chaîne",
+        "summary": "Get a channel",
         "operationId": "getChannel",
         "parameters": [
           {
@@ -2605,7 +2605,7 @@
             "description": "Chaîne introuvable"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [
@@ -2642,7 +2642,7 @@
             "description": "Aucune modification depuis l’ETag fourni"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         }
       }
@@ -2652,7 +2652,7 @@
         "tags": [
           "Connectors"
         ],
-        "summary": "Soumettre un connecteur",
+        "summary": "Submit a connector",
         "description": "Soumet un connecteur pour revue. Limite : 5 soumissions par heure et par utilisateur.",
         "operationId": "submitConnector",
         "requestBody": {
@@ -2692,7 +2692,7 @@
             "description": "Limite atteinte"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [
@@ -2710,7 +2710,7 @@
         "tags": [
           "Kodi"
         ],
-        "summary": "Importer une bibliothèque Kodi",
+        "summary": "Import a Kodi library",
         "operationId": "importKodi",
         "requestBody": {
           "required": true,
@@ -2743,7 +2743,7 @@
             "description": "Lot ou paramètres invalides"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [
@@ -2761,7 +2761,7 @@
         "tags": [
           "Media"
         ],
-        "summary": "Résoudre un média",
+        "summary": "Resolve media",
         "description": "Recherche un média à partir d’un IMDb ID, d’un TMDB ID et type, d’un titre/année ou du contexte d’un épisode.",
         "operationId": "resolveMedia",
         "requestBody": {
@@ -2796,7 +2796,7 @@
             "description": "Média introuvable"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [
@@ -2854,7 +2854,7 @@
             "description": "Aucun élément valide"
           },
           "500": {
-            "description": "Erreur serveur"
+            "description": "Server error"
           }
         },
         "security": [
@@ -2928,7 +2928,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB du contenu"
+            "description": "TMDB ID of the content"
           }
         }
       },
@@ -3115,29 +3115,29 @@
             "type": "integer",
             "minimum": 1,
             "maximum": 10,
-            "description": "Note de 1 à 10"
+            "description": "Rating from 1 to 10"
           },
           "review": {
             "type": "string",
-            "description": "Avis textuel (optionnel)"
+            "description": "Text review (optional)"
           },
           "tvShowId": {
             "type": "integer",
-            "description": "Requis pour les saisons et épisodes",
+            "description": "Required for seasons and episodes",
             "nullable": true
           },
           "seasonNumber": {
             "type": "integer",
-            "description": "Requis pour les saisons",
+            "description": "Required for seasons",
             "nullable": true
           },
           "episodeNumber": {
             "type": "integer",
             "minimum": 1,
-            "description": "Numéro d'épisode, requis lorsque l'épisode est résolu par contexte."
+            "description": "Episode number, required when the episode is resolved by context."
           }
         },
-        "description": "Ajoute ou met à jour une note de 1 à 10. Les saisons et épisodes utilisent tvShowId et leur contexte S/E."
+        "description": "Adds or updates a rating from 1 to 10. Seasons and episodes use tvShowId and their S/E context."
       },
       "WatchlistItem": {
         "allOf": [
@@ -3183,7 +3183,7 @@
           },
           "priority": {
             "type": "integer",
-            "description": "Priorité (plus petit = plus prioritaire)"
+            "description": "Priority (smaller = higher priority)"
           },
           "notes": {
             "type": "string"
@@ -3211,15 +3211,15 @@
           },
           "progress": {
             "type": "integer",
-            "description": "Secondes lues"
+            "description": "Seconds played"
           },
           "duration": {
             "type": "integer",
-            "description": "Durée totale en secondes"
+            "description": "Total duration in seconds"
           },
           "progressPercent": {
             "type": "number",
-            "description": "Pourcentage de progression (0-100)"
+            "description": "Progress percentage (0-100)"
           },
           "updatedAt": {
             "type": "string",
@@ -3244,7 +3244,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB du film ou de l'épisode, facultatif si tmdbId ou le contexte d'épisode est fourni."
+            "description": "TMDB ID of the movie or episode, optional if tmdbId or episode context is provided."
           },
           "progress": {
             "type": "integer",
@@ -3257,25 +3257,25 @@
           "tmdbId": {
             "type": "integer",
             "minimum": 1,
-            "description": "ID TMDB du film ou ID TMDB de la série pour résoudre un épisode."
+            "description": "TMDB ID of the movie or TMDB ID of the TV show to resolve an episode."
           },
           "tvShowId": {
             "type": "integer",
             "minimum": 1,
-            "description": "ID TMDB de la série pour résoudre un épisode."
+            "description": "TMDB ID of the TV show to resolve an episode."
           },
           "seasonNumber": {
             "type": "integer",
             "minimum": 0,
-            "description": "Numéro de saison pour résoudre un épisode."
+            "description": "Season number to resolve an episode."
           },
           "episodeNumber": {
             "type": "integer",
             "minimum": 1,
-            "description": "Numéro d'épisode pour résoudre un épisode."
+            "description": "Episode number to resolve an episode."
           }
         },
-        "description": "Met à jour la progression d'un film ou d'un épisode. À 90 % ou plus, le contenu est automatiquement marqué comme vu."
+        "description": "Updates the progress of a movie or episode. At 90% or more, the content is automatically marked as watched."
       },
       "UpNextItem": {
         "type": "object",
@@ -3356,7 +3356,7 @@
         "properties": {
           "name": {
             "type": "string",
-            "description": "Nom de la liste"
+            "description": "List name"
           },
           "description": {
             "type": "string"
@@ -3393,7 +3393,7 @@
               },
               "position": {
                 "type": "integer",
-                "description": "Position dans la liste"
+                "description": "Position in the list"
               },
               "addedAt": {
                 "type": "string",
@@ -3426,7 +3426,7 @@
           },
           "position": {
             "type": "integer",
-            "description": "Position souhaitée dans la liste"
+            "description": "Desired position in the list"
           },
           "tvShowId": {
             "type": "integer",
@@ -3444,7 +3444,7 @@
             "description": "Numéro d'épisode pour un épisode."
           }
         },
-        "description": "Ajoute un film, une série ou un épisode à une liste. Les règles dépendent du kind de la liste."
+        "description": "Adds a movie, TV show, or episode to a list. Rules depend on the list kind."
       },
       "Pagination": {
         "type": "object",
@@ -3472,11 +3472,11 @@
         "properties": {
           "error": {
             "type": "string",
-            "description": "Code d'erreur machine-readable"
+            "description": "Machine-readable error code"
           },
           "message": {
             "type": "string",
-            "description": "Description lisible de l'erreur"
+            "description": "Human-readable error description"
           }
         }
       },
@@ -3490,7 +3490,7 @@
             "type": "boolean"
           },
           "data": {
-            "description": "Données retournées par l’opération"
+            "description": "Data returned by the operation"
           }
         }
       },
@@ -3729,7 +3729,7 @@
                 }
               }
             },
-            "description": "Tableau des médias à interroger. Peut être vide ; la réponse retourne alors un objet data vide."
+            "description": "Array of media to query. It may be empty; the response then returns an empty data object."
           }
         }
       },
@@ -3753,7 +3753,7 @@
           },
           "definition": {
             "type": "object",
-            "description": "Doit notamment contenir definition.extractors. Les sélecteurs ne doivent pas utiliser de wildcard universel."
+            "description": "Must include definition.extractors. Selectors must not use a universal wildcard."
           }
         }
       },
@@ -3806,7 +3806,7 @@
     },
     "responses": {
       "Unauthorized": {
-        "description": "Authentification requise. Utilisez le header x-api-key ou Authorization: Bearer <key>.",
+        "description": "Authentication required. Use the x-api-key header or Authorization: Bearer <key>.",
         "content": {
           "application/json": {
             "schema": {
@@ -3820,7 +3820,7 @@
         }
       },
       "Forbidden": {
-        "description": "Accès refusé. Cette opération nécessite une **clé secrète** (`sk_...`).",
+        "description": "Access denied. This operation requires a **secret key** (`sk_...`).",
         "content": {
           "application/json": {
             "schema": {
@@ -3834,7 +3834,7 @@
         }
       },
       "NotFound": {
-        "description": "Ressource introuvable.",
+        "description": "Resource not found.",
         "content": {
           "application/json": {
             "schema": {
@@ -3848,7 +3848,7 @@
         }
       },
       "UnprocessableEntity": {
-        "description": "Données de requête invalides.",
+        "description": "Invalid request data.",
         "content": {
           "application/json": {
             "schema": {
