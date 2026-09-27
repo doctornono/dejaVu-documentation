@@ -12,12 +12,12 @@ L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
 ## Exemple
 
 ```bash
-curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/collection?page=1&pageSize=20"
+curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/collection?page=1&pageSize=20"
 ```
 
 ## Paramètres et réponse
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page. Pour les requêtes d’écriture, envoyez le corps JSON conforme au schéma indiqué.
+Les paramètres, schémas et réponses sont définis par la spécification OpenAPI affichée sur cette page.
 
 ## Erreurs
 
@@ -25,5 +25,4 @@ Consultez **Responses** pour les codes et formats d’erreur propres à l’opé
 
 ## Notes
 
-- N’exposez jamais une clé API `sk_` dans du code client ou un dépôt public.
-- Utilisez la pagination pour les collections volumineuses.
+Utilisez la pagination pour les collections volumineuses. N’exposez jamais une clé API `sk_` dans du code client ou un dépôt public.
