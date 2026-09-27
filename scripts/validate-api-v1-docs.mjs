@@ -18,7 +18,7 @@ try {
 } catch (error) { fail(`Invalid JSON: ${error.message}`); process.exit(1); }
 
 const methods = new Set(["get","post","put","patch","delete"]);
-const englishOpenapiPath = path.join(root, "api-reference", "en", "openapi.json");
+const englishOpenapiPath = path.join(root, "en", "api-reference", "openapi.json");
 if (!fs.existsSync(englishOpenapiPath)) { fail(`Missing ${englishOpenapiPath}`); process.exit(1); }
 let englishSpec;
 try { englishSpec = JSON.parse(fs.readFileSync(englishOpenapiPath, "utf8")); }
