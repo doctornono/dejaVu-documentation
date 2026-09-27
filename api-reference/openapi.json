@@ -2161,7 +2161,15 @@
           "500": {
             "description": "Erreur serveur"
           }
-        }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/channels/{id}": {
@@ -2198,7 +2206,15 @@
           "500": {
             "description": "Erreur serveur"
           }
-        }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/connectors": {
@@ -2268,7 +2284,15 @@
           "500": {
             "description": "Erreur serveur"
           }
-        }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/kodi/import": {
@@ -2305,7 +2329,15 @@
           "500": {
             "description": "Erreur serveur"
           }
-        }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/media/resolve": {
@@ -2346,7 +2378,15 @@
           "500": {
             "description": "Erreur serveur"
           }
-        }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     },
     "/media/status": {
@@ -2384,7 +2424,15 @@
           "500": {
             "description": "Erreur serveur"
           }
-        }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
       }
     }
   },
