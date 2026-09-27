@@ -1,80 +1,74 @@
-# Audit de la documentation API v1 — DejaVu
+# API V1 Documentation Audit
 
-## État du contrat
+Date: 2026-09-27
 
-Le dépôt documente actuellement :
+## Scope
 
-- **24 routes**
-- **39 opérations**
-- **29 schémas OpenAPI**
-- une référence française et une référence anglaise
-- une authentification par `x-api-key` ou Bearer pour les opérations protégées
-- un Device Flow avec ses endpoints publics et son endpoint d’approbation par session navigateur
-- les intégrations Connectors et Kodi
-- les opérations Channels et Media
+Deep content audit of the DejaVu API v1 documentation repository, covering the canonical French and English OpenAPI documents, Mintlify navigation, all 39 API operations, all 39 French endpoint pages, all 39 English endpoint pages, introduction and authentication pages, endpoint security declarations, documented query parameters and examples, French/English consistency, and obsolete starter content.
 
-L’ancien endpoint `/collection/batch` est absent du contrat et de la navigation.
+## Contract baseline
 
-## Parité FR / EN
+- 24 API routes.
+- 39 OpenAPI operations.
+- 29 OpenAPI schemas.
+- French and English OpenAPI operation sets are aligned.
+- French and English endpoint navigation each expose all 39 operations.
+- OpenAPI references on endpoint pages match the canonical routes.
 
-La validation automatique vérifie que :
+## Findings
 
-- les deux OpenAPI existent et sont valides ;
-- les ensembles d’opérations sont identiques ;
-- les ensembles de schémas sont identiques ;
-- la version OpenAPI et la version de l’API sont identiques ;
-- les 39 opérations disposent d’une page FR et d’une page EN ;
-- les références `openapi:` des pages correspondent aux opérations du contrat.
+### 1. English endpoint content was not production-ready
 
-## Structure documentaire
+The English endpoint pages contained substantial mixed French/English prose and, in several cases, malformed hybrid titles.
 
-La navigation est limitée à la référence API :
+**Action:** all 39 English endpoint pages were rewritten in consistent technical English while preserving exact OpenAPI method/path references and technical identifiers.
 
-- Introduction
-- Auth
-- Collection
-- History
-- Favorites
-- Ratings
-- Watchlist
-- Scrobble
-- Up Next
-- Dashboard
-- Lists
-- User
-- Media
-- Channels
-- Connectors
-- Kodi
+### 2. Device approval authentication was documented incorrectly
 
-Les anciens contenus du starter Mintlify ont été supprimés lorsqu’ils n’étaient pas utilisés par la documentation DejaVu.
+The device approval endpoint is protected by the authenticated DejaVu session cookie (SessionCookie), not by an API key and not as a public endpoint.
 
-## Validation
+**Action:** both French and English pages now explicitly document session authentication and provide a session-cookie example.
 
-Commande locale :
+### 3. Device QR and verification examples omitted a required parameter
 
-```bash
-node scripts/validate-api-v1-docs.mjs
-```
+GET /auth/device/qr and GET /auth/device/verify require the user_code query parameter.
 
-CI :
+**Action:** both French and English pages now show ?user_code=... and explicitly mention the parameter.
 
-```text
-.github/workflows/validate-api-v1-docs.yml
-```
+### 4. Channel authentication was documented incorrectly
 
-Le workflow est déclenché sur les pushes vers `main` et les pull requests.
+GET /channels and GET /channels/{id} require API-key/Bearer authentication according to the OpenAPI contract.
 
-## Règle de maintenance
+**Action:** both French and English pages now describe authenticated access consistently.
 
-Lorsqu’un endpoint évolue, mettre à jour dans cet ordre :
+### 5. Dashboard and profile examples contained undeclared query parameters
 
-1. comportement réel et tests dans le dépôt DejaVu ;
-2. OpenAPI canonique ;
-3. OpenAPI anglais ;
-4. pages FR ;
-5. pages EN ;
-6. validation locale ;
-7. CI.
+The previous examples for GET /dashboard and GET /me included page and pageSize, although those operations do not define query parameters.
 
-Cet audit décrit l’état documentaire ; il ne remplace pas les tests fonctionnels de l’API dans le dépôt DejaVu.
+**Action:** dashboard and profile examples now use the actual parameterless endpoints.
+
+### 6. Write operations were underspecified in prose
+
+Several endpoint pages only said that authentication was required, without making the read/write key distinction explicit.
+
+**Action:** English write-operation pages now state that write access requires the permissions associated with a secret key (sk_), consistent with the OpenAPI error contract.
+
+## Structural verification
+
+The existing validator continues to enforce exact OpenAPI operation parity, exact French/English operation parity, exact schema-set parity, explicit operation security declarations, complete endpoint-page coverage, absence of obsolete /collection/batch, absence of starter/duplicate files, and DejaVu branding/navbar constraints.
+
+The validator was strengthened with content-level checks for:
+
+- French prose accidentally present in English endpoint pages;
+- contradictions between page authentication claims and OpenAPI security;
+- undocumented query parameters used in examples.
+
+## Mintlify configuration
+
+The repository remains intentionally API-focused. Mintlify is the documentation renderer, not the subject of the documentation.
+
+The navigation uses French and English language sections and the canonical OpenAPI contract. Mintlify supports language-partitioned navigation and OpenAPI-backed endpoint pages. citeturn0search2turn0search3
+
+## Result
+
+The repository now has a clean FR/EN endpoint reference with the OpenAPI contract as the technical source of truth and content-level regression checks for the main classes of documentation drift discovered during this audit.

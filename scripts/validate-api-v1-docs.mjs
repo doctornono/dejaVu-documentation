@@ -83,6 +83,53 @@ function readPages(tab, label) {
 const french = readPages(frTab, "French");
 const english = readPages(enTab, "English");
 
+// Content-level checks: endpoint pages must not contradict the OpenAPI security contract,
+// and documented query parameters must actually exist on the referenced operation.
+const englishForbiddenPatterns = [
+  /\bCette\b/, /\bRetourne\b/, /\bAjoute\b/, /\bRetire\b/, /\bRécupérer\b/,
+  /\bSchéma\b/, /\brequête\b/, /\bauthentification\b/, /\bl’utilisateur\b/,
+  /\bune nouvelle\b/, /\bles paramètres\b/, /\bles réponses\b/, /\bConservez\b/,
+  /\bApprouver\b/, /\bLister\b/, /\bChaîne\b/, /\bSéries\b/
+];
+
+function inspectPage(relative, label) {
+  const file = path.join(root, `${relative}.mdx`);
+  const content = fs.readFileSync(file, "utf8");
+  const match = content.match(/^openapi:\s*["'](GET|POST|PUT|PATCH|DELETE)\s+(.+?)["']\s*$/m);
+  if (!match) return;
+  const key = `${match[1]} ${match[2]}`;
+  const operation = opMapForValidation.get(key);
+  if (!operation) return;
+
+  if (label === "English") {
+    for (const pattern of englishForbiddenPatterns) {
+      if (pattern.test(content)) fail(`${relative}.mdx: English page still contains French prose (${pattern})`);
+    }
+  }
+
+  const requiresAuth = Array.isArray(operation.security) && operation.security.length > 0;
+  if (!requiresAuth && /Authentication is required|API key is required/i.test(content)) {
+    fail(`${relative}.mdx: page requires API authentication but OpenAPI declares the operation public`);
+  }
+  if (requiresAuth && /This operation is public|No API key is required/i.test(content)) {
+    fail(`${relative}.mdx: page declares a public/no-key operation but OpenAPI requires security`);
+  }
+
+  const queryNames = new Set((operation.parameters ?? []).filter((p) => p.in === "query").map((p) => p.name));
+  const urls = [...content.matchAll(/https:\/\/dejavu\.plus\/api\/v1\/[^\s"`]+/g)].map((m) => m[0]);
+  for (const raw of urls) {
+    const query = raw.split("?")[1];
+    if (!query) continue;
+    for (const part of query.split("&")) {
+      const name = decodeURIComponent(part.split("=")[0]);
+      if (name && !queryNames.has(name)) fail(`${relative}.mdx: example uses undeclared query parameter ${name}`);
+    }
+  }
+}
+const opMapForValidation = new Map(operations.map(({method,route,operation}) => [`${method} ${route}`, operation]));
+for (const relative of french.pages) inspectPage(relative, "French");
+for (const relative of english.pages) inspectPage(relative, "English");
+
 for (const [label,set] of [["French",new Set(french.keys)],["English",new Set(english.keys)]]) {
   for (const key of operationKeys) if (!set.has(key)) fail(`OpenAPI operation has no ${label} Mintlify page: ${key}`);
   for (const key of set) if (!operationKeys.has(key)) fail(`${label} Mintlify page references an operation absent from OpenAPI: ${key}`);
