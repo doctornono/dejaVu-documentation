@@ -2,3 +2,23 @@
 title: "Supprimer des favoris"
 openapi: "DELETE /favorites"
 ---
+
+## Utilisation
+
+Retire un média des favoris de l’utilisateur authentifié.
+
+L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
+
+## Exemple
+
+```bash
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/favorites"
+```
+
+## Paramètres et réponse
+
+Les paramètres d’identification et les réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
