@@ -2,3 +2,27 @@
 title: "Récupérer les favoris"
 openapi: "GET /favorites"
 ---
+
+## Utilisation
+
+Retourne les favoris paginés de l’utilisateur authentifié.
+
+L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
+
+## Exemple
+
+```bash
+curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/favorites?page=1&pageSize=20"
+```
+
+## Paramètres et réponse
+
+Les paramètres et schémas de réponse sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
+
+## Notes
+
+Utilisez la pagination pour parcourir un grand nombre de favoris.
