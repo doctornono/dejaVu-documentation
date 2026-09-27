@@ -1,0 +1,62 @@
+---
+title: "Authentication"
+description: "API keys, Bearer tokens, and Device Flow"
+---
+
+# Authentication
+
+The v1 API accepts two main API-key authentication methods:
+
+- `x-api-key: <key>`
+- `Authorization: Bearer <key>`
+
+DejaVu keys generally use the `pk_` and `sk_` prefixes.
+
+## Public key
+
+A `pk_` key is intended for read operations.
+
+```bash
+curl https://dejavu.plus/api/v1/me \\
+  -H "x-api-key: pk_YOUR_KEY"
+```
+
+## Secret key
+
+An `sk_` key can be used for authorized read and write operations.
+
+```bash
+curl https://dejavu.plus/api/v1/lists \\
+  -H "Authorization: Bearer sk_YOUR_KEY"
+```
+
+## Unsupported usage
+
+Do not send a key in the query string:
+
+```text
+/api/v1/me?api_key=...
+```
+
+This form is not supported by the v1 API.
+
+## Device Flow
+
+The Device Flow is intended in particular for applications and devices that do not have a full browser.
+
+The general flow is:
+
+1. Request a device code.
+2. Present the code or QR code to the user.
+3. Have the device approved in DejaVu.
+4. Exchange the `device_code` for an access token.
+5. Use the returned token as a Bearer token.
+
+See the endpoints in the **Auth** group for the exact request and response formats.
+
+## Security
+
+- Never log API keys.
+- Never place a secret key in JavaScript executed in the browser.
+- Use HTTPS for every request.
+- If a key is compromised, revoke it and create a new one.
