@@ -1,33 +1,40 @@
 ---
-title: 'Introduction'
-description: 'Example section for showcasing API endpoints'
+title: "Référence API"
+description: "Référence complète de l’API v1 DejaVu"
 ---
 
-<Note>
-  If you're not looking to build API reference documentation, you can delete
-  this section by removing the api-reference folder.
-</Note>
+# Référence API v1
 
-## Welcome
+Cette section est la référence technique de l’API DejaVu. Les endpoints sont décrits à partir de `api-reference/openapi.json`.
 
-There are two ways to build API documentation: [OpenAPI](https://mintlify.com/docs/api-playground/openapi/setup) and [MDX components](https://mintlify.com/docs/api-playground/mdx/configuration). For the starter kit, we are using the following OpenAPI specification.
+## Authentification
 
-<Card
-  title="Plant Store Endpoints"
-  icon="leaf"
-  href="https://github.com/mintlify/starter/blob/main/api-reference/openapi.json"
->
-  View the OpenAPI specification file
-</Card>
+La majorité des endpoints utilisent une clé API dans l’en-tête `x-api-key` ou un jeton Bearer dans `Authorization`.
 
-## Authentication
-
-All API endpoints are authenticated using Bearer tokens and picked up from the specification file.
-
-```json
-"security": [
-  {
-    "bearerAuth": []
-  }
-]
+```http
+x-api-key: pk_VOTRE_CLE
 ```
+
+ou :
+
+```http
+Authorization: Bearer VOTRE_CLE
+```
+
+Les clés API ne doivent pas être placées dans l’URL. La forme `?api_key=` n’est pas supportée.
+
+## Convention de réponse
+
+Les endpoints qui utilisent l’enveloppe standard renvoient un objet contenant notamment `success` et, selon l’opération, `data`, `pagination` ou `user`.
+
+Les codes HTTP restent la source de vérité pour déterminer si une requête a réussi.
+
+## Playground
+
+La référence OpenAPI fournit un playground interactif lorsque l’endpoint est compatible avec celui-ci. Il permet de renseigner l’authentification, les paramètres et le corps de requête puis d’observer la réponse réelle.
+
+Pour les tests avancés propres à DejaVu, notamment les scénarios nécessitant un contexte utilisateur ou des opérations internes, utilisez également le playground administrateur disponible dans DejaVu.
+
+<Warning>
+Ne partagez jamais une clé `sk_` dans une application cliente ou dans du code distribué publiquement.
+</Warning>

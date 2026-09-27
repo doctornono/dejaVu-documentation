@@ -53,7 +53,8 @@
           {
             "group": "Introduction",
             "pages": [
-              "api-reference/introduction"
+              "api-reference/introduction",
+              "api-reference/authentication"
             ]
           },
           {
@@ -71,8 +72,7 @@
             "pages": [
               "api-reference/collection/get-collection",
               "api-reference/collection/add-to-collection",
-              "api-reference/collection/remove-from-collection",
-              "api-reference/collection/batch-add-to-collection"
+              "api-reference/collection/remove-from-collection"
             ]
           },
           {
@@ -182,14 +182,14 @@
   "navbar": {
     "links": [
       {
-        "label": "Support",
-        "href": "mailto:hi@mintlify.com"
+        "label": "DejaVu",
+        "href": "https://dejavu.plus"
       }
     ],
     "primary": {
       "type": "button",
-      "label": "Dashboard",
-      "href": "https://dashboard.mintlify.com"
+      "label": "Ouvrir DejaVu",
+      "href": "https://dejavu.plus"
     }
   },
   "footer": {

@@ -1,41 +1,43 @@
 ---
-title: "Introduction"
-description: "Welcome to the new home for your documentation"
+title: "DejaVu API"
+description: "Documentation de l’API v1 de DejaVu"
 ---
 
-# Welcome to DejaVu 👋
+# DejaVu API v1
 
-**DejaVu** est votre compagnon personnel pour suivre, organiser et analyser votre passion pour le cinéma et les séries TV. Plus qu'un simple traqueur, DejaVu vous offre une vue d'ensemble détaillée de vos habitudes de visionnage tout en vous permettant de personnaliser entièrement votre expérience.
+L’API v1 permet aux applications, extensions et intégrations de lire et de modifier les données personnelles d’un compte DejaVu.
 
-## 🌟 Points forts de DejaVu
+<Note>
+La référence technique est générée à partir de la spécification OpenAPI. Les exemples et guides complètent cette référence avec des explications pratiques.
+</Note>
 
-- **Suivi Complet** : Gardez une trace de chaque film vu, chaque épisode visionné et chaque note attribuée.
-- **Tableau de Bord Personnalisable** : Organisez vos propres widgets pour voir ce qui compte vraiment pour vous.
-- **Statistiques Avancées** : Découvrez vos genres favoris, votre temps total de visionnage et la répartition de vos notes.
-- **Gestion de Collection** : Répertoriez vos supports physiques (DVD, Blu-ray, 4K) et numériques.
-- **Importation Facilitée** : Ne repartez pas de zéro ! Importez vos données depuis IMDb, Trakt ou TMDb en quelques clics.
+## Pour commencer
 
----
+1. Créez ou récupérez une clé API DejaVu.
+2. Ajoutez-la à vos requêtes avec l’en-tête `x-api-key` ou `Authorization: Bearer`.
+3. Testez votre première requête dans le playground de la référence API.
+4. Consultez les endpoints par ressource lorsque vous commencez votre intégration.
 
-## 📖 Comment utiliser cette aide ?
+<CardGroup cols={2}>
+  <Card title="Authentification" icon="key" href="/api-reference/authentication">
+    Comprendre les clés `pk_`, `sk_` et le Device Flow.
+  </Card>
+  <Card title="Référence API" icon="code" href="/api-reference/introduction">
+    Endpoints, paramètres, requêtes et réponses.
+  </Card>
+</CardGroup>
 
-Cette section regroupe tous les guides nécessaires pour maîtriser l'application :
+## Authentification
 
-### 🚀 Premiers Pas
+Les clés API sont transmises dans les en-têtes HTTP. Les clés dans la query string (`?api_key=`) ne sont pas supportées.
 
-- [**Choisir sa langue et sa région**](./essentials/settings) : L'importance de la localisation pour vos données.
-- [**Importer ses données**](./essentials/import) : Récupérez votre historique depuis d'autres plateformes.
+```bash
+curl https://dejavu.plus/api/v1/me \
+  -H "x-api-key: pk_VOTRE_CLE"
+```
 
-### 🛠️ Personnalisation
+Une clé publique `pk_` est destinée aux opérations de lecture. Une clé secrète `sk_` permet les opérations de lecture et d’écriture lorsque l’endpoint l’autorise.
 
-- [**Configurer son Dashboard**](./essentials/dashboard) : Apprenez à ajouter, déplacer et supprimer des widgets.
+## Ressources
 
-### 📥 Guides d'Importation Détaillés
-
-- [Guide IMDb](./essentials/imdb)
-- [Guide TMDb](./essentials/tmdb)
-- [Guide Trakt.tv](./essentials/trakt)
-
----
-
-_Bonne exploration et bons visionnages avec DejaVu !_
+La référence couvre les collections, historiques, favoris, notes, watchlist, scrobble, listes, dashboard, médias, channels, connecteurs, import Kodi et Device Flow.
