@@ -19,122 +19,122 @@
               {
                 "group": "Introduction",
                 "pages": [
-                  "api-reference/introduction",
-                  "api-reference/authentication"
+                  "fr/api-reference/introduction",
+                  "fr/api-reference/authentication"
                 ]
               },
               {
                 "group": "Auth",
                 "pages": [
-                  "api-reference/auth/request-device-code",
-                  "api-reference/auth/request-device-qr",
-                  "api-reference/auth/exchange-device-token",
-                  "api-reference/auth/verify-device-code",
-                  "api-reference/auth/approve-device-code"
+                  "fr/api-reference/auth/request-device-code",
+                  "fr/api-reference/auth/request-device-qr",
+                  "fr/api-reference/auth/exchange-device-token",
+                  "fr/api-reference/auth/verify-device-code",
+                  "fr/api-reference/auth/approve-device-code"
                 ]
               },
               {
                 "group": "Collection",
                 "pages": [
-                  "api-reference/collection/get-collection",
-                  "api-reference/collection/add-to-collection",
-                  "api-reference/collection/remove-from-collection"
+                  "fr/api-reference/collection/get-collection",
+                  "fr/api-reference/collection/add-to-collection",
+                  "fr/api-reference/collection/remove-from-collection"
                 ]
               },
               {
                 "group": "History",
                 "pages": [
-                  "api-reference/history/get-history",
-                  "api-reference/history/add-to-history",
-                  "api-reference/history/remove-from-history"
+                  "fr/api-reference/history/get-history",
+                  "fr/api-reference/history/add-to-history",
+                  "fr/api-reference/history/remove-from-history"
                 ]
               },
               {
                 "group": "Favorites",
                 "pages": [
-                  "api-reference/favorites/get-favorites",
-                  "api-reference/favorites/add-to-favorites",
-                  "api-reference/favorites/remove-from-favorites"
+                  "fr/api-reference/favorites/get-favorites",
+                  "fr/api-reference/favorites/add-to-favorites",
+                  "fr/api-reference/favorites/remove-from-favorites"
                 ]
               },
               {
                 "group": "Ratings",
                 "pages": [
-                  "api-reference/ratings/get-ratings",
-                  "api-reference/ratings/upsert-rating",
-                  "api-reference/ratings/delete-rating"
+                  "fr/api-reference/ratings/get-ratings",
+                  "fr/api-reference/ratings/upsert-rating",
+                  "fr/api-reference/ratings/delete-rating"
                 ]
               },
               {
                 "group": "Watchlist",
                 "pages": [
-                  "api-reference/watchlist/get-watchlist",
-                  "api-reference/watchlist/add-to-watchlist",
-                  "api-reference/watchlist/remove-from-watchlist"
+                  "fr/api-reference/watchlist/get-watchlist",
+                  "fr/api-reference/watchlist/add-to-watchlist",
+                  "fr/api-reference/watchlist/remove-from-watchlist"
                 ]
               },
               {
                 "group": "Scrobble",
                 "pages": [
-                  "api-reference/scrobble/get-scrobble-sessions",
-                  "api-reference/scrobble/update-scrobble",
-                  "api-reference/scrobble/delete-scrobble"
+                  "fr/api-reference/scrobble/get-scrobble-sessions",
+                  "fr/api-reference/scrobble/update-scrobble",
+                  "fr/api-reference/scrobble/delete-scrobble"
                 ]
               },
               {
                 "group": "Up Next",
                 "pages": [
-                  "api-reference/upnext/get-up-next"
+                  "fr/api-reference/upnext/get-up-next"
                 ]
               },
               {
                 "group": "Dashboard",
                 "pages": [
-                  "api-reference/dashboard/get-dashboard-config",
-                  "api-reference/dashboard/get-dashboard-widget-content"
+                  "fr/api-reference/dashboard/get-dashboard-config",
+                  "fr/api-reference/dashboard/get-dashboard-widget-content"
                 ]
               },
               {
                 "group": "Lists",
                 "pages": [
-                  "api-reference/lists/get-lists",
-                  "api-reference/lists/create-list",
-                  "api-reference/lists/get-list-items",
-                  "api-reference/lists/add-item-to-list",
-                  "api-reference/lists/remove-item-from-list"
+                  "fr/api-reference/lists/get-lists",
+                  "fr/api-reference/lists/create-list",
+                  "fr/api-reference/lists/get-list-items",
+                  "fr/api-reference/lists/add-item-to-list",
+                  "fr/api-reference/lists/remove-item-from-list"
                 ]
               },
               {
                 "group": "User",
                 "pages": [
-                  "api-reference/user/get-profile"
+                  "fr/api-reference/user/get-profile"
                 ]
               },
               {
                 "group": "Media",
                 "pages": [
-                  "api-reference/media/resolve-media",
-                  "api-reference/media/get-media-status"
+                  "fr/api-reference/media/resolve-media",
+                  "fr/api-reference/media/get-media-status"
                 ]
               },
               {
                 "group": "Channels",
                 "pages": [
-                  "api-reference/channels/get-channels",
-                  "api-reference/channels/get-channel"
+                  "fr/api-reference/channels/get-channels",
+                  "fr/api-reference/channels/get-channel"
                 ]
               },
               {
                 "group": "Connectors",
                 "pages": [
-                  "api-reference/connectors/get-connectors",
-                  "api-reference/connectors/submit-connector"
+                  "fr/api-reference/connectors/get-connectors",
+                  "fr/api-reference/connectors/submit-connector"
                 ]
               },
               {
                 "group": "Kodi",
                 "pages": [
-                  "api-reference/kodi/import"
+                  "fr/api-reference/kodi/import"
                 ]
               }
             ]
