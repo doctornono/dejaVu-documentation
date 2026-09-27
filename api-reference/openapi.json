@@ -215,7 +215,11 @@
             "in": "query",
             "description": "Tri (ex: addedAt:desc, addedAt:asc)",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "addedAt:asc",
+                "addedAt:desc"
+              ]
             }
           },
           {
@@ -499,6 +503,15 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
           }
         ],
         "responses": {
@@ -576,7 +589,11 @@
             "in": "query",
             "description": "Tri (ex: watchedAt:desc, watchedAt:asc)",
             "schema": {
-              "type": "string"
+              "type": "string",
+              "enum": [
+                "watchedAt:asc",
+                "watchedAt:desc"
+              ]
             }
           },
           {
@@ -587,6 +604,24 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
           }
         ],
         "responses": {
@@ -710,9 +745,36 @@
           {
             "name": "id",
             "in": "query",
-            "required": true,
             "schema": {
-              "type": "integer"
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "ID TMDB du média ou de l'épisode. Facultatif si un contexte d'épisode est fourni.",
+            "required": false
+          },
+          {
+            "name": "tvShowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "ID TMDB de la série pour cibler un épisode."
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "episodeNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
             }
           }
         ],
@@ -784,6 +846,24 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
           }
         ],
         "responses": {
@@ -978,6 +1058,24 @@
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
           }
         ],
         "responses": {
@@ -1180,6 +1278,24 @@
             "schema": {
               "type": "string"
             }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
           }
         ],
         "responses": {
@@ -1387,6 +1503,46 @@
           {
             "BearerAuth": []
           }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "episode"
+              ]
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
         ]
       },
       "post": {
@@ -1465,9 +1621,34 @@
           {
             "name": "id",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "integer"
+            },
+            "description": "ID TMDB du film ou de l'épisode. Facultatif si le contexte d'épisode est fourni."
+          },
+          {
+            "name": "tvShowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "episodeNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
             }
           }
         ],
@@ -1518,14 +1699,29 @@
         "operationId": "getUpNext",
         "parameters": [
           {
-            "name": "limit",
+            "name": "page",
             "in": "query",
-            "description": "Nombre maximum de séries à retourner",
             "schema": {
               "type": "integer",
-              "minimum": 1,
-              "maximum": 50,
-              "default": 10
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
             }
           }
         ],
@@ -1661,6 +1857,35 @@
           {
             "BearerAuth": []
           }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Retourne une représentation minimale des listes."
+          }
         ]
       },
       "post": {
@@ -1736,16 +1961,26 @@
               "type": "integer",
               "minimum": 1,
               "default": 1
-            }
+            },
+            "description": "Numéro de page (à partir de 1)."
           },
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourner uniquement type et id",
+            "description": "Retourne une représentation minimale des éléments.",
             "schema": {
               "type": "boolean",
               "default": false
             }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100)."
           }
         ],
         "responses": {
@@ -1885,15 +2120,16 @@
               "type": "string",
               "enum": [
                 "movie",
-                "tv"
+                "tv",
+                "episode"
               ]
             }
           },
           {
-            "name": "id_item",
+            "name": "id",
             "in": "query",
             "required": true,
-            "description": "ID TMDB de l'élément à retirer",
+            "description": "ID TMDB du média ou de l'épisode.",
             "schema": {
               "type": "integer"
             }
@@ -2588,8 +2824,7 @@
       "HistoryInput": {
         "type": "object",
         "required": [
-          "type",
-          "id"
+          "type"
         ],
         "properties": {
           "type": {
@@ -2602,7 +2837,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB"
+            "description": "ID TMDB du film ou de l'épisode. Pour un épisode, peut être remplacé par tvShowId + seasonNumber + episodeNumber."
           },
           "count": {
             "type": "integer",
@@ -2613,8 +2848,27 @@
             "type": "string",
             "format": "date-time",
             "description": "Date et heure du visionnage (défaut: maintenant)"
+          },
+          "tmdbId": {
+            "type": "integer",
+            "description": "Alias du TMDB ID de la série pour résoudre un épisode par contexte."
+          },
+          "tvShowId": {
+            "type": "integer",
+            "description": "ID TMDB de la série, utilisé pour résoudre un épisode."
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Numéro de saison pour la résolution d'un épisode."
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode pour la résolution d'un épisode."
           }
-        }
+        },
+        "description": "Ajoute un film ou un épisode à l'historique. Les séries TV ne constituent pas une entrée d'historique autonome : utilisez type=episode."
       },
       "RatingItem": {
         "allOf": [
@@ -2645,7 +2899,6 @@
         "type": "object",
         "required": [
           "type",
-          "id",
           "rating"
         ],
         "properties": {
@@ -2660,7 +2913,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB"
+            "description": "ID TMDB du média ou de l'épisode. Pour une saison/épisode, le contexte de série peut être nécessaire."
           },
           "rating": {
             "type": "integer",
@@ -2681,8 +2934,14 @@
             "type": "integer",
             "description": "Requis pour les saisons",
             "nullable": true
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode, requis lorsque l'épisode est résolu par contexte."
           }
-        }
+        },
+        "description": "Ajoute ou met à jour une note de 1 à 10. Les saisons et épisodes utilisent tvShowId et leur contexte S/E."
       },
       "WatchlistItem": {
         "allOf": [
@@ -2776,7 +3035,6 @@
         "type": "object",
         "required": [
           "type",
-          "id",
           "progress",
           "duration"
         ],
@@ -2790,7 +3048,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB du film ou de l'épisode"
+            "description": "ID TMDB du film ou de l'épisode, facultatif si tmdbId ou le contexte d'épisode est fourni."
           },
           "progress": {
             "type": "integer",
@@ -2799,8 +3057,29 @@
           "duration": {
             "type": "integer",
             "description": "Durée totale du contenu en secondes"
+          },
+          "tmdbId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "ID TMDB du film ou ID TMDB de la série pour résoudre un épisode."
+          },
+          "tvShowId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "ID TMDB de la série pour résoudre un épisode."
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Numéro de saison pour résoudre un épisode."
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode pour résoudre un épisode."
           }
-        }
+        },
+        "description": "Met à jour la progression d'un film ou d'un épisode. À 90 % ou plus, le contenu est automatiquement marqué comme vu."
       },
       "UpNextItem": {
         "type": "object",
@@ -2931,8 +3210,7 @@
       "ListItemInput": {
         "type": "object",
         "required": [
-          "type",
-          "id"
+          "type"
         ],
         "properties": {
           "type": {
@@ -2945,7 +3223,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB"
+            "description": "ID TMDB du média ou de l'épisode. Pour un épisode, peut être remplacé par le contexte tvShowId + seasonNumber + episodeNumber."
           },
           "notes": {
             "type": "string"
@@ -2953,8 +3231,24 @@
           "position": {
             "type": "integer",
             "description": "Position souhaitée dans la liste"
+          },
+          "tvShowId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "ID TMDB de la série, utilisé pour résoudre un épisode."
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Numéro de saison pour un épisode."
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode pour un épisode."
           }
-        }
+        },
+        "description": "Ajoute un film, une série ou un épisode à une liste. Les règles dépendent du kind de la liste."
       },
       "Pagination": {
         "type": "object",
@@ -3195,9 +3489,7 @@
       },
       "MediaStatusRequest": {
         "type": "object",
-        "required": [
-          "items"
-        ],
+        "required": [],
         "properties": {
           "items": {
             "type": "array",
@@ -3240,7 +3532,8 @@
                   "type": "integer"
                 }
               }
-            }
+            },
+            "description": "Tableau des médias à interroger. Peut être vide ; la réponse retourne alors un objet data vide."
           }
         }
       },
