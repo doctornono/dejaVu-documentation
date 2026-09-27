@@ -1,0 +1,28 @@
+---
+title: "Remover une rating"
+openapi: "DELETE /ratings"
+---
+
+## Usage
+
+Remove une rating existante. Pour une saison ou un episode, utilisez le contexte correspondant.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/ratings"
+```
+
+## Parameters and response
+
+Request parameters, schemas, and responses are defined by the OpenAPI specification displayed on this page. Use the schema fields to build the request.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats. Une réponse `401` indique une authentification absente ou invalide.
+
+## Notes
+
+Never expose an `sk_` API key in client-side code or a public repository.
