@@ -1,0 +1,28 @@
+---
+title: "Createsr une list"
+openapi: "POST /lists"
+---
+
+## Usage
+
+Creates une nouvelle list selon les paramètres de visibilité et de type définis par l’API.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X POST -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/lists"
+```
+
+## Parameters and response
+
+Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats.
+
+## Notes
+
+Never expose an `sk_` API key in client-side code or a public repository.
