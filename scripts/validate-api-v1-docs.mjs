@@ -18,6 +18,27 @@ try {
 } catch (error) { fail(`Invalid JSON: ${error.message}`); process.exit(1); }
 
 const methods = new Set(["get","post","put","patch","delete"]);
+const englishOpenapiPath = path.join(root, "api-reference", "en", "openapi.json");
+if (!fs.existsSync(englishOpenapiPath)) { fail(`Missing ${englishOpenapiPath}`); process.exit(1); }
+let englishSpec;
+try { englishSpec = JSON.parse(fs.readFileSync(englishOpenapiPath, "utf8")); }
+catch (error) { fail(`Invalid English OpenAPI JSON: ${error.message}`); process.exit(1); }
+
+const operationSignature = (value) => Object.entries(value.paths ?? {}).flatMap(([route,item]) =>
+  Object.keys(item ?? {}).filter((method) => methods.has(method)).map((method) => `${method.toUpperCase()} ${route}`)
+).sort();
+const schemaNames = (value) => Object.keys(value.components?.schemas ?? {}).sort();
+if (JSON.stringify(operationSignature(spec)) !== JSON.stringify(operationSignature(englishSpec))) {
+  fail("English OpenAPI operation set differs from canonical OpenAPI");
+}
+if (JSON.stringify(schemaNames(spec)) !== JSON.stringify(schemaNames(englishSpec))) {
+  fail("English OpenAPI schema set differs from canonical OpenAPI");
+}
+if (englishSpec.openapi !== spec.openapi || englishSpec.info?.version !== spec.info?.version) {
+  fail("English OpenAPI version metadata differs from canonical OpenAPI");
+}
+if (englishSpec.info?.title !== "DejaVu API V1") fail("English OpenAPI title is not English/canonical");
+
 const operations = [];
 for (const [route,item] of Object.entries(spec.paths ?? {})) {
   for (const [method,operation] of Object.entries(item ?? {})) {
