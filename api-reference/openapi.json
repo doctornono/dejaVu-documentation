@@ -291,7 +291,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20"
       },
       "post": {
         "tags": [
@@ -570,7 +571,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "type=up_next&page=1&pageSize=20"
       }
     },
     "/history": {
@@ -688,7 +690,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20&type=movie&sort=watchedAt:desc"
       },
       "post": {
         "tags": [
@@ -938,7 +941,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20"
       },
       "post": {
         "tags": [
@@ -1161,7 +1165,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20"
       },
       "post": {
         "tags": [
@@ -1421,7 +1426,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20"
       },
       "post": {
         "tags": [
@@ -1640,7 +1646,8 @@
               "default": false
             }
           }
-        ]
+        ],
+        "x-example-query": "type=episode&page=1&pageSize=20&minimal=true"
       },
       "post": {
         "tags": [
@@ -1873,7 +1880,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20&minimal=true"
       }
     },
     "/me": {
@@ -1998,7 +2006,8 @@
             },
             "description": "Retourne une représentation minimale des listes."
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20&minimal=true"
       },
       "post": {
         "tags": [
@@ -2150,7 +2159,8 @@
           {
             "BearerAuth": []
           }
-        ]
+        ],
+        "x-example-query": "page=1&pageSize=20&minimal=true"
       },
       "post": {
         "tags": [
