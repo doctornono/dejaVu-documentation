@@ -11,43 +11,6 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "Guides",
-        "groups": [
-          {
-            "group": "Démarrage",
-            "pages": [
-              "index",
-              "quickstart",
-              "development"
-            ]
-          },
-          {
-            "group": "Personnalisation",
-            "pages": [
-              "essentials/settings",
-              "essentials/dashboard"
-            ]
-          },
-          {
-            "group": "Importation",
-            "pages": [
-              "essentials/import",
-              "essentials/tmdb",
-              "essentials/trakt",
-              "essentials/imdb"
-            ]
-          },
-          {
-            "group": "API",
-            "pages": [
-              "ai-tools/cursor",
-              "ai-tools/claude-code",
-              "ai-tools/windsurf"
-            ]
-          }
-        ]
-      },
-      {
         "tab": "API reference",
         "groups": [
           {
