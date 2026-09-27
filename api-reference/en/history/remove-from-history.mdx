@@ -1,0 +1,28 @@
+---
+title: "Remover de l’history"
+openapi: "DELETE /history"
+---
+
+## Usage
+
+Remove une entrée de l’history de the authenticated user.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/history"
+```
+
+## Parameters and response
+
+Les paramètres d’identification et les réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats.
+
+## Notes
+
+Pour les episodes, utilisez le contexte de series, saison et episode correspondant à l’entrée à supprimer.
