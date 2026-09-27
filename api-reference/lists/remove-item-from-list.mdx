@@ -2,3 +2,27 @@
 title: "Retirer un élément d'une liste"
 openapi: "DELETE /lists/{id}/items"
 ---
+
+## Utilisation
+
+Retire un élément d’une liste. L’identifiant d’élément utilise le paramètre `id`.
+
+L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
+
+## Exemple
+
+```bash
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/lists/{id}/items"
+```
+
+## Paramètres et réponse
+
+Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
+
+## Notes
+
+Pour cette opération, le paramètre d’élément est `id` ; les types pris en charge sont ceux du schéma OpenAPI.
