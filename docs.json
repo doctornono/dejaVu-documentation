@@ -15,11 +15,18 @@
         "groups": [
           {
             "group": "Démarrage",
-            "pages": ["index", "quickstart", "development"]
+            "pages": [
+              "index",
+              "quickstart",
+              "development"
+            ]
           },
           {
             "group": "Personnalisation",
-            "pages": ["essentials/settings", "essentials/dashboard"]
+            "pages": [
+              "essentials/settings",
+              "essentials/dashboard"
+            ]
           },
           {
             "group": "Importation",
@@ -45,12 +52,15 @@
         "groups": [
           {
             "group": "Introduction",
-            "pages": ["api-reference/introduction"]
+            "pages": [
+              "api-reference/introduction"
+            ]
           },
           {
             "group": "Auth",
             "pages": [
               "api-reference/auth/request-device-code",
+              "api-reference/auth/request-device-qr",
               "api-reference/auth/exchange-device-token",
               "api-reference/auth/verify-device-code",
               "api-reference/auth/approve-device-code"
@@ -107,7 +117,9 @@
           },
           {
             "group": "Up Next",
-            "pages": ["api-reference/upnext/get-up-next"]
+            "pages": [
+              "api-reference/upnext/get-up-next"
+            ]
           },
           {
             "group": "Dashboard",
@@ -128,7 +140,36 @@
           },
           {
             "group": "User",
-            "pages": ["api-reference/user/get-profile"]
+            "pages": [
+              "api-reference/user/get-profile"
+            ]
+          },
+          {
+            "group": "Media",
+            "pages": [
+              "api-reference/media/resolve-media",
+              "api-reference/media/get-media-status"
+            ]
+          },
+          {
+            "group": "Channels",
+            "pages": [
+              "api-reference/channels/get-channels",
+              "api-reference/channels/get-channel"
+            ]
+          },
+          {
+            "group": "Connectors",
+            "pages": [
+              "api-reference/connectors/get-connectors",
+              "api-reference/connectors/submit-connector"
+            ]
+          },
+          {
+            "group": "Kodi",
+            "pages": [
+              "api-reference/kodi/import"
+            ]
           }
         ]
       }

@@ -2,7 +2,7 @@
   "openapi": "3.1.0",
   "info": {
     "title": "DejaVu API V1",
-    "description": "API pour gérer votre collection, historique, favoris, notes, watchlist, scrobble et listes de films et séries TV.",
+    "description": "API publique DejaVu V1 pour intégrer la collection, l’historique, les favoris, les notes, la watchlist, le scrobble, les listes, les chaînes, les connecteurs et les fonctions d’intégration.",
     "version": "1.0.0"
   },
   "servers": [
@@ -14,9 +14,6 @@
   "security": [
     {
       "ApiKeyHeader": []
-    },
-    {
-      "ApiKeyQuery": []
     },
     {
       "BearerAuth": []
@@ -66,12 +63,30 @@
     {
       "name": "Auth",
       "description": "Authentification des appareils et gestion des jetons."
+    },
+    {
+      "name": "Channels",
+      "description": "Chaînes et univers accessibles à l’utilisateur."
+    },
+    {
+      "name": "Connectors",
+      "description": "Connecteurs utilisés par l’extension navigateur."
+    },
+    {
+      "name": "Kodi",
+      "description": "Import de bibliothèques Kodi."
+    },
+    {
+      "name": "Media",
+      "description": "Résolution et statut de médias."
     }
   ],
   "paths": {
     "/auth/device/code": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Demander un code d'appareil (Device Flow)",
         "description": "Première étape de l'authentification pour les appareils sans clavier (TV, etc.).",
         "operationId": "requestDeviceCode",
@@ -81,35 +96,25 @@
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": ["success", "data"],
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "device_code": {
-                          "type": "string"
-                        },
-                        "user_code": {
-                          "type": "string"
-                        },
-                        "verification_uri": {
-                          "type": "string"
-                        },
-                        "expires_in": {
-                          "type": "integer"
-                        },
-                        "interval": {
-                          "type": "integer"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/DeviceCodeResponse"
                 }
+              }
+            }
+          },
+          "429": {
+            "description": "Trop de demandes depuis cette adresse IP."
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceCodeRequest"
               }
             }
           }
@@ -118,7 +123,9 @@
     },
     "/auth/device/token": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Échanger le code d'appareil contre un jeton",
         "description": "Étape de 'polling' pour vérifier si l'utilisateur a autorisé l'appareil.",
         "operationId": "exchangeDeviceToken",
@@ -127,54 +134,43 @@
           "content": {
             "application/json": {
               "schema": {
-                "type": "object",
-                "properties": {
-                  "device_code": {
-                    "type": "string"
-                  }
-                }
+                "$ref": "#/components/schemas/DeviceTokenRequest"
               }
             }
           }
         },
         "responses": {
           "200": {
-            "description": "Jeton (clé API secrète) délivré",
+            "description": "Jeton d’accès délivré",
             "content": {
               "application/json": {
                 "schema": {
-                  "type": "object",
-                  "required": ["success", "data"],
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    },
-                    "data": {
-                      "type": "object",
-                      "properties": {
-                        "access_token": {
-                          "type": "string"
-                        },
-                        "token_type": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
+                  "$ref": "#/components/schemas/DeviceTokenResponse"
                 }
               }
             }
           },
           "400": {
-            "description": "En attente, expiré ou refusé"
+            "description": "Requête invalide, autorisation en attente, expirée ou invalide."
+          },
+          "403": {
+            "description": "Demande refusée par l’utilisateur."
+          },
+          "429": {
+            "description": "Trop de polling pour ce device_code."
+          },
+          "500": {
+            "description": "Erreur serveur"
           }
-        }
+        },
+        "security": []
       }
     },
     "/collection": {
       "get": {
-        "tags": ["Collection"],
+        "tags": [
+          "Collection"
+        ],
         "summary": "Récupérer la collection",
         "description": "Retourne l'ensemble des éléments de votre collection avec pagination optionnelle.",
         "operationId": "getCollection",
@@ -185,7 +181,11 @@
             "description": "Filtrer par type de contenu",
             "schema": {
               "type": "string",
-              "enum": ["all", "movie", "tv"],
+              "enum": [
+                "all",
+                "movie",
+                "tv"
+              ],
               "default": "all"
             }
           },
@@ -258,7 +258,11 @@
                       "default": true
                     }
                   },
-                  "required": ["success", "data", "pagination"]
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ]
                 }
               }
             }
@@ -272,15 +276,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Collection"],
+        "tags": [
+          "Collection"
+        ],
         "summary": "Ajouter à la collection",
         "description": "Ajoute un film ou une série à votre collection. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addToCollection",
@@ -320,15 +323,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["Collection"],
+        "tags": [
+          "Collection"
+        ],
         "summary": "Supprimer de la collection",
         "description": "Retire un élément de votre collection. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromCollection",
@@ -339,7 +341,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "tv"]
+              "enum": [
+                "movie",
+                "tv"
+              ]
             }
           },
           {
@@ -384,86 +389,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
-            "BearerAuth": []
-          }
-        ]
-      }
-    },
-    "/collection/batch": {
-      "post": {
-        "tags": ["Collection"],
-        "summary": "Ajout par lots à la collection",
-        "description": "Permet d'ajouter plusieurs films ou séries en une seule requête. Requiert une clé secrète.",
-        "operationId": "batchAddToCollection",
-        "requestBody": {
-          "required": true,
-          "content": {
-            "application/json": {
-              "schema": {
-                "type": "object",
-                "properties": {
-                  "items": {
-                    "type": "array",
-                    "items": {
-                      "type": "object",
-                      "required": ["type", "id"],
-                      "properties": {
-                        "type": {
-                          "type": "string",
-                          "enum": ["movie", "tv"]
-                        },
-                        "id": {
-                          "type": "integer"
-                        },
-                        "format": {
-                          "type": "string"
-                        },
-                        "notes": {
-                          "type": "string"
-                        }
-                      }
-                    }
-                  }
-                }
-              }
-            }
-          }
-        },
-        "responses": {
-          "200": {
-            "description": "Succès du lot",
-            "content": {
-              "application/json": {
-                "schema": {
-                  "type": "object",
-                  "properties": {
-                    "success": {
-                      "type": "boolean",
-                      "default": true
-                    }
-                  }
-                }
-              }
-            }
-          },
-          "401": {
-            "$ref": "#/components/responses/Unauthorized"
-          },
-          "403": {
-            "$ref": "#/components/responses/Forbidden"
-          }
-        },
-        "security": [
-          {
-            "ApiKeyHeader": []
-          },
-          {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -471,7 +396,9 @@
     },
     "/dashboard": {
       "get": {
-        "tags": ["Dashboard"],
+        "tags": [
+          "Dashboard"
+        ],
         "summary": "Configuration du tableau de bord",
         "description": "Retourne la configuration des widgets du dashboard de l'utilisateur.",
         "operationId": "getDashboardConfig",
@@ -483,7 +410,10 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "default": true },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
                     "data": {
                       "type": "object",
                       "properties": {
@@ -492,10 +422,18 @@
                           "items": {
                             "type": "object",
                             "properties": {
-                              "id": { "type": "string" },
-                              "type": { "type": "string" },
-                              "title": { "type": "string" },
-                              "apiUrl": { "type": "string" }
+                              "id": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "apiUrl": {
+                                "type": "string"
+                              }
                             }
                           }
                         }
@@ -506,18 +444,25 @@
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
         },
         "security": [
-          { "ApiKeyHeader": [] },
-          { "ApiKeyQuery": [] },
-          { "BearerAuth": [] }
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
         ]
       }
     },
     "/dashboard/widget": {
       "get": {
-        "tags": ["Dashboard"],
+        "tags": [
+          "Dashboard"
+        ],
         "summary": "Contenu unifié de widget",
         "description": "Agit comme un proxy pour retourner le contenu d'un widget spécifique.",
         "operationId": "getDashboardWidgetContent",
@@ -564,26 +509,41 @@
                 "schema": {
                   "type": "object",
                   "properties": {
-                    "success": { "type": "boolean", "default": true },
-                    "data": { "type": "array", "items": {} },
-                    "pagination": { "$ref": "#/components/schemas/Pagination" }
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
                   }
                 }
               }
             }
           },
-          "401": { "$ref": "#/components/responses/Unauthorized" }
+          "401": {
+            "$ref": "#/components/responses/Unauthorized"
+          }
         },
         "security": [
-          { "ApiKeyHeader": [] },
-          { "ApiKeyQuery": [] },
-          { "BearerAuth": [] }
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
         ]
       }
     },
     "/history": {
       "get": {
-        "tags": ["History"],
+        "tags": [
+          "History"
+        ],
         "summary": "Récupérer l'historique de visionnage",
         "description": "Retourne l'historique de visionnage de l'utilisateur.",
         "operationId": "getHistory",
@@ -593,7 +553,12 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": ["all", "movie", "tv", "episode"],
+              "enum": [
+                "all",
+                "movie",
+                "tv",
+                "episode"
+              ],
               "default": "all"
             }
           },
@@ -646,7 +611,11 @@
                       "default": true
                     }
                   },
-                  "required": ["success", "data", "pagination"]
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ]
                 }
               }
             }
@@ -660,15 +629,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["History"],
+        "tags": [
+          "History"
+        ],
         "summary": "Ajouter à l'historique",
         "description": "Enregistre un visionnage dans l'historique. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addToHistory",
@@ -714,15 +682,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["History"],
+        "tags": [
+          "History"
+        ],
         "summary": "Supprimer de l'historique",
         "description": "Supprime une entrée de l'historique. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromHistory",
@@ -733,7 +700,11 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "tv", "episode"]
+              "enum": [
+                "movie",
+                "tv",
+                "episode"
+              ]
             }
           },
           {
@@ -777,9 +748,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -787,7 +755,9 @@
     },
     "/favorites": {
       "get": {
-        "tags": ["Favorites"],
+        "tags": [
+          "Favorites"
+        ],
         "summary": "Récupérer les favoris",
         "description": "Retourne la liste des favoris de l'utilisateur.",
         "operationId": "getFavorites",
@@ -798,7 +768,11 @@
             "description": "Filtrer par type",
             "schema": {
               "type": "string",
-              "enum": ["all", "movie", "tv"],
+              "enum": [
+                "all",
+                "movie",
+                "tv"
+              ],
               "default": "all"
             }
           },
@@ -819,7 +793,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
+                  "required": [
+                    "success",
+                    "data"
+                  ],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -845,15 +822,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Favorites"],
+        "tags": [
+          "Favorites"
+        ],
         "summary": "Ajouter aux favoris",
         "description": "Ajoute un film ou une série aux favoris. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addToFavorites",
@@ -899,15 +875,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["Favorites"],
+        "tags": [
+          "Favorites"
+        ],
         "summary": "Supprimer des favoris",
         "description": "Retire un élément des favoris. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromFavorites",
@@ -918,7 +893,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "tv"]
+              "enum": [
+                "movie",
+                "tv"
+              ]
             }
           },
           {
@@ -962,9 +940,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -972,7 +947,9 @@
     },
     "/ratings": {
       "get": {
-        "tags": ["Ratings"],
+        "tags": [
+          "Ratings"
+        ],
         "summary": "Récupérer les notes",
         "description": "Retourne les notes données par l'utilisateur.",
         "operationId": "getRatings",
@@ -983,7 +960,13 @@
             "description": "Filtrer par type",
             "schema": {
               "type": "string",
-              "enum": ["all", "movie", "tv", "season", "episode"],
+              "enum": [
+                "all",
+                "movie",
+                "tv",
+                "season",
+                "episode"
+              ],
               "default": "all"
             }
           },
@@ -1004,7 +987,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
+                  "required": [
+                    "success",
+                    "data"
+                  ],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1030,15 +1016,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Ratings"],
+        "tags": [
+          "Ratings"
+        ],
         "summary": "Ajouter ou modifier une note",
         "description": "Attribue ou met à jour une note (1-10) avec avis optionnel. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "upsertRating",
@@ -1084,15 +1069,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["Ratings"],
+        "tags": [
+          "Ratings"
+        ],
         "summary": "Supprimer une note",
         "description": "Supprime une note existante. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "deleteRating",
@@ -1103,7 +1087,12 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "tv", "season", "episode"]
+              "enum": [
+                "movie",
+                "tv",
+                "season",
+                "episode"
+              ]
             }
           },
           {
@@ -1147,9 +1136,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1157,7 +1143,9 @@
     },
     "/watchlist": {
       "get": {
-        "tags": ["Watchlist"],
+        "tags": [
+          "Watchlist"
+        ],
         "summary": "Récupérer la watchlist",
         "description": "Retourne la liste des contenus à regarder.",
         "operationId": "getWatchlist",
@@ -1168,7 +1156,11 @@
             "description": "Filtrer par type",
             "schema": {
               "type": "string",
-              "enum": ["all", "movie", "tv"],
+              "enum": [
+                "all",
+                "movie",
+                "tv"
+              ],
               "default": "all"
             }
           },
@@ -1197,7 +1189,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
+                  "required": [
+                    "success",
+                    "data"
+                  ],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1223,15 +1218,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Watchlist"],
+        "tags": [
+          "Watchlist"
+        ],
         "summary": "Ajouter à la watchlist",
         "description": "Ajoute un film ou une série à la watchlist. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addToWatchlist",
@@ -1277,15 +1271,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["Watchlist"],
+        "tags": [
+          "Watchlist"
+        ],
         "summary": "Supprimer de la watchlist",
         "description": "Retire un élément de la watchlist. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeFromWatchlist",
@@ -1296,7 +1289,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "tv"]
+              "enum": [
+                "movie",
+                "tv"
+              ]
             }
           },
           {
@@ -1340,9 +1336,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1350,7 +1343,9 @@
     },
     "/scrobble": {
       "get": {
-        "tags": ["Scrobble"],
+        "tags": [
+          "Scrobble"
+        ],
         "summary": "Sessions de lecture en cours",
         "description": "Retourne les sessions de lecture actives (lecture en cours).",
         "operationId": "getScrobbleSessions",
@@ -1361,7 +1356,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
+                  "required": [
+                    "success",
+                    "data"
+                  ],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1387,15 +1385,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Scrobble"],
+        "tags": [
+          "Scrobble"
+        ],
         "summary": "Mettre à jour la progression de lecture",
         "description": "Met à jour la progression de lecture d'un film ou épisode. Si la progression dépasse **90%**, le contenu est automatiquement marqué comme vu dans l'historique. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "updateScrobble",
@@ -1441,15 +1438,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["Scrobble"],
+        "tags": [
+          "Scrobble"
+        ],
         "summary": "Supprimer une session de lecture",
         "description": "Met fin à une session de lecture sans la marquer comme vue. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "deleteScrobble",
@@ -1460,7 +1456,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "episode"]
+              "enum": [
+                "movie",
+                "episode"
+              ]
             }
           },
           {
@@ -1504,9 +1503,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1514,7 +1510,9 @@
     },
     "/upnext": {
       "get": {
-        "tags": ["Up Next"],
+        "tags": [
+          "Up Next"
+        ],
         "summary": "Séries à suivre (Up Next)",
         "description": "Retourne les prochains épisodes à regarder pour les séries en cours.",
         "operationId": "getUpNext",
@@ -1538,7 +1536,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
+                  "required": [
+                    "success",
+                    "data"
+                  ],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1564,9 +1565,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1574,7 +1572,9 @@
     },
     "/me": {
       "get": {
-        "tags": ["User"],
+        "tags": [
+          "User"
+        ],
         "summary": "Récupérer le profil et les statistiques du compte",
         "description": "Retourne les informations du profil utilisateur ainsi que ses statistiques globales (temps passé, nombre de films, etc.).",
         "operationId": "getMe",
@@ -1610,9 +1610,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1620,7 +1617,9 @@
     },
     "/lists": {
       "get": {
-        "tags": ["Lists"],
+        "tags": [
+          "Lists"
+        ],
         "summary": "Récupérer les listes",
         "description": "Retourne toutes les listes personnalisées de l'utilisateur.",
         "operationId": "getLists",
@@ -1631,7 +1630,10 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": ["success", "data"],
+                  "required": [
+                    "success",
+                    "data"
+                  ],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1657,15 +1659,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Lists"],
+        "tags": [
+          "Lists"
+        ],
         "summary": "Créer une liste",
         "description": "Crée une nouvelle liste personnalisée. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "createList",
@@ -1705,9 +1706,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1715,7 +1713,9 @@
     },
     "/lists/{id}/items": {
       "get": {
-        "tags": ["Lists"],
+        "tags": [
+          "Lists"
+        ],
         "summary": "Récupérer les éléments d'une liste",
         "description": "Retourne les éléments d'une liste avec pagination.",
         "operationId": "getListItems",
@@ -1770,7 +1770,11 @@
                       "default": true
                     }
                   },
-                  "required": ["success", "data", "pagination"]
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ]
                 }
               }
             }
@@ -1787,15 +1791,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "post": {
-        "tags": ["Lists"],
+        "tags": [
+          "Lists"
+        ],
         "summary": "Ajouter un élément à une liste",
         "description": "Ajoute un film ou une série à une liste. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "addItemToList",
@@ -1854,15 +1857,14 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
       },
       "delete": {
-        "tags": ["Lists"],
+        "tags": [
+          "Lists"
+        ],
         "summary": "Retirer un élément d'une liste",
         "description": "Retire un film ou une série d'une liste. **Requiert une clé secrète** (`sk_...`).",
         "operationId": "removeItemFromList",
@@ -1881,7 +1883,10 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": ["movie", "tv"]
+              "enum": [
+                "movie",
+                "tv"
+              ]
             }
           },
           {
@@ -1926,9 +1931,6 @@
             "ApiKeyHeader": []
           },
           {
-            "ApiKeyQuery": []
-          },
-          {
             "BearerAuth": []
           }
         ]
@@ -1936,7 +1938,9 @@
     },
     "/auth/device/verify": {
       "get": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Vérifier le code utilisateur",
         "description": "Appelé par le navigateur utilisateur pour valider un `user_code` avant de l'approuver.",
         "operationId": "verifyDeviceCode",
@@ -1978,21 +1982,24 @@
               }
             }
           },
-          "404": {
-            "description": "Code invalide ou expiré"
+          "400": {
+            "description": "Code manquant, déjà utilisé ou expiré."
           }
-        }
+        },
+        "security": []
       }
     },
     "/auth/device/approve": {
       "post": {
-        "tags": ["Auth"],
+        "tags": [
+          "Auth"
+        ],
         "summary": "Approuver le code utilisateur",
-        "description": "Appelé depuis le compte de l'utilisateur (requiert une session `BearerAuth`) pour autoriser le device. Délivre ensuite en arrière-plan la clé secrète à l'appareil.",
+        "description": "Appelé depuis le compte utilisateur. Requiert la session DejaVu du navigateur.",
         "operationId": "approveDeviceCode",
         "security": [
           {
-            "BearerAuth": []
+            "SessionCookie": []
           }
         ],
         "requestBody": {
@@ -2001,7 +2008,9 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": ["user_code"],
+                "required": [
+                  "user_code"
+                ],
                 "properties": {
                   "user_code": {
                     "type": "string"
@@ -2028,11 +2037,352 @@
               }
             }
           },
+          "400": {
+            "description": "Code invalide ou expiré."
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
+          }
+        }
+      }
+    },
+    "/auth/device/qr": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Obtenir le QR code d’un appareil",
+        "description": "Retourne un PNG contenant l’URL de vérification associée à un user_code encore en attente.",
+        "operationId": "getDeviceQr",
+        "security": [],
+        "parameters": [
+          {
+            "name": "user_code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image PNG",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "user_code invalide"
           },
           "404": {
-            "description": "Code invalide ou expiré"
+            "description": "Code introuvable ou expiré"
+          },
+          "429": {
+            "description": "Trop de demandes"
+          }
+        }
+      }
+    },
+    "/channels": {
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Lister les chaînes",
+        "operationId": "getChannels",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "UNIVERSE",
+                "EDITORIAL",
+                "PLATFORM",
+                "THEMATIC",
+                "CREATOR",
+                "AWARDS",
+                "FRANCHISE"
+              ]
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "mine",
+                "following"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste paginée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Paramètres invalides"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/channels/{id}": {
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Récupérer une chaîne",
+        "operationId": "getChannel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chaîne",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chaîne introuvable"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/connectors": {
+      "get": {
+        "tags": [
+          "Connectors"
+        ],
+        "summary": "Lister les connecteurs approuvés",
+        "description": "Endpoint public utilisé par l’extension navigateur.",
+        "operationId": "getConnectors",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Connecteurs approuvés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Aucune modification depuis l’ETag fourni"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/connectors/submit": {
+      "post": {
+        "tags": [
+          "Connectors"
+        ],
+        "summary": "Soumettre un connecteur",
+        "description": "Soumet un connecteur pour revue. Limite : 5 soumissions par heure et par utilisateur.",
+        "operationId": "submitConnector",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectorSubmission"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Connecteur soumis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "429": {
+            "description": "Limite atteinte"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/kodi/import": {
+      "post": {
+        "tags": [
+          "Kodi"
+        ],
+        "summary": "Importer une bibliothèque Kodi",
+        "operationId": "importKodi",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KodiImportRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lot importé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Lot ou paramètres invalides"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/media/resolve": {
+      "post": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "Résoudre un média",
+        "description": "Recherche un média à partir d’un IMDb ID, d’un TMDB ID et type, d’un titre/année ou du contexte d’un épisode.",
+        "operationId": "resolveMedia",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaResolveRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Média résolu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identifiants ou contexte invalides"
+          },
+          "404": {
+            "description": "Média introuvable"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/media/status": {
+      "post": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "Récupérer le statut utilisateur de médias",
+        "description": "Retourne le statut utilisateur pour un lot de films, séries ou épisodes.",
+        "operationId": "getMediaStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaStatusRequest"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Statuts retournés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Aucun élément valide"
+          },
+          "500": {
+            "description": "Erreur serveur"
           }
         }
       }
@@ -2044,18 +2394,18 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-api-key",
-        "description": "Clé API transmise via le header HTTP. Supporte les clés publiques (`pk_...`) et secrètes (`sk_...`)."
-      },
-      "ApiKeyQuery": {
-        "type": "apiKey",
-        "in": "query",
-        "name": "api_key",
-        "description": "Clé API transmise via query string. Supporte les clés publiques (`pk_...`) et secrètes (`sk_...`)."
+        "description": "Clé API DejaVu. pk_* = lecture seule ; sk_* = lecture et écriture."
       },
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Token Bearer pour les sessions utilisateur authentifiées."
+        "description": "Clé API DejaVu envoyée dans Authorization: Bearer <key>."
+      },
+      "SessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "better-auth.session_token",
+        "description": "Session utilisateur DejaVu utilisée par l’approbation du Device Flow dans le navigateur."
       }
     },
     "schemas": {
@@ -2068,7 +2418,10 @@
           },
           "type": {
             "type": "string",
-            "enum": ["movie", "tv"]
+            "enum": [
+              "movie",
+              "tv"
+            ]
           },
           "title": {
             "type": "string"
@@ -2081,11 +2434,17 @@
       },
       "MediaInput": {
         "type": "object",
-        "required": ["type", "id"],
+        "required": [
+          "type",
+          "id"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "tv"]
+            "enum": [
+              "movie",
+              "tv"
+            ]
           },
           "id": {
             "type": "integer",
@@ -2120,11 +2479,17 @@
       },
       "CollectionInput": {
         "type": "object",
-        "required": ["type", "id"],
+        "required": [
+          "type",
+          "id"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "tv"]
+            "enum": [
+              "movie",
+              "tv"
+            ]
           },
           "id": {
             "type": "integer",
@@ -2174,11 +2539,18 @@
       },
       "HistoryInput": {
         "type": "object",
-        "required": ["type", "id"],
+        "required": [
+          "type",
+          "id"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "tv", "episode"]
+            "enum": [
+              "movie",
+              "tv",
+              "episode"
+            ]
           },
           "id": {
             "type": "integer",
@@ -2223,11 +2595,20 @@
       },
       "RatingInput": {
         "type": "object",
-        "required": ["type", "id", "rating"],
+        "required": [
+          "type",
+          "id",
+          "rating"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "tv", "season", "episode"]
+            "enum": [
+              "movie",
+              "tv",
+              "season",
+              "episode"
+            ]
           },
           "id": {
             "type": "integer",
@@ -2282,11 +2663,17 @@
       },
       "WatchlistInput": {
         "type": "object",
-        "required": ["type", "id"],
+        "required": [
+          "type",
+          "id"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "tv"]
+            "enum": [
+              "movie",
+              "tv"
+            ]
           },
           "id": {
             "type": "integer"
@@ -2308,7 +2695,10 @@
           },
           "type": {
             "type": "string",
-            "enum": ["movie", "episode"]
+            "enum": [
+              "movie",
+              "episode"
+            ]
           },
           "mediaId": {
             "type": "integer"
@@ -2336,11 +2726,19 @@
       },
       "ScrobbleInput": {
         "type": "object",
-        "required": ["type", "id", "progress", "duration"],
+        "required": [
+          "type",
+          "id",
+          "progress",
+          "duration"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "episode"]
+            "enum": [
+              "movie",
+              "episode"
+            ]
           },
           "id": {
             "type": "integer",
@@ -2408,7 +2806,11 @@
           },
           "visibility": {
             "type": "string",
-            "enum": ["PRIVATE", "PUBLIC", "FRIENDS"]
+            "enum": [
+              "PRIVATE",
+              "PUBLIC",
+              "SHARED"
+            ]
           },
           "itemCount": {
             "type": "integer"
@@ -2425,7 +2827,9 @@
       },
       "ListInput": {
         "type": "object",
-        "required": ["name"],
+        "required": [
+          "name"
+        ],
         "properties": {
           "name": {
             "type": "string",
@@ -2436,8 +2840,19 @@
           },
           "visibility": {
             "type": "string",
-            "enum": ["PRIVATE", "PUBLIC", "FRIENDS"],
+            "enum": [
+              "PRIVATE",
+              "PUBLIC",
+              "SHARED"
+            ],
             "default": "PRIVATE"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "media",
+              "episode"
+            ]
           }
         }
       },
@@ -2467,11 +2882,18 @@
       },
       "ListItemInput": {
         "type": "object",
-        "required": ["type", "id"],
+        "required": [
+          "type",
+          "id"
+        ],
         "properties": {
           "type": {
             "type": "string",
-            "enum": ["movie", "tv"]
+            "enum": [
+              "movie",
+              "tv",
+              "episode"
+            ]
           },
           "id": {
             "type": "integer",
@@ -2505,7 +2927,10 @@
       },
       "Error": {
         "type": "object",
-        "required": ["error", "message"],
+        "required": [
+          "error",
+          "message"
+        ],
         "properties": {
           "error": {
             "type": "string",
@@ -2519,32 +2944,332 @@
       },
       "SuccessResponse": {
         "type": "object",
-        "required": ["success", "data"],
+        "required": [
+          "success"
+        ],
         "properties": {
           "success": {
-            "type": "boolean",
-            "default": true,
-            "description": "Indique si la requête a réussi"
+            "type": "boolean"
+          },
+          "data": {
+            "description": "Données retournées par l’opération"
           }
         }
       },
       "PaginatedSuccessResponse": {
         "type": "object",
-        "required": ["success", "data", "pagination"],
+        "required": [
+          "success",
+          "data",
+          "pagination"
+        ],
         "properties": {
           "success": {
-            "type": "boolean",
-            "default": true
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {}
           },
           "pagination": {
             "$ref": "#/components/schemas/Pagination"
+          }
+        }
+      },
+      "DeviceCodeRequest": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "client_name": {
+            "type": "string",
+            "maxLength": 64
+          }
+        }
+      },
+      "DeviceCodeResponse": {
+        "type": "object",
+        "required": [
+          "device_code",
+          "user_code",
+          "verification_uri",
+          "verification_uri_complete",
+          "expires_in",
+          "interval"
+        ],
+        "properties": {
+          "device_code": {
+            "type": "string"
+          },
+          "user_code": {
+            "type": "string"
+          },
+          "verification_uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "verification_uri_complete": {
+            "type": "string",
+            "format": "uri"
+          },
+          "expires_in": {
+            "type": "integer",
+            "example": 300
+          },
+          "interval": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "DeviceTokenRequest": {
+        "type": "object",
+        "required": [
+          "device_code",
+          "grant_type"
+        ],
+        "properties": {
+          "device_code": {
+            "type": "string"
+          },
+          "grant_type": {
+            "type": "string",
+            "enum": [
+              "urn:ietf:params:oauth:grant-type:device_code"
+            ]
+          }
+        }
+      },
+      "DeviceTokenResponse": {
+        "type": "object",
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in"
+        ],
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "example": 7776000
+          }
+        }
+      },
+      "MediaResolveRequest": {
+        "type": "object",
+        "properties": {
+          "imdbId": {
+            "type": "string"
+          },
+          "imdb_id": {
+            "type": "string"
+          },
+          "tmdbId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tmdb_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv",
+              "episode"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "year": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tvShowId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "seasonNumber": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "episodeNumber": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "MediaStatusRequest": {
+        "type": "object",
+        "required": [
+          "items"
+        ],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "movie",
+                    "tv",
+                    "episode"
+                  ]
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "tmdbId": {
+                  "type": "integer"
+                },
+                "tmdb_id": {
+                  "type": "integer"
+                },
+                "seasonNumber": {
+                  "type": "integer"
+                },
+                "season_number": {
+                  "type": "integer"
+                },
+                "season": {
+                  "type": "integer"
+                },
+                "episodeNumber": {
+                  "type": "integer"
+                },
+                "episode_number": {
+                  "type": "integer"
+                },
+                "episode": {
+                  "type": "integer"
+                }
+              }
+            }
+          }
+        }
+      },
+      "ConnectorSubmission": {
+        "type": "object",
+        "required": [
+          "name",
+          "domains",
+          "definition"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "domains": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "string"
+            }
+          },
+          "definition": {
+            "type": "object",
+            "description": "Doit notamment contenir definition.extractors. Les sélecteurs ne doivent pas utiliser de wildcard universel."
+          }
+        }
+      },
+      "KodiImportRequest": {
+        "type": "object",
+        "required": [
+          "importSessionId",
+          "chunk",
+          "totalChunks"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "importSessionId": {
+            "type": "string"
+          },
+          "chunk": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "totalChunks": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "options": {
+            "type": "object"
+          },
+          "movies": {
+            "type": "array",
+            "maxItems": 250
+          },
+          "tvShows": {
+            "type": "array",
+            "maxItems": 250
+          },
+          "episodes": {
+            "type": "array",
+            "maxItems": 250
+          },
+          "playlists": {
+            "type": "array"
+          },
+          "favorites": {
+            "type": "array",
+            "maxItems": 250
           }
         }
       }
     },
     "responses": {
       "Unauthorized": {
-        "description": "Authentification requise. Fournissez une clé API valide via le header `x-api-key` ou le paramètre `api_key`.",
+        "description": "Authentification requise. Utilisez le header x-api-key ou Authorization: Bearer <key>.",
         "content": {
           "application/json": {
             "schema": {
