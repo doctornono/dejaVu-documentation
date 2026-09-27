@@ -1,13 +1,13 @@
 ---
-title: "Demander un code d'appareil"
+title: "Request a device code"
 openapi: "POST /auth/device/code"
 ---
 
 ## Usage
 
-Démarre un flux d’authentification par appareil. Cette opération est publique.
+Starts the device authentication flow. This operation is public.
 
-Aucune clé API n’est requise pour cette opération.
+No API key is required.
 
 ## Example
 
@@ -17,7 +17,7 @@ curl -X POST -H "Content-Type: application/json" "https://dejavu.plus/api/v1/aut
 
 ## Parameters and response
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+The request body, parameters, and responses are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
@@ -25,4 +25,4 @@ See **Responses** for the operation-specific error codes and formats.
 
 ## Notes
 
-Le device code est destiné aux clients comme les extensions ou applications de salon.
+The device code is intended for clients such as Kodi extensions and other living-room applications.

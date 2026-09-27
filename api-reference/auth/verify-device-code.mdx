@@ -7,17 +7,19 @@ openapi: "GET /auth/device/verify"
 
 Vérifie l’état d’un code utilisateur. Cette opération est publique.
 
-Aucune clé API n’est requise pour cette opération.
+Aucune clé API n’est requise.
+
+Le paramètre de requête obligatoire `user_code` est défini par le contrat OpenAPI.
 
 ## Exemple
 
 ```bash
-curl -X GET -H "Content-Type: application/json" "https://dejavu.plus/api/v1/auth/device/verify"
+curl "https://dejavu.plus/api/v1/auth/device/verify?user_code=CODE_UTILISATEUR"
 ```
 
 ## Paramètres et réponse
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+Les paramètres de requête et les réponses sont définis par la spécification OpenAPI affichée sur cette page.
 
 ## Erreurs
 
@@ -25,4 +27,4 @@ Consultez **Responses** pour les codes et formats d’erreur propres à l’opé
 
 ## Notes
 
-Conservez les codes et jetons hors du code source public.
+Conservez les codes d’appareil et les jetons d’accès hors du code source public et des logs.

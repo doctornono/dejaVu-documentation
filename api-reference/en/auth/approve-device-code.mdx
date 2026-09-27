@@ -1,23 +1,26 @@
 ---
-title: "Approuver l'appareil"
+title: "Approve a device"
 openapi: "POST /auth/device/approve"
 ---
 
 ## Usage
 
-Associe et approuve un appareil à partir du flux d’autorisation DejaVu.
+Approves a pending device authorization request for the signed-in DejaVu user.
 
-Aucune clé API n’est requise pour cette opération.
+This operation requires an authenticated DejaVu session. An API key is not used for this operation.
 
 ## Example
 
 ```bash
-curl -X POST -H "Content-Type: application/json" "https://dejavu.plus/api/v1/auth/device/approve"
+curl -X POST -H "Content-Type: application/json" \
+  -H "Cookie: <DEJAVU_SESSION>" \
+  -d '{"user_code":"USER_CODE"}' \
+  "https://dejavu.plus/api/v1/auth/device/approve"
 ```
 
 ## Parameters and response
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+The request body and responses are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
@@ -25,4 +28,4 @@ See **Responses** for the operation-specific error codes and formats.
 
 ## Notes
 
-Conservez les codes et jetons hors du code source public.
+The approval is performed in the authenticated DejaVu user session.

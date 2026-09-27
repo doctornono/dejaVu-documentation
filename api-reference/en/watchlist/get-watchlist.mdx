@@ -5,24 +5,24 @@ openapi: "GET /watchlist"
 
 ## Usage
 
-Retourne la watchlist paginée de the authenticated user.
+Returns the authenticated user's watchlist with pagination and optional filters.
 
 Authentication is required via `x-api-key` or `Authorization: Bearer`.
 
 ## Example
 
 ```bash
-curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/watchlist?page=1&pageSize=20"
+curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/watchlist?page=1&pageSize=20"
 ```
 
 ## Parameters and response
 
-Request parameters, schemas, and responses are defined by the OpenAPI specification displayed on this page. Use the schema fields to build the request.
+Query parameters and response schemas are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
-See **Responses** for the operation-specific error codes and formats. Une réponse `401` indique une authentification absente ou invalide.
+See **Responses** for the operation-specific error codes and formats.
 
 ## Notes
 
-Never expose an `sk_` API key in client-side code or a public repository.
+Use the filters and pagination parameters documented in the OpenAPI contract.

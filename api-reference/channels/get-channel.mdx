@@ -5,24 +5,20 @@ openapi: "GET /channels/{id}"
 
 ## Utilisation
 
-Retourne le détail d’une chaîne publique et les listes qui lui sont associées.
+Retourne le détail d’une chaîne et les listes qui lui sont associées.
 
 L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
 
 ## Exemple
 
 ```bash
-curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/channels/{id}"
+curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/channels/CHANNEL_ID"
 ```
 
 ## Paramètres et réponse
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+L’identifiant de la chaîne et le schéma de réponse sont définis par la spécification OpenAPI affichée sur cette page.
 
 ## Erreurs
 
 Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
-
-## Notes
-
-Conservez les codes et jetons hors du code source public.

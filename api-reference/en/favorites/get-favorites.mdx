@@ -1,11 +1,11 @@
 ---
-title: "Get les favorites"
+title: "Get Favorites"
 openapi: "GET /favorites"
 ---
 
 ## Usage
 
-Retourne les favorites paginés de the authenticated user.
+Returns the authenticated user's favorites with pagination.
 
 Authentication is required via `x-api-key` or `Authorization: Bearer`.
 
@@ -17,7 +17,7 @@ curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/favorites?page=
 
 ## Parameters and response
 
-Les paramètres et schémas de réponse sont définis par la spécification OpenAPI affichée sur cette page.
+Query parameters and response schemas are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
@@ -25,4 +25,4 @@ See **Responses** for the operation-specific error codes and formats.
 
 ## Notes
 
-Utilisez la pagination pour parcourir un grand nombre de favorites.
+Use pagination when retrieving a large number of favorites.

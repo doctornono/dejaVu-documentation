@@ -1,11 +1,11 @@
 ---
-title: "Récupérer l’historique"
+title: "Get History"
 openapi: "GET /history"
 ---
 
 ## Usage
 
-Retourne l’historique de visionnage paginé de l’utilisateur authentifié.
+Returns the authenticated user's watch history with pagination and filtering options.
 
 Authentication is required via `x-api-key` or `Authorization: Bearer`.
 
@@ -17,7 +17,7 @@ curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/history?page=1&
 
 ## Parameters and response
 
-Les paramètres de pagination, filtres éventuels et schémas de réponse sont définis par la spécification OpenAPI affichée sur cette page.
+Query parameters, filters, and response schemas are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
@@ -25,4 +25,4 @@ See **Responses** for the operation-specific error codes and formats.
 
 ## Notes
 
-Les épisodes peuvent être identifiés directement ou avec leur contexte de série, saison et épisode.
+Episodes can be identified directly or with their series, season, and episode context.

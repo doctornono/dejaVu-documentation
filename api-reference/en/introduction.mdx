@@ -5,7 +5,7 @@ description: "Complete reference for the DejaVu v1 API"
 
 # DejaVu API v1
 
-This section is the technical reference for the DejaVu API. Endpoints are documented from `api-reference/openapi.json`.
+This section is the technical reference for the DejaVu API v1. Endpoints are documented from the canonical OpenAPI specification.
 
 ## Authentication
 
@@ -21,20 +21,20 @@ or:
 Authorization: Bearer YOUR_KEY
 ```
 
-API keys must not be placed in the URL. The `?api_key=` form is not supported.
+API keys must not be placed in the URL. The `?api_key=` query-string form is not supported.
 
-## Response convention
+## Response conventions
 
-Endpoints using the standard envelope return an object containing `success` and, depending on the operation, `data`, `pagination`, or `user`.
+Endpoints using the standard response envelope return an object containing `success` and, depending on the operation, `data`, `pagination`, or `user`.
 
-HTTP status codes remain the source of truth for determining whether a request succeeded.
+HTTP status codes are the source of truth for determining whether a request succeeded.
 
-## Playground
+## Interactive API reference
 
-The OpenAPI reference provides an interactive playground when the endpoint is compatible with it. You can enter authentication, parameters, and a request body, then inspect the real response.
+The OpenAPI reference can provide an interactive request builder when enabled by the documentation platform. Use it to inspect the endpoint contract, authentication requirements, parameters, request bodies, and responses.
 
-For advanced DejaVu-specific tests, use the test environments and tools provided for your integration.
+For advanced DejaVu-specific tests, use the test environments and integration tools intended for your client.
 
 <Warning>
-Never share an `sk_` key in a client application or publicly distributed code.
+Never expose an `sk_` key in a client application or publicly distributed code.
 </Warning>

@@ -1,23 +1,23 @@
 ---
-title: "Vérifier le code utilisateur"
+title: "Verify a user code"
 openapi: "GET /auth/device/verify"
 ---
 
 ## Usage
 
-Vérifie l’état d’un code utilisateur. Cette opération est publique.
+Checks the status of a user code. This operation is public.
 
-Aucune clé API n’est requise pour cette opération.
+No API key is required.
 
 ## Example
 
 ```bash
-curl -X GET -H "Content-Type: application/json" "https://dejavu.plus/api/v1/auth/device/verify"
+curl "https://dejavu.plus/api/v1/auth/device/verify?user_code=USER_CODE"
 ```
 
 ## Parameters and response
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+The request parameters and responses are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
@@ -25,4 +25,4 @@ See **Responses** for the operation-specific error codes and formats.
 
 ## Notes
 
-Conservez les codes et jetons hors du code source public.
+Keep device codes and access tokens out of public source code and logs.

@@ -1,28 +1,24 @@
 ---
-title: "Remover de Watchlist"
+title: "Remove from Watchlist"
 openapi: "DELETE /watchlist"
 ---
 
 ## Usage
 
-Retire un média de la watchlist.
+Removes a media item from the authenticated user's watchlist.
 
-Authentication is required via `x-api-key` or `Authorization: Bearer`.
+Authentication is required via `x-api-key` or `Authorization: Bearer`. Write access requires the permissions associated with a secret key (`sk_`).
 
 ## Example
 
 ```bash
-curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/watchlist"
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/watchlist?type=movie&id=550"
 ```
 
 ## Parameters and response
 
-Request parameters, schemas, and responses are defined by the OpenAPI specification displayed on this page. Use the schema fields to build the request.
+The required identification parameters and responses are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
-See **Responses** for the operation-specific error codes and formats. Une réponse `401` indique une authentification absente ou invalide.
-
-## Notes
-
-Never expose an `sk_` API key in client-side code or a public repository.
+See **Responses** for the operation-specific error codes and formats.

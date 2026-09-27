@@ -1,28 +1,24 @@
 ---
-title: "Get les éléments d'une list"
+title: "Get List Items"
 openapi: "GET /lists/{id}/items"
 ---
 
 ## Usage
 
-Retourne les éléments d’une list avec pagination.
+Returns the items in a list with pagination.
 
 Authentication is required via `x-api-key` or `Authorization: Bearer`.
 
 ## Example
 
 ```bash
-curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/lists/{id}/items?page=1&pageSize=20"
+curl -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/lists/LIST_ID/items?page=1&pageSize=20"
 ```
 
 ## Parameters and response
 
-Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+The path parameter, pagination parameters, and response schemas are defined by the OpenAPI specification displayed on this page.
 
 ## Errors
 
 See **Responses** for the operation-specific error codes and formats.
-
-## Notes
-
-Never expose an `sk_` API key in client-side code or a public repository.
