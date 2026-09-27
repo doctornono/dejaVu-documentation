@@ -269,7 +269,7 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Ouvrir dejaVu",
+      "label": "dejaVu",
       "href": "https://dejavu.plus"
     }
   },

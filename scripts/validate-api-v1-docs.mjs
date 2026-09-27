@@ -279,7 +279,7 @@ if (
 }
 if (docs.navbar?.links?.length)
   fail("Navbar contains extra links; keep only the primary dejaVu CTA");
-if (docs.navbar?.primary?.label !== "Ouvrir dejaVu")
+if (docs.navbar?.primary?.label !== "dejaVu")
   fail("Missing primary dejaVu navbar CTA");
 if (process.exitCode) throw new Error("Validation failed");
 console.log(`OK: ${operations.length} OpenAPI operations`);
