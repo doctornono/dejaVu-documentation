@@ -90,7 +90,27 @@ for (const [label,set] of [["French",new Set(french.keys)],["English",new Set(en
 if (french.keys.length !== operations.length) fail(`French operation/page count mismatch: ${operations.length} vs ${french.keys.length}`);
 if (english.keys.length !== operations.length) fail(`English operation/page count mismatch: ${operations.length} vs ${english.keys.length}`);
 
-if (process.exitCode) process.exit(process.exitCode);
+
+const forbiddenPaths = [
+  "README-APPLY.md",
+  "essentials/imdb.mdx",
+  "snippets/snippet-intro.mdx",
+  "ai-tools",
+  "images/hero-dark.png",
+  "images/hero-light.png",
+  "images/checks-passed.png",
+  "api-reference/collection/batch-add-to-collection.mdx",
+  "scripts/validate-api-docs.mjs"
+];
+for (const relative of forbiddenPaths) {
+  if (fs.existsSync(path.join(root, relative))) fail(`Obsolete starter/duplicate file remains: ${relative}`);
+}
+if (docs.colors?.primary !== "#7B2820" || docs.colors?.light !== "#7B2820" || docs.colors?.dark !== "#7B2820") {
+  fail("DejaVu primary colors are not configured consistently");
+}
+if (docs.navbar?.links?.length) fail("Navbar contains extra links; keep only the primary DejaVu CTA");
+if (docs.navbar?.primary?.label !== "Ouvrir DejaVu") fail("Missing primary DejaVu navbar CTA");
+\nif (process.exitCode) process.exit(process.exitCode);
 console.log(`OK: ${operations.length} OpenAPI operations`);
 console.log(`OK: ${Object.keys(spec.paths ?? {}).length} OpenAPI paths`);
 console.log(`OK: ${french.keys.length} French endpoint pages`);
