@@ -2,3 +2,27 @@
 title: "Échanger le code d'appareil"
 openapi: "POST /auth/device/token"
 ---
+
+## Utilisation
+
+Échange un device code approuvé contre un jeton. Cette opération est publique.
+
+Aucune clé API n’est requise pour cette opération.
+
+## Exemple
+
+```bash
+curl -X POST -H "Content-Type: application/json" "https://dejavu.plus/api/v1/auth/device/token"
+```
+
+## Paramètres et réponse
+
+Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
+
+## Notes
+
+Le flux utilise `grant_type=urn:ietf:params:oauth:grant-type:device_code`.
