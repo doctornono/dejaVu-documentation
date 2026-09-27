@@ -1,0 +1,3866 @@
+{
+  "openapi": "3.1.0",
+  "info": {
+    "title": "DejaVu API V1",
+    "description": "API publique DejaVu V1 pour intégrer la collection, l’historique, les favoris, les notes, la watchlist, le scrobble, les listes, les chaînes, les connecteurs et les fonctions d’intégration.",
+    "version": "1.0.0"
+  },
+  "servers": [
+    {
+      "url": "https://dejavu.plus/api/v1",
+      "description": "Production"
+    }
+  ],
+  "security": [
+    {
+      "ApiKeyHeader": []
+    },
+    {
+      "BearerAuth": []
+    }
+  ],
+  "tags": [
+    {
+      "name": "Collection",
+      "description": "Gérez votre collection personnelle de films et séries vus ou possédés."
+    },
+    {
+      "name": "History",
+      "description": "Consultez et gérez votre historique de visionnage."
+    },
+    {
+      "name": "Favorites",
+      "description": "Ajoutez et retirez des films et séries de vos favoris."
+    },
+    {
+      "name": "Ratings",
+      "description": "Notez et rédigez des avis sur vos films, séries, saisons et épisodes."
+    },
+    {
+      "name": "Watchlist",
+      "description": "Gérez votre liste de contenus à regarder."
+    },
+    {
+      "name": "Scrobble",
+      "description": "Suivez la progression de lecture en temps réel."
+    },
+    {
+      "name": "Up Next",
+      "description": "Obtenez les prochains épisodes à regarder pour les séries que vous suivez."
+    },
+    {
+      "name": "Lists",
+      "description": "Créez et gérez des listes personnalisées de films et séries."
+    },
+    {
+      "name": "Dashboard",
+      "description": "Expose la configuration du tableau de bord et le contenu des widgets."
+    },
+    {
+      "name": "User",
+      "description": "Informations de compte et statistiques."
+    },
+    {
+      "name": "Auth",
+      "description": "Authentification des appareils et gestion des jetons."
+    },
+    {
+      "name": "Channels",
+      "description": "Chaînes et univers accessibles à l’utilisateur."
+    },
+    {
+      "name": "Connectors",
+      "description": "Connecteurs utilisés par l’extension navigateur."
+    },
+    {
+      "name": "Kodi",
+      "description": "Import de bibliothèques Kodi."
+    },
+    {
+      "name": "Media",
+      "description": "Résolution et statut de médias."
+    }
+  ],
+  "paths": {
+    "/auth/device/code": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Demander un code d'appareil (Device Flow)",
+        "description": "Première étape de l'authentification pour les appareils sans clavier (TV, etc.).",
+        "operationId": "requestDeviceCode",
+        "responses": {
+          "200": {
+            "description": "Codes générés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceCodeResponse"
+                }
+              }
+            }
+          },
+          "429": {
+            "description": "Trop de demandes depuis cette adresse IP."
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [],
+        "requestBody": {
+          "required": false,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceCodeRequest"
+              },
+              "example": {
+                "client_id": "kodi",
+                "client_name": "DejaVu Kodi"
+              }
+            }
+          }
+        }
+      }
+    },
+    "/auth/device/token": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Échanger le code d'appareil contre un jeton",
+        "description": "Étape de 'polling' pour vérifier si l'utilisateur a autorisé l'appareil.",
+        "operationId": "exchangeDeviceToken",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/DeviceTokenRequest"
+              },
+              "example": {
+                "device_code": "DEVICE_CODE_FROM_PREVIOUS_STEP",
+                "grant_type": "urn:ietf:params:oauth:grant-type:device_code"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Jeton d’accès délivré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/DeviceTokenResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Requête invalide, autorisation en attente, expirée ou invalide."
+          },
+          "403": {
+            "description": "Demande refusée par l’utilisateur."
+          },
+          "429": {
+            "description": "Trop de polling pour ce device_code."
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": []
+      }
+    },
+    "/collection": {
+      "get": {
+        "tags": [
+          "Collection"
+        ],
+        "summary": "Récupérer la collection",
+        "description": "Retourne l'ensemble des éléments de votre collection avec pagination optionnelle.",
+        "operationId": "getCollection",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type de contenu",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "tv"
+              ],
+              "default": "all"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "description": "Numéro de page (commence à 1)",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "description": "Nombre d'éléments par page",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            },
+            "example": 20
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Tri (ex: addedAt:desc, addedAt:asc)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "addedAt:asc",
+                "addedAt:desc"
+              ]
+            }
+          },
+          {
+            "name": "format",
+            "in": "query",
+            "description": "Filtrer par format (bluray, dvd, digital, 4k)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des éléments de la collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/CollectionItem"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Collection"
+        ],
+        "summary": "Ajouter à la collection",
+        "description": "Ajoute un film ou une série à votre collection. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToCollection",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/CollectionInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Élément ajouté à la collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/CollectionItem"
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Collection"
+        ],
+        "summary": "Supprimer de la collection",
+        "description": "Retire un élément de votre collection. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromCollection",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "tv"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "ID TMDB du contenu",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Élément supprimé de la collection",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/dashboard": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Configuration du tableau de bord",
+        "description": "Retourne la configuration des widgets du dashboard de l'utilisateur.",
+        "operationId": "getDashboardConfig",
+        "responses": {
+          "200": {
+            "description": "Configuration du dashboard",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "widgets": {
+                          "type": "array",
+                          "items": {
+                            "type": "object",
+                            "properties": {
+                              "id": {
+                                "type": "string"
+                              },
+                              "type": {
+                                "type": "string"
+                              },
+                              "title": {
+                                "type": "string"
+                              },
+                              "apiUrl": {
+                                "type": "string"
+                              }
+                            }
+                          }
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/dashboard/widget": {
+      "get": {
+        "tags": [
+          "Dashboard"
+        ],
+        "summary": "Contenu unifié de widget",
+        "description": "Agit comme un proxy pour retourner le contenu d'un widget spécifique.",
+        "operationId": "getDashboardWidgetContent",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "description": "Type de widget",
+            "schema": {
+              "type": "string"
+            },
+            "example": "up_next"
+          },
+          {
+            "name": "listId",
+            "in": "query",
+            "description": "ID de la liste (requis si type=list)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "default": 1
+            },
+            "example": 1
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Contenu du widget",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {}
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/history": {
+      "get": {
+        "tags": [
+          "History"
+        ],
+        "summary": "Récupérer l'historique de visionnage",
+        "description": "Retourne l'historique de visionnage de l'utilisateur.",
+        "operationId": "getHistory",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "tv",
+                "episode"
+              ],
+              "default": "all"
+            },
+            "example": "movie"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "example": 1
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Tri (ex: watchedAt:desc, watchedAt:asc)",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "watchedAt:asc",
+                "watchedAt:desc"
+              ]
+            },
+            "example": "watchedAt:desc"
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1)."
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Historique de visionnage",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/HistoryItem"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "History"
+        ],
+        "summary": "Ajouter à l'historique",
+        "description": "Enregistre un visionnage dans l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToHistory",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/HistoryInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "watchedAt": "2026-09-27T12:00:00Z"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Visionnage enregistré",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "History"
+        ],
+        "summary": "Supprimer de l'historique",
+        "description": "Supprime une entrée de l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromHistory",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "tv",
+                "episode"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "ID TMDB du média ou de l'épisode. Facultatif si un contexte d'épisode est fourni.",
+            "required": false
+          },
+          {
+            "name": "tvShowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "ID TMDB de la série pour cibler un épisode."
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "episodeNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Entrée supprimée de l'historique",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/favorites": {
+      "get": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Récupérer les favoris",
+        "description": "Retourne la liste des favoris de l'utilisateur.",
+        "operationId": "getFavorites",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "tv"
+              ],
+              "default": "all"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/MediaItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Ajouter aux favoris",
+        "description": "Ajoute un film ou une série aux favoris. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToFavorites",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ajouté aux favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Favorites"
+        ],
+        "summary": "Supprimer des favoris",
+        "description": "Retire un élément des favoris. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromFavorites",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "tv"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retiré des favoris",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/ratings": {
+      "get": {
+        "tags": [
+          "Ratings"
+        ],
+        "summary": "Récupérer les notes",
+        "description": "Retourne les notes données par l'utilisateur.",
+        "operationId": "getRatings",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "tv",
+                "season",
+                "episode"
+              ],
+              "default": "all"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste des notes",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/RatingItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Ratings"
+        ],
+        "summary": "Ajouter ou modifier une note",
+        "description": "Attribue ou met à jour une note (1-10) avec avis optionnel. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "upsertRating",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/RatingInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "rating": 9
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Note enregistrée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Ratings"
+        ],
+        "summary": "Supprimer une note",
+        "description": "Supprime une note existante. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "deleteRating",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "tv",
+                "season",
+                "episode"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID TMDB du média ou de l'épisode. Facultatif si le contexte saison/épisode est fourni."
+          },
+          {
+            "name": "tvShowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "ID TMDB de la série pour cibler une saison ou un épisode."
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Numéro de saison."
+          },
+          {
+            "name": "episodeNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro d'épisode."
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Note supprimée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/watchlist": {
+      "get": {
+        "tags": [
+          "Watchlist"
+        ],
+        "summary": "Récupérer la watchlist",
+        "description": "Retourne la liste des contenus à regarder.",
+        "operationId": "getWatchlist",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "description": "Filtrer par type",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "tv"
+              ],
+              "default": "all"
+            }
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourner uniquement type et id",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            }
+          },
+          {
+            "name": "sort",
+            "in": "query",
+            "description": "Tri (ex: addedAt:desc, priority:desc)",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Watchlist de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/WatchlistItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Watchlist"
+        ],
+        "summary": "Ajouter à la watchlist",
+        "description": "Ajoute un film ou une série à la watchlist. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addToWatchlist",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/WatchlistInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "priority": 1
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Ajouté à la watchlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Watchlist"
+        ],
+        "summary": "Supprimer de la watchlist",
+        "description": "Retire un élément de la watchlist. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeFromWatchlist",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "tv"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Retiré de la watchlist",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/scrobble": {
+      "get": {
+        "tags": [
+          "Scrobble"
+        ],
+        "summary": "Sessions de lecture en cours",
+        "description": "Retourne les sessions de lecture actives (lecture en cours).",
+        "operationId": "getScrobbleSessions",
+        "responses": {
+          "200": {
+            "description": "Sessions actives",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ScrobbleSession"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "all",
+                "movie",
+                "episode"
+              ]
+            },
+            "example": "episode"
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "example": true
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Scrobble"
+        ],
+        "summary": "Mettre à jour la progression de lecture",
+        "description": "Met à jour la progression de lecture d'un film ou épisode. Si la progression dépasse **90%**, le contenu est automatiquement marqué comme vu dans l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "updateScrobble",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ScrobbleInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550,
+                "progress": 42,
+                "duration": 120
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Progression mise à jour. Si > 90%, marqué comme vu automatiquement.",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Scrobble"
+        ],
+        "summary": "Supprimer une session de lecture",
+        "description": "Met fin à une session de lecture sans la marquer comme vue. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "deleteScrobble",
+        "parameters": [
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "episode"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": false,
+            "schema": {
+              "type": "integer"
+            },
+            "description": "ID TMDB du film ou de l'épisode. Facultatif si le contexte d'épisode est fourni."
+          },
+          {
+            "name": "tvShowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            }
+          },
+          {
+            "name": "episodeNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Session supprimée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/upnext": {
+      "get": {
+        "tags": [
+          "Up Next"
+        ],
+        "summary": "Séries à suivre (Up Next)",
+        "description": "Retourne les prochains épisodes à regarder pour les séries en cours.",
+        "operationId": "getUpNext",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "example": true
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Prochains épisodes à regarder",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/UpNextItem"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/me": {
+      "get": {
+        "tags": [
+          "User"
+        ],
+        "summary": "Récupérer le profil et les statistiques du compte",
+        "description": "Retourne les informations du profil utilisateur ainsi que ses statistiques globales (temps passé, nombre de films, etc.).",
+        "operationId": "getMe",
+        "responses": {
+          "200": {
+            "description": "Profil et statistiques utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "user": {
+                      "type": "object"
+                    },
+                    "stats": {
+                      "type": "object"
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/lists": {
+      "get": {
+        "tags": [
+          "Lists"
+        ],
+        "summary": "Récupérer les listes",
+        "description": "Retourne toutes les listes personnalisées de l'utilisateur.",
+        "operationId": "getLists",
+        "responses": {
+          "200": {
+            "description": "Listes de l'utilisateur",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "required": [
+                    "success",
+                    "data"
+                  ],
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/List"
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ],
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "description": "Retourne une représentation minimale des listes.",
+            "example": true
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Lists"
+        ],
+        "summary": "Créer une liste",
+        "description": "Crée une nouvelle liste personnalisée. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "createList",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListInput"
+              },
+              "example": {
+                "name": "Films à voir",
+                "kind": "MEDIA",
+                "visibility": "PRIVATE"
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Liste créée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/List"
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "422": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Données valides syntaxiquement mais impossibles à traiter."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/lists/{id}/items": {
+      "get": {
+        "tags": [
+          "Lists"
+        ],
+        "summary": "Récupérer les éléments d'une liste",
+        "description": "Retourne les éléments d'une liste avec pagination.",
+        "operationId": "getListItems",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "description": "Identifiant de la liste",
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            },
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
+          },
+          {
+            "name": "minimal",
+            "in": "query",
+            "description": "Retourne une représentation minimale des éléments.",
+            "schema": {
+              "type": "boolean",
+              "default": false
+            },
+            "example": true
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Éléments de la liste",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "data": {
+                      "type": "array",
+                      "items": {
+                        "$ref": "#/components/schemas/ListItem"
+                      }
+                    },
+                    "pagination": {
+                      "$ref": "#/components/schemas/Pagination"
+                    },
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  },
+                  "required": [
+                    "success",
+                    "data",
+                    "pagination"
+                  ]
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "post": {
+        "tags": [
+          "Lists"
+        ],
+        "summary": "Ajouter un élément à une liste",
+        "description": "Ajoute un film ou une série à une liste. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "addItemToList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ListItemInput"
+              },
+              "example": {
+                "type": "movie",
+                "id": 550
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Élément ajouté à la liste",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      },
+      "delete": {
+        "tags": [
+          "Lists"
+        ],
+        "summary": "Retirer un élément d'une liste",
+        "description": "Retire un film ou une série d'une liste. **Requiert une clé secrète** (`sk_...`).",
+        "operationId": "removeItemFromList",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string",
+              "enum": [
+                "movie",
+                "tv",
+                "episode"
+              ]
+            }
+          },
+          {
+            "name": "id",
+            "in": "query",
+            "required": true,
+            "description": "ID TMDB du média ou de l'épisode.",
+            "schema": {
+              "type": "integer"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Élément retiré de la liste",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          },
+          "403": {
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
+          },
+          "404": {
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/auth/device/verify": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Vérifier le code utilisateur",
+        "description": "Appelé par le navigateur utilisateur pour valider un `user_code` avant de l'approuver.",
+        "operationId": "verifyDeviceCode",
+        "parameters": [
+          {
+            "name": "user_code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Code valide, informations de l'appareil retournées",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    },
+                    "data": {
+                      "type": "object",
+                      "properties": {
+                        "id": {
+                          "type": "string"
+                        },
+                        "userCode": {
+                          "type": "string"
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Code manquant, déjà utilisé ou expiré."
+          }
+        },
+        "security": []
+      }
+    },
+    "/auth/device/approve": {
+      "post": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Approuver le code utilisateur",
+        "description": "Appelé depuis le compte utilisateur. Requiert la session DejaVu du navigateur.",
+        "operationId": "approveDeviceCode",
+        "security": [
+          {
+            "SessionCookie": []
+          }
+        ],
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "type": "object",
+                "required": [
+                  "user_code"
+                ],
+                "properties": {
+                  "user_code": {
+                    "type": "string"
+                  }
+                }
+              },
+              "example": {
+                "user_code": "ABCD-1234"
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Appareil autorisé avec succès",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "type": "object",
+                  "properties": {
+                    "success": {
+                      "type": "boolean",
+                      "default": true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Code invalide ou expiré."
+          },
+          "401": {
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
+          }
+        }
+      }
+    },
+    "/auth/device/qr": {
+      "get": {
+        "tags": [
+          "Auth"
+        ],
+        "summary": "Obtenir le QR code d’un appareil",
+        "description": "Retourne un PNG contenant l’URL de vérification associée à un user_code encore en attente.",
+        "operationId": "getDeviceQr",
+        "security": [],
+        "parameters": [
+          {
+            "name": "user_code",
+            "in": "query",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Image PNG",
+            "content": {
+              "image/png": {
+                "schema": {
+                  "type": "string",
+                  "format": "binary"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "user_code invalide"
+          },
+          "404": {
+            "description": "Code introuvable ou expiré"
+          },
+          "429": {
+            "description": "Trop de demandes"
+          }
+        }
+      }
+    },
+    "/channels": {
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Lister les chaînes",
+        "operationId": "getChannels",
+        "parameters": [
+          {
+            "name": "page",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "default": 1
+            }
+          },
+          {
+            "name": "pageSize",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1,
+              "maximum": 100,
+              "default": 20
+            }
+          },
+          {
+            "name": "type",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "UNIVERSE",
+                "EDITORIAL",
+                "PLATFORM",
+                "THEMATIC",
+                "CREATOR",
+                "AWARDS",
+                "FRANCHISE"
+              ]
+            }
+          },
+          {
+            "name": "scope",
+            "in": "query",
+            "schema": {
+              "type": "string",
+              "enum": [
+                "mine",
+                "following"
+              ]
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Liste paginée",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/PaginatedSuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Paramètres invalides"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/channels/{id}": {
+      "get": {
+        "tags": [
+          "Channels"
+        ],
+        "summary": "Récupérer une chaîne",
+        "operationId": "getChannel",
+        "parameters": [
+          {
+            "name": "id",
+            "in": "path",
+            "required": true,
+            "schema": {
+              "type": "string"
+            }
+          }
+        ],
+        "responses": {
+          "200": {
+            "description": "Chaîne",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "404": {
+            "description": "Chaîne introuvable"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/connectors": {
+      "get": {
+        "tags": [
+          "Connectors"
+        ],
+        "summary": "Lister les connecteurs approuvés",
+        "description": "Endpoint public utilisé par l’extension navigateur.",
+        "operationId": "getConnectors",
+        "security": [],
+        "responses": {
+          "200": {
+            "description": "Connecteurs approuvés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "304": {
+            "description": "Aucune modification depuis l’ETag fourni"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        }
+      }
+    },
+    "/connectors/submit": {
+      "post": {
+        "tags": [
+          "Connectors"
+        ],
+        "summary": "Soumettre un connecteur",
+        "description": "Soumet un connecteur pour revue. Limite : 5 soumissions par heure et par utilisateur.",
+        "operationId": "submitConnector",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/ConnectorSubmission"
+              },
+              "example": {
+                "name": "Example connector",
+                "domains": [
+                  "example.com"
+                ],
+                "definition": {
+                  "version": 1
+                }
+              }
+            }
+          }
+        },
+        "responses": {
+          "201": {
+            "description": "Connecteur soumis",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Données invalides"
+          },
+          "429": {
+            "description": "Limite atteinte"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/kodi/import": {
+      "post": {
+        "tags": [
+          "Kodi"
+        ],
+        "summary": "Importer une bibliothèque Kodi",
+        "operationId": "importKodi",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/KodiImportRequest"
+              },
+              "example": {
+                "importSessionId": "demo-session",
+                "chunk": 1,
+                "totalChunks": 1,
+                "items": []
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Lot importé",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Lot ou paramètres invalides"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/media/resolve": {
+      "post": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "Résoudre un média",
+        "description": "Recherche un média à partir d’un IMDb ID, d’un TMDB ID et type, d’un titre/année ou du contexte d’un épisode.",
+        "operationId": "resolveMedia",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaResolveRequest"
+              },
+              "example": {
+                "type": "movie",
+                "tmdbId": 550
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Média résolu",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Identifiants ou contexte invalides"
+          },
+          "404": {
+            "description": "Média introuvable"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    },
+    "/media/status": {
+      "post": {
+        "tags": [
+          "Media"
+        ],
+        "summary": "Récupérer le statut utilisateur de médias",
+        "description": "Retourne le statut utilisateur pour un lot de films, séries ou épisodes.",
+        "operationId": "getMediaStatus",
+        "requestBody": {
+          "required": true,
+          "content": {
+            "application/json": {
+              "schema": {
+                "$ref": "#/components/schemas/MediaStatusRequest"
+              },
+              "example": {
+                "items": [
+                  {
+                    "type": "movie",
+                    "id": 550
+                  },
+                  {
+                    "type": "tv",
+                    "id": 1399
+                  }
+                ]
+              }
+            }
+          }
+        },
+        "responses": {
+          "200": {
+            "description": "Statuts retournés",
+            "content": {
+              "application/json": {
+                "schema": {
+                  "$ref": "#/components/schemas/SuccessResponse"
+                }
+              }
+            }
+          },
+          "400": {
+            "description": "Aucun élément valide"
+          },
+          "500": {
+            "description": "Erreur serveur"
+          }
+        },
+        "security": [
+          {
+            "ApiKeyHeader": []
+          },
+          {
+            "BearerAuth": []
+          }
+        ]
+      }
+    }
+  },
+  "components": {
+    "securitySchemes": {
+      "ApiKeyHeader": {
+        "type": "apiKey",
+        "in": "header",
+        "name": "x-api-key",
+        "description": "Clé API DejaVu. pk_* = lecture seule ; sk_* = lecture et écriture."
+      },
+      "BearerAuth": {
+        "type": "http",
+        "scheme": "bearer",
+        "description": "Clé API DejaVu envoyée dans Authorization: Bearer <key>."
+      },
+      "SessionCookie": {
+        "type": "apiKey",
+        "in": "cookie",
+        "name": "better-auth.session_token",
+        "description": "Session utilisateur DejaVu utilisée par l’approbation du Device Flow dans le navigateur."
+      }
+    },
+    "schemas": {
+      "MediaItem": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "posterPath": {
+            "type": "string",
+            "nullable": true
+          }
+        }
+      },
+      "MediaInput": {
+        "type": "object",
+        "required": [
+          "type",
+          "id"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du contenu"
+          }
+        }
+      },
+      "CollectionItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "format": {
+                "type": "string",
+                "description": "Format de stockage (Blu-ray, DVD, etc.)",
+                "nullable": true
+              },
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
+              "addedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "CollectionInput": {
+        "type": "object",
+        "required": [
+          "type",
+          "id"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB"
+          },
+          "format": {
+            "type": "string",
+            "description": "Format de stockage (ex: Blu-ray, DVD, digital)"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "HistoryItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "watchedAt": {
+                "type": "string",
+                "format": "date-time"
+              },
+              "count": {
+                "type": "integer",
+                "description": "Nombre de fois vu",
+                "default": 1
+              },
+              "episodeId": {
+                "type": "integer",
+                "nullable": true
+              },
+              "seasonNumber": {
+                "type": "integer",
+                "nullable": true
+              },
+              "episodeNumber": {
+                "type": "integer",
+                "nullable": true
+              }
+            }
+          }
+        ]
+      },
+      "HistoryInput": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv",
+              "episode"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du film ou de l'épisode. Pour un épisode, peut être remplacé par tvShowId + seasonNumber + episodeNumber."
+          },
+          "count": {
+            "type": "integer",
+            "default": 1,
+            "description": "Nombre de visionnages à enregistrer"
+          },
+          "watchedAt": {
+            "type": "string",
+            "format": "date-time",
+            "description": "Date et heure du visionnage (défaut: maintenant)"
+          },
+          "tmdbId": {
+            "type": "integer",
+            "description": "Alias du TMDB ID de la série pour résoudre un épisode par contexte."
+          },
+          "tvShowId": {
+            "type": "integer",
+            "description": "ID TMDB de la série, utilisé pour résoudre un épisode."
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Numéro de saison pour la résolution d'un épisode."
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode pour la résolution d'un épisode."
+          }
+        },
+        "description": "Ajoute un film ou un épisode à l'historique. Les séries TV ne constituent pas une entrée d'historique autonome : utilisez type=episode."
+      },
+      "RatingItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "rating": {
+                "type": "integer",
+                "minimum": 1,
+                "maximum": 10
+              },
+              "review": {
+                "type": "string",
+                "nullable": true
+              },
+              "ratedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "RatingInput": {
+        "type": "object",
+        "required": [
+          "type",
+          "rating"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv",
+              "season",
+              "episode"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du média ou de l'épisode. Pour une saison/épisode, le contexte de série peut être nécessaire."
+          },
+          "rating": {
+            "type": "integer",
+            "minimum": 1,
+            "maximum": 10,
+            "description": "Note de 1 à 10"
+          },
+          "review": {
+            "type": "string",
+            "description": "Avis textuel (optionnel)"
+          },
+          "tvShowId": {
+            "type": "integer",
+            "description": "Requis pour les saisons et épisodes",
+            "nullable": true
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "description": "Requis pour les saisons",
+            "nullable": true
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode, requis lorsque l'épisode est résolu par contexte."
+          }
+        },
+        "description": "Ajoute ou met à jour une note de 1 à 10. Les saisons et épisodes utilisent tvShowId et leur contexte S/E."
+      },
+      "WatchlistItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "priority": {
+                "type": "integer",
+                "description": "Ordre de priorité",
+                "nullable": true
+              },
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
+              "addedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "WatchlistInput": {
+        "type": "object",
+        "required": [
+          "type",
+          "id"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv"
+            ]
+          },
+          "id": {
+            "type": "integer"
+          },
+          "priority": {
+            "type": "integer",
+            "description": "Priorité (plus petit = plus prioritaire)"
+          },
+          "notes": {
+            "type": "string"
+          }
+        }
+      },
+      "ScrobbleSession": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "integer"
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "episode"
+            ]
+          },
+          "mediaId": {
+            "type": "integer"
+          },
+          "title": {
+            "type": "string"
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Secondes lues"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Durée totale en secondes"
+          },
+          "progressPercent": {
+            "type": "number",
+            "description": "Pourcentage de progression (0-100)"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ScrobbleInput": {
+        "type": "object",
+        "required": [
+          "type",
+          "progress",
+          "duration"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "episode"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du film ou de l'épisode, facultatif si tmdbId ou le contexte d'épisode est fourni."
+          },
+          "progress": {
+            "type": "integer",
+            "description": "Secondes déjà lues"
+          },
+          "duration": {
+            "type": "integer",
+            "description": "Durée totale du contenu en secondes"
+          },
+          "tmdbId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "ID TMDB du film ou ID TMDB de la série pour résoudre un épisode."
+          },
+          "tvShowId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "ID TMDB de la série pour résoudre un épisode."
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Numéro de saison pour résoudre un épisode."
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode pour résoudre un épisode."
+          }
+        },
+        "description": "Met à jour la progression d'un film ou d'un épisode. À 90 % ou plus, le contenu est automatiquement marqué comme vu."
+      },
+      "UpNextItem": {
+        "type": "object",
+        "properties": {
+          "showId": {
+            "type": "integer"
+          },
+          "showTitle": {
+            "type": "string"
+          },
+          "posterPath": {
+            "type": "string",
+            "nullable": true
+          },
+          "nextEpisode": {
+            "type": "object",
+            "properties": {
+              "id": {
+                "type": "integer"
+              },
+              "seasonNumber": {
+                "type": "integer"
+              },
+              "episodeNumber": {
+                "type": "integer"
+              },
+              "title": {
+                "type": "string"
+              },
+              "airDate": {
+                "type": "string",
+                "format": "date",
+                "nullable": true
+              }
+            }
+          }
+        }
+      },
+      "List": {
+        "type": "object",
+        "properties": {
+          "id": {
+            "type": "string"
+          },
+          "name": {
+            "type": "string"
+          },
+          "description": {
+            "type": "string",
+            "nullable": true
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "PRIVATE",
+              "PUBLIC",
+              "SHARED"
+            ]
+          },
+          "itemCount": {
+            "type": "integer"
+          },
+          "createdAt": {
+            "type": "string",
+            "format": "date-time"
+          },
+          "updatedAt": {
+            "type": "string",
+            "format": "date-time"
+          }
+        }
+      },
+      "ListInput": {
+        "type": "object",
+        "required": [
+          "name"
+        ],
+        "properties": {
+          "name": {
+            "type": "string",
+            "description": "Nom de la liste"
+          },
+          "description": {
+            "type": "string"
+          },
+          "visibility": {
+            "type": "string",
+            "enum": [
+              "PRIVATE",
+              "PUBLIC",
+              "SHARED"
+            ],
+            "default": "PRIVATE"
+          },
+          "kind": {
+            "type": "string",
+            "enum": [
+              "media",
+              "episode"
+            ]
+          }
+        }
+      },
+      "ListItem": {
+        "allOf": [
+          {
+            "$ref": "#/components/schemas/MediaItem"
+          },
+          {
+            "type": "object",
+            "properties": {
+              "notes": {
+                "type": "string",
+                "nullable": true
+              },
+              "position": {
+                "type": "integer",
+                "description": "Position dans la liste"
+              },
+              "addedAt": {
+                "type": "string",
+                "format": "date-time"
+              }
+            }
+          }
+        ]
+      },
+      "ListItemInput": {
+        "type": "object",
+        "required": [
+          "type"
+        ],
+        "properties": {
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv",
+              "episode"
+            ]
+          },
+          "id": {
+            "type": "integer",
+            "description": "ID TMDB du média ou de l'épisode. Pour un épisode, peut être remplacé par le contexte tvShowId + seasonNumber + episodeNumber."
+          },
+          "notes": {
+            "type": "string"
+          },
+          "position": {
+            "type": "integer",
+            "description": "Position souhaitée dans la liste"
+          },
+          "tvShowId": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "ID TMDB de la série, utilisé pour résoudre un épisode."
+          },
+          "seasonNumber": {
+            "type": "integer",
+            "minimum": 0,
+            "description": "Numéro de saison pour un épisode."
+          },
+          "episodeNumber": {
+            "type": "integer",
+            "minimum": 1,
+            "description": "Numéro d'épisode pour un épisode."
+          }
+        },
+        "description": "Ajoute un film, une série ou un épisode à une liste. Les règles dépendent du kind de la liste."
+      },
+      "Pagination": {
+        "type": "object",
+        "properties": {
+          "page": {
+            "type": "integer"
+          },
+          "pageSize": {
+            "type": "integer"
+          },
+          "totalItems": {
+            "type": "integer"
+          },
+          "totalPages": {
+            "type": "integer"
+          }
+        }
+      },
+      "Error": {
+        "type": "object",
+        "required": [
+          "error",
+          "message"
+        ],
+        "properties": {
+          "error": {
+            "type": "string",
+            "description": "Code d'erreur machine-readable"
+          },
+          "message": {
+            "type": "string",
+            "description": "Description lisible de l'erreur"
+          }
+        }
+      },
+      "SuccessResponse": {
+        "type": "object",
+        "required": [
+          "success"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "description": "Données retournées par l’opération"
+          }
+        }
+      },
+      "PaginatedSuccessResponse": {
+        "type": "object",
+        "required": [
+          "success",
+          "data",
+          "pagination"
+        ],
+        "properties": {
+          "success": {
+            "type": "boolean"
+          },
+          "data": {
+            "type": "array",
+            "items": {}
+          },
+          "pagination": {
+            "$ref": "#/components/schemas/Pagination"
+          }
+        }
+      },
+      "DeviceCodeRequest": {
+        "type": "object",
+        "properties": {
+          "client_id": {
+            "type": "string",
+            "maxLength": 64
+          },
+          "client_name": {
+            "type": "string",
+            "maxLength": 64
+          }
+        }
+      },
+      "DeviceCodeResponse": {
+        "type": "object",
+        "required": [
+          "device_code",
+          "user_code",
+          "verification_uri",
+          "verification_uri_complete",
+          "expires_in",
+          "interval"
+        ],
+        "properties": {
+          "device_code": {
+            "type": "string"
+          },
+          "user_code": {
+            "type": "string"
+          },
+          "verification_uri": {
+            "type": "string",
+            "format": "uri"
+          },
+          "verification_uri_complete": {
+            "type": "string",
+            "format": "uri"
+          },
+          "expires_in": {
+            "type": "integer",
+            "example": 300
+          },
+          "interval": {
+            "type": "integer",
+            "example": 5
+          }
+        }
+      },
+      "DeviceTokenRequest": {
+        "type": "object",
+        "required": [
+          "device_code",
+          "grant_type"
+        ],
+        "properties": {
+          "device_code": {
+            "type": "string"
+          },
+          "grant_type": {
+            "type": "string",
+            "enum": [
+              "urn:ietf:params:oauth:grant-type:device_code"
+            ]
+          }
+        }
+      },
+      "DeviceTokenResponse": {
+        "type": "object",
+        "required": [
+          "access_token",
+          "token_type",
+          "expires_in"
+        ],
+        "properties": {
+          "access_token": {
+            "type": "string"
+          },
+          "token_type": {
+            "type": "string",
+            "example": "Bearer"
+          },
+          "expires_in": {
+            "type": "integer",
+            "example": 7776000
+          }
+        }
+      },
+      "MediaResolveRequest": {
+        "type": "object",
+        "properties": {
+          "imdbId": {
+            "type": "string"
+          },
+          "imdb_id": {
+            "type": "string"
+          },
+          "tmdbId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tmdb_id": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "type": {
+            "type": "string",
+            "enum": [
+              "movie",
+              "tv",
+              "episode"
+            ]
+          },
+          "title": {
+            "type": "string"
+          },
+          "year": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "tvShowId": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "seasonNumber": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          },
+          "episodeNumber": {
+            "oneOf": [
+              {
+                "type": "integer"
+              },
+              {
+                "type": "string"
+              }
+            ]
+          }
+        }
+      },
+      "MediaStatusRequest": {
+        "type": "object",
+        "required": [],
+        "properties": {
+          "items": {
+            "type": "array",
+            "items": {
+              "type": "object",
+              "properties": {
+                "type": {
+                  "type": "string",
+                  "enum": [
+                    "movie",
+                    "tv",
+                    "episode"
+                  ]
+                },
+                "id": {
+                  "type": "integer"
+                },
+                "tmdbId": {
+                  "type": "integer"
+                },
+                "tmdb_id": {
+                  "type": "integer"
+                },
+                "seasonNumber": {
+                  "type": "integer"
+                },
+                "season_number": {
+                  "type": "integer"
+                },
+                "season": {
+                  "type": "integer"
+                },
+                "episodeNumber": {
+                  "type": "integer"
+                },
+                "episode_number": {
+                  "type": "integer"
+                },
+                "episode": {
+                  "type": "integer"
+                }
+              }
+            },
+            "description": "Tableau des médias à interroger. Peut être vide ; la réponse retourne alors un objet data vide."
+          }
+        }
+      },
+      "ConnectorSubmission": {
+        "type": "object",
+        "required": [
+          "name",
+          "domains",
+          "definition"
+        ],
+        "properties": {
+          "name": {
+            "type": "string"
+          },
+          "domains": {
+            "type": "array",
+            "maxItems": 10,
+            "items": {
+              "type": "string"
+            }
+          },
+          "definition": {
+            "type": "object",
+            "description": "Doit notamment contenir definition.extractors. Les sélecteurs ne doivent pas utiliser de wildcard universel."
+          }
+        }
+      },
+      "KodiImportRequest": {
+        "type": "object",
+        "required": [
+          "importSessionId",
+          "chunk",
+          "totalChunks"
+        ],
+        "properties": {
+          "source": {
+            "type": "string"
+          },
+          "importSessionId": {
+            "type": "string"
+          },
+          "chunk": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "totalChunks": {
+            "type": "integer",
+            "minimum": 1
+          },
+          "options": {
+            "type": "object"
+          },
+          "movies": {
+            "type": "array",
+            "maxItems": 250
+          },
+          "tvShows": {
+            "type": "array",
+            "maxItems": 250
+          },
+          "episodes": {
+            "type": "array",
+            "maxItems": 250
+          },
+          "playlists": {
+            "type": "array"
+          },
+          "favorites": {
+            "type": "array",
+            "maxItems": 250
+          }
+        }
+      }
+    },
+    "responses": {
+      "Unauthorized": {
+        "description": "Authentification requise. Utilisez le header x-api-key ou Authorization: Bearer <key>.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "UNAUTHORIZED",
+              "message": "API key is missing or invalid."
+            }
+          }
+        }
+      },
+      "Forbidden": {
+        "description": "Accès refusé. Cette opération nécessite une **clé secrète** (`sk_...`).",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "FORBIDDEN",
+              "message": "A secret key (sk_...) is required for write operations."
+            }
+          }
+        }
+      },
+      "NotFound": {
+        "description": "Ressource introuvable.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "NOT_FOUND",
+              "message": "The requested resource was not found."
+            }
+          }
+        }
+      },
+      "UnprocessableEntity": {
+        "description": "Données de requête invalides.",
+        "content": {
+          "application/json": {
+            "schema": {
+              "$ref": "#/components/schemas/Error"
+            },
+            "example": {
+              "error": "VALIDATION_ERROR",
+              "message": "The field 'rating' must be between 1 and 10."
+            }
+          }
+        }
+      }
+    }
+  }
+}
