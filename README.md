@@ -22,7 +22,7 @@ Le fichier de référence français est :
 
 La version anglaise est :
 
-`api-reference/en/openapi.json`
+`en/api-reference/openapi.json`
 
 Les deux contrats doivent conserver exactement le même ensemble d’opérations et de schémas. Les identifiants techniques, routes, `operationId`, propriétés et valeurs d’exemple restent inchangés entre les langues.
 
@@ -65,11 +65,14 @@ GitHub Actions exécute cette validation sur les pushes vers `main` et les pull 
 
 ```text
 api-reference/
-  *.mdx                 # référence française
   openapi.json          # contrat OpenAPI canonique
-  en/
-    *.mdx               # référence anglaise
-    openapi.json        # contrat OpenAPI anglais
+
+fr/api-reference/
+  *.mdx                 # référence française
+
+en/api-reference/
+  *.mdx                 # référence anglaise
+  openapi.json          # contrat OpenAPI anglais
 
 scripts/
   validate-api-v1-docs.mjs
