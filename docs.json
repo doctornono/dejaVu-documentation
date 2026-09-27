@@ -83,9 +83,7 @@
               },
               {
                 "group": "Up Next",
-                "pages": [
-                  "fr/api-reference/upnext/get-up-next"
-                ]
+                "pages": ["fr/api-reference/upnext/get-up-next"]
               },
               {
                 "group": "Dashboard",
@@ -106,9 +104,7 @@
               },
               {
                 "group": "User",
-                "pages": [
-                  "fr/api-reference/user/get-profile"
-                ]
+                "pages": ["fr/api-reference/user/get-profile"]
               },
               {
                 "group": "Media",
@@ -133,9 +129,7 @@
               },
               {
                 "group": "Kodi",
-                "pages": [
-                  "fr/api-reference/kodi/import"
-                ]
+                "pages": ["fr/api-reference/kodi/import"]
               }
             ]
           }
@@ -150,123 +144,117 @@
               {
                 "group": "Introduction",
                 "pages": [
-                  "api-reference/en/introduction",
-                  "api-reference/en/authentication"
+                  "en/api-reference/introduction",
+                  "en/api-reference/authentication"
                 ]
               },
               {
                 "group": "Auth",
                 "pages": [
-                  "api-reference/en/auth/request-device-code",
-                  "api-reference/en/auth/request-device-qr",
-                  "api-reference/en/auth/exchange-device-token",
-                  "api-reference/en/auth/verify-device-code",
-                  "api-reference/en/auth/approve-device-code"
+                  "en/api-reference/auth/request-device-code",
+                  "en/api-reference/auth/request-device-qr",
+                  "en/api-reference/auth/exchange-device-token",
+                  "en/api-reference/auth/verify-device-code",
+                  "en/api-reference/auth/approve-device-code"
                 ]
               },
               {
                 "group": "Collection",
                 "pages": [
-                  "api-reference/en/collection/get-collection",
-                  "api-reference/en/collection/add-to-collection",
-                  "api-reference/en/collection/remove-from-collection"
+                  "en/api-reference/collection/get-collection",
+                  "en/api-reference/collection/add-to-collection",
+                  "en/api-reference/collection/remove-from-collection"
                 ]
               },
               {
                 "group": "History",
                 "pages": [
-                  "api-reference/en/history/get-history",
-                  "api-reference/en/history/add-to-history",
-                  "api-reference/en/history/remove-from-history"
+                  "en/api-reference/history/get-history",
+                  "en/api-reference/history/add-to-history",
+                  "en/api-reference/history/remove-from-history"
                 ]
               },
               {
                 "group": "Favorites",
                 "pages": [
-                  "api-reference/en/favorites/get-favorites",
-                  "api-reference/en/favorites/add-to-favorites",
-                  "api-reference/en/favorites/remove-from-favorites"
+                  "en/api-reference/favorites/get-favorites",
+                  "en/api-reference/favorites/add-to-favorites",
+                  "en/api-reference/favorites/remove-from-favorites"
                 ]
               },
               {
                 "group": "Ratings",
                 "pages": [
-                  "api-reference/en/ratings/get-ratings",
-                  "api-reference/en/ratings/upsert-rating",
-                  "api-reference/en/ratings/delete-rating"
+                  "en/api-reference/ratings/get-ratings",
+                  "en/api-reference/ratings/upsert-rating",
+                  "en/api-reference/ratings/delete-rating"
                 ]
               },
               {
                 "group": "Watchlist",
                 "pages": [
-                  "api-reference/en/watchlist/get-watchlist",
-                  "api-reference/en/watchlist/add-to-watchlist",
-                  "api-reference/en/watchlist/remove-from-watchlist"
+                  "en/api-reference/watchlist/get-watchlist",
+                  "en/api-reference/watchlist/add-to-watchlist",
+                  "en/api-reference/watchlist/remove-from-watchlist"
                 ]
               },
               {
                 "group": "Scrobble",
                 "pages": [
-                  "api-reference/en/scrobble/get-scrobble-sessions",
-                  "api-reference/en/scrobble/update-scrobble",
-                  "api-reference/en/scrobble/delete-scrobble"
+                  "en/api-reference/scrobble/get-scrobble-sessions",
+                  "en/api-reference/scrobble/update-scrobble",
+                  "en/api-reference/scrobble/delete-scrobble"
                 ]
               },
               {
                 "group": "Up Next",
-                "pages": [
-                  "api-reference/en/upnext/get-up-next"
-                ]
+                "pages": ["en/api-reference/upnext/get-up-next"]
               },
               {
                 "group": "Dashboard",
                 "pages": [
-                  "api-reference/en/dashboard/get-dashboard-config",
-                  "api-reference/en/dashboard/get-dashboard-widget-content"
+                  "en/api-reference/dashboard/get-dashboard-config",
+                  "en/api-reference/dashboard/get-dashboard-widget-content"
                 ]
               },
               {
                 "group": "Lists",
                 "pages": [
-                  "api-reference/en/lists/get-lists",
-                  "api-reference/en/lists/create-list",
-                  "api-reference/en/lists/get-list-items",
-                  "api-reference/en/lists/add-item-to-list",
-                  "api-reference/en/lists/remove-item-from-list"
+                  "en/api-reference/lists/get-lists",
+                  "en/api-reference/lists/create-list",
+                  "en/api-reference/lists/get-list-items",
+                  "en/api-reference/lists/add-item-to-list",
+                  "en/api-reference/lists/remove-item-from-list"
                 ]
               },
               {
                 "group": "User",
-                "pages": [
-                  "api-reference/en/user/get-profile"
-                ]
+                "pages": ["en/api-reference/user/get-profile"]
               },
               {
                 "group": "Media",
                 "pages": [
-                  "api-reference/en/media/resolve-media",
-                  "api-reference/en/media/get-media-status"
+                  "en/api-reference/media/resolve-media",
+                  "en/api-reference/media/get-media-status"
                 ]
               },
               {
                 "group": "Channels",
                 "pages": [
-                  "api-reference/en/channels/get-channels",
-                  "api-reference/en/channels/get-channel"
+                  "en/api-reference/channels/get-channels",
+                  "en/api-reference/channels/get-channel"
                 ]
               },
               {
                 "group": "Connectors",
                 "pages": [
-                  "api-reference/en/connectors/get-connectors",
-                  "api-reference/en/connectors/submit-connector"
+                  "en/api-reference/connectors/get-connectors",
+                  "en/api-reference/connectors/submit-connector"
                 ]
               },
               {
                 "group": "Kodi",
-                "pages": [
-                  "api-reference/en/kodi/import"
-                ]
+                "pages": ["en/api-reference/kodi/import"]
               }
             ]
           }
