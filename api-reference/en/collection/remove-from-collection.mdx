@@ -1,0 +1,28 @@
+---
+title: "Remove from Collection"
+openapi: "DELETE /collection"
+---
+
+## Usage
+
+Retire un média de la collection de l’utilisateur authentifié.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X DELETE -H "x-api-key: $DEJAVU_API_KEY" "https://dejavu.plus/api/v1/collection"
+```
+
+## Parameters and response
+
+Les paramètres et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats.
+
+## Notes
+
+Vérifiez le type et l’identifiant du média avant suppression. Pour les épisodes, respectez le contexte prévu par le schéma.
