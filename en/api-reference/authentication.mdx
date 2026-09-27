@@ -10,7 +10,7 @@ The v1 API accepts two API-key authentication methods:
 - `x-api-key: <key>`
 - `Authorization: Bearer <key>`
 
-DejaVu keys generally use the `pk_` and `sk_` prefixes.
+dejaVu keys generally use the `pk_` and `sk_` prefixes.
 
 ## Public key
 
@@ -48,11 +48,11 @@ The general flow is:
 
 1. Request a device code.
 2. Present the user code or QR code to the user.
-3. Have the device approved in DejaVu.
+3. Have the device approved in dejaVu.
 4. Exchange the `device_code` for an access token.
 5. Use the returned token as a Bearer token.
 
-The approval operation requires an authenticated DejaVu session. See the **Auth** endpoints for the exact request and response formats.
+The approval operation requires an authenticated dejaVu session. See the **Auth** endpoints for the exact request and response formats.
 
 ## Security
 

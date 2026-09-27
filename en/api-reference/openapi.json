@@ -1,8 +1,8 @@
 {
   "openapi": "3.1.0",
   "info": {
-    "title": "DejaVu API V1",
-    "description": "Public DejaVu V1 API for integrating collection, history, favorites, ratings, watchlist, scrobbling, lists, channels, connectors, and integration features.",
+    "title": "dejaVu API V1",
+    "description": "Public dejaVu V1 API for integrating collection, history, favorites, ratings, watchlist, scrobbling, lists, channels, connectors, and integration features.",
     "version": "1.0.0"
   },
   "servers": [
@@ -84,9 +84,7 @@
   "paths": {
     "/auth/device/code": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Request a device code (Device Flow)",
         "description": "First authentication step for devices without a keyboard (TV, etc.).",
         "operationId": "requestDeviceCode",
@@ -118,7 +116,7 @@
               },
               "example": {
                 "client_id": "kodi",
-                "client_name": "DejaVu Kodi"
+                "client_name": "dejaVu Kodi"
               }
             }
           }
@@ -127,9 +125,7 @@
     },
     "/auth/device/token": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Exchange the device code for a token",
         "description": "Polling step to check whether the user has authorized the device.",
         "operationId": "exchangeDeviceToken",
@@ -176,9 +172,7 @@
     },
     "/collection": {
       "get": {
-        "tags": [
-          "Collection"
-        ],
+        "tags": ["Collection"],
         "summary": "Get collection",
         "description": "Returns all items in your collection with optional pagination.",
         "operationId": "getCollection",
@@ -189,11 +183,7 @@
             "description": "Filter by content type",
             "schema": {
               "type": "string",
-              "enum": [
-                "all",
-                "movie",
-                "tv"
-              ],
+              "enum": ["all", "movie", "tv"],
               "default": "all"
             }
           },
@@ -226,10 +216,7 @@
             "description": "Sort order (e.g. addedAt:desc, addedAt:asc)",
             "schema": {
               "type": "string",
-              "enum": [
-                "addedAt:asc",
-                "addedAt:desc"
-              ]
+              "enum": ["addedAt:asc", "addedAt:desc"]
             }
           },
           {
@@ -272,11 +259,7 @@
                       "default": true
                     }
                   },
-                  "required": [
-                    "success",
-                    "data",
-                    "pagination"
-                  ]
+                  "required": ["success", "data", "pagination"]
                 }
               }
             }
@@ -296,9 +279,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Collection"
-        ],
+        "tags": ["Collection"],
         "summary": "Add to collection",
         "description": "Adds a movie or TV show to your collection. **Requires a secret key** (`sk_...`).",
         "operationId": "addToCollection",
@@ -350,9 +331,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Collection"
-        ],
+        "tags": ["Collection"],
         "summary": "Remove from collection",
         "description": "Removes an item from your collection. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromCollection",
@@ -363,10 +342,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "tv"
-              ]
+              "enum": ["movie", "tv"]
             }
           },
           {
@@ -421,9 +397,7 @@
     },
     "/dashboard": {
       "get": {
-        "tags": [
-          "Dashboard"
-        ],
+        "tags": ["Dashboard"],
         "summary": "Dashboard configuration",
         "description": "Returns the user's dashboard widget configuration.",
         "operationId": "getDashboardConfig",
@@ -486,9 +460,7 @@
     },
     "/dashboard/widget": {
       "get": {
-        "tags": [
-          "Dashboard"
-        ],
+        "tags": ["Dashboard"],
         "summary": "Unified widget content",
         "description": "Acts as a proxy to return the content of a specific widget.",
         "operationId": "getDashboardWidgetContent",
@@ -580,9 +552,7 @@
     },
     "/history": {
       "get": {
-        "tags": [
-          "History"
-        ],
+        "tags": ["History"],
         "summary": "Get watch history",
         "description": "Returns the user's watch history.",
         "operationId": "getHistory",
@@ -592,12 +562,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "all",
-                "movie",
-                "tv",
-                "episode"
-              ],
+              "enum": ["all", "movie", "tv", "episode"],
               "default": "all"
             },
             "example": "movie"
@@ -618,10 +583,7 @@
             "description": "Sort order (e.g. watchedAt:desc, watchedAt:asc)",
             "schema": {
               "type": "string",
-              "enum": [
-                "watchedAt:asc",
-                "watchedAt:desc"
-              ]
+              "enum": ["watchedAt:asc", "watchedAt:desc"]
             },
             "example": "watchedAt:desc"
           },
@@ -676,11 +638,7 @@
                       "default": true
                     }
                   },
-                  "required": [
-                    "success",
-                    "data",
-                    "pagination"
-                  ]
+                  "required": ["success", "data", "pagination"]
                 }
               }
             }
@@ -700,9 +658,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "History"
-        ],
+        "tags": ["History"],
         "summary": "Add to history",
         "description": "Records a watch in history. **Requires a secret key** (`sk_...`).",
         "operationId": "addToHistory",
@@ -761,9 +717,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "History"
-        ],
+        "tags": ["History"],
         "summary": "Remove from history",
         "description": "Removes a history entry. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromHistory",
@@ -774,11 +728,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "tv",
-                "episode"
-              ]
+              "enum": ["movie", "tv", "episode"]
             }
           },
           {
@@ -859,9 +809,7 @@
     },
     "/favorites": {
       "get": {
-        "tags": [
-          "Favorites"
-        ],
+        "tags": ["Favorites"],
         "summary": "Get favorites",
         "description": "Returns the user's favorites.",
         "operationId": "getFavorites",
@@ -872,11 +820,7 @@
             "description": "Filter by type",
             "schema": {
               "type": "string",
-              "enum": [
-                "all",
-                "movie",
-                "tv"
-              ],
+              "enum": ["all", "movie", "tv"],
               "default": "all"
             }
           },
@@ -917,10 +861,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "data"
-                  ],
+                  "required": ["success", "data"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -952,9 +893,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Favorites"
-        ],
+        "tags": ["Favorites"],
         "summary": "Add to favorites",
         "description": "Adds a movie or TV show to favorites. **Requires a secret key** (`sk_...`).",
         "operationId": "addToFavorites",
@@ -1012,9 +951,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Favorites"
-        ],
+        "tags": ["Favorites"],
         "summary": "Remove from favorites",
         "description": "Removes an item from favorites. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromFavorites",
@@ -1025,10 +962,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "tv"
-              ]
+              "enum": ["movie", "tv"]
             }
           },
           {
@@ -1082,9 +1016,7 @@
     },
     "/ratings": {
       "get": {
-        "tags": [
-          "Ratings"
-        ],
+        "tags": ["Ratings"],
         "summary": "Get ratings",
         "description": "Returns ratings given by the user.",
         "operationId": "getRatings",
@@ -1095,13 +1027,7 @@
             "description": "Filter by type",
             "schema": {
               "type": "string",
-              "enum": [
-                "all",
-                "movie",
-                "tv",
-                "season",
-                "episode"
-              ],
+              "enum": ["all", "movie", "tv", "season", "episode"],
               "default": "all"
             }
           },
@@ -1142,10 +1068,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "data"
-                  ],
+                  "required": ["success", "data"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1177,9 +1100,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Ratings"
-        ],
+        "tags": ["Ratings"],
         "summary": "Add or update a rating",
         "description": "Assigns or updates a rating (1-10) with an optional review. **Requires a secret key** (`sk_...`).",
         "operationId": "upsertRating",
@@ -1238,9 +1159,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Ratings"
-        ],
+        "tags": ["Ratings"],
         "summary": "Remove a rating",
         "description": "Removes an existing rating. **Requires a secret key** (`sk_...`).",
         "operationId": "deleteRating",
@@ -1251,12 +1170,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "tv",
-                "season",
-                "episode"
-              ]
+              "enum": ["movie", "tv", "season", "episode"]
             }
           },
           {
@@ -1338,9 +1252,7 @@
     },
     "/watchlist": {
       "get": {
-        "tags": [
-          "Watchlist"
-        ],
+        "tags": ["Watchlist"],
         "summary": "Get watchlist",
         "description": "Returns the list of content to watch.",
         "operationId": "getWatchlist",
@@ -1351,11 +1263,7 @@
             "description": "Filter by type",
             "schema": {
               "type": "string",
-              "enum": [
-                "all",
-                "movie",
-                "tv"
-              ],
+              "enum": ["all", "movie", "tv"],
               "default": "all"
             }
           },
@@ -1404,10 +1312,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "data"
-                  ],
+                  "required": ["success", "data"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1439,9 +1344,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Watchlist"
-        ],
+        "tags": ["Watchlist"],
         "summary": "Add to watchlist",
         "description": "Adds a movie or TV show to the watchlist. **Requires a secret key** (`sk_...`).",
         "operationId": "addToWatchlist",
@@ -1500,9 +1403,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Watchlist"
-        ],
+        "tags": ["Watchlist"],
         "summary": "Remove from watchlist",
         "description": "Removes an item from the watchlist. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromWatchlist",
@@ -1513,10 +1414,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "tv"
-              ]
+              "enum": ["movie", "tv"]
             }
           },
           {
@@ -1570,9 +1468,7 @@
     },
     "/scrobble": {
       "get": {
-        "tags": [
-          "Scrobble"
-        ],
+        "tags": ["Scrobble"],
         "summary": "Active playback sessions",
         "description": "Returns active playback sessions (currently playing).",
         "operationId": "getScrobbleSessions",
@@ -1583,10 +1479,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "data"
-                  ],
+                  "required": ["success", "data"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1622,11 +1515,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "all",
-                "movie",
-                "episode"
-              ]
+              "enum": ["all", "movie", "episode"]
             },
             "example": "episode"
           },
@@ -1662,9 +1551,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Scrobble"
-        ],
+        "tags": ["Scrobble"],
         "summary": "Update playback progress",
         "description": "Updates playback progress for a movie or episode. If progress exceeds **90%**, the content is automatically marked as watched in history. **Requires a secret key** (`sk_...`).",
         "operationId": "updateScrobble",
@@ -1724,9 +1611,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Scrobble"
-        ],
+        "tags": ["Scrobble"],
         "summary": "Remove a playback session",
         "description": "Ends a playback session without marking it as watched. **Requires a secret key** (`sk_...`).",
         "operationId": "deleteScrobble",
@@ -1737,10 +1622,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "episode"
-              ]
+              "enum": ["movie", "episode"]
             }
           },
           {
@@ -1819,9 +1701,7 @@
     },
     "/upnext": {
       "get": {
-        "tags": [
-          "Up Next"
-        ],
+        "tags": ["Up Next"],
         "summary": "Shows to follow (Up Next)",
         "description": "Returns the next episodes to watch for shows in progress.",
         "operationId": "getUpNext",
@@ -1863,10 +1743,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "data"
-                  ],
+                  "required": ["success", "data"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -1900,9 +1777,7 @@
     },
     "/me": {
       "get": {
-        "tags": [
-          "User"
-        ],
+        "tags": ["User"],
         "summary": "Get account profile and statistics",
         "description": "Returns user profile information and overall statistics (time spent, number of movies, etc.).",
         "operationId": "getMe",
@@ -1946,9 +1821,7 @@
     },
     "/lists": {
       "get": {
-        "tags": [
-          "Lists"
-        ],
+        "tags": ["Lists"],
         "summary": "Get lists",
         "description": "Returns all of the user's custom lists.",
         "operationId": "getLists",
@@ -1959,10 +1832,7 @@
               "application/json": {
                 "schema": {
                   "type": "object",
-                  "required": [
-                    "success",
-                    "data"
-                  ],
+                  "required": ["success", "data"],
                   "properties": {
                     "success": {
                       "type": "boolean",
@@ -2026,9 +1896,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Lists"
-        ],
+        "tags": ["Lists"],
         "summary": "Create a list",
         "description": "Creates a new custom list. **Requires a secret key** (`sk_...`).",
         "operationId": "createList",
@@ -2083,9 +1951,7 @@
     },
     "/lists/{id}/items": {
       "get": {
-        "tags": [
-          "Lists"
-        ],
+        "tags": ["Lists"],
         "summary": "Get list items",
         "description": "Returns the items in a list with pagination.",
         "operationId": "getListItems",
@@ -2153,11 +2019,7 @@
                       "default": true
                     }
                   },
-                  "required": [
-                    "success",
-                    "data",
-                    "pagination"
-                  ]
+                  "required": ["success", "data", "pagination"]
                 }
               }
             }
@@ -2181,9 +2043,7 @@
         ]
       },
       "post": {
-        "tags": [
-          "Lists"
-        ],
+        "tags": ["Lists"],
         "summary": "Add an item to a list",
         "description": "Adds a movie or TV show to a list. **Requires a secret key** (`sk_...`).",
         "operationId": "addItemToList",
@@ -2255,9 +2115,7 @@
         ]
       },
       "delete": {
-        "tags": [
-          "Lists"
-        ],
+        "tags": ["Lists"],
         "summary": "Remove an item from a list",
         "description": "Removes a movie or TV show from a list. **Requires a secret key** (`sk_...`).",
         "operationId": "removeItemFromList",
@@ -2276,11 +2134,7 @@
             "required": true,
             "schema": {
               "type": "string",
-              "enum": [
-                "movie",
-                "tv",
-                "episode"
-              ]
+              "enum": ["movie", "tv", "episode"]
             }
           },
           {
@@ -2335,9 +2189,7 @@
     },
     "/auth/device/verify": {
       "get": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Verify user code",
         "description": "Called by the user's browser to validate a `user_code` before approval.",
         "operationId": "verifyDeviceCode",
@@ -2388,11 +2240,9 @@
     },
     "/auth/device/approve": {
       "post": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Approve user code",
-        "description": "Called from the user account. Requires the DejaVu browser session.",
+        "description": "Called from the user account. Requires the dejaVu browser session.",
         "operationId": "approveDeviceCode",
         "security": [
           {
@@ -2405,9 +2255,7 @@
             "application/json": {
               "schema": {
                 "type": "object",
-                "required": [
-                  "user_code"
-                ],
+                "required": ["user_code"],
                 "properties": {
                   "user_code": {
                     "type": "string"
@@ -2449,9 +2297,7 @@
     },
     "/auth/device/qr": {
       "get": {
-        "tags": [
-          "Auth"
-        ],
+        "tags": ["Auth"],
         "summary": "Get a device QR code",
         "description": "Returns a PNG containing the verification URL associated with a pending user_code.",
         "operationId": "getDeviceQr",
@@ -2492,9 +2338,7 @@
     },
     "/channels": {
       "get": {
-        "tags": [
-          "Channels"
-        ],
+        "tags": ["Channels"],
         "summary": "List channels",
         "operationId": "getChannels",
         "parameters": [
@@ -2538,10 +2382,7 @@
             "in": "query",
             "schema": {
               "type": "string",
-              "enum": [
-                "mine",
-                "following"
-              ]
+              "enum": ["mine", "following"]
             }
           }
         ],
@@ -2575,9 +2416,7 @@
     },
     "/channels/{id}": {
       "get": {
-        "tags": [
-          "Channels"
-        ],
+        "tags": ["Channels"],
         "summary": "Get a channel",
         "operationId": "getChannel",
         "parameters": [
@@ -2620,9 +2459,7 @@
     },
     "/connectors": {
       "get": {
-        "tags": [
-          "Connectors"
-        ],
+        "tags": ["Connectors"],
         "summary": "List approved connectors",
         "description": "Public endpoint used by the browser extension.",
         "operationId": "getConnectors",
@@ -2649,9 +2486,7 @@
     },
     "/connectors/submit": {
       "post": {
-        "tags": [
-          "Connectors"
-        ],
+        "tags": ["Connectors"],
         "summary": "Submit a connector",
         "description": "Submits a connector for review. Limit: 5 submissions per hour per user.",
         "operationId": "submitConnector",
@@ -2664,9 +2499,7 @@
               },
               "example": {
                 "name": "Example connector",
-                "domains": [
-                  "example.com"
-                ],
+                "domains": ["example.com"],
                 "definition": {
                   "version": 1
                 }
@@ -2707,9 +2540,7 @@
     },
     "/kodi/import": {
       "post": {
-        "tags": [
-          "Kodi"
-        ],
+        "tags": ["Kodi"],
         "summary": "Import a Kodi library",
         "operationId": "importKodi",
         "requestBody": {
@@ -2758,9 +2589,7 @@
     },
     "/media/resolve": {
       "post": {
-        "tags": [
-          "Media"
-        ],
+        "tags": ["Media"],
         "summary": "Resolve media",
         "description": "Finds a media item from an IMDb ID, a TMDB ID and type, a title/year, or episode context.",
         "operationId": "resolveMedia",
@@ -2811,9 +2640,7 @@
     },
     "/media/status": {
       "post": {
-        "tags": [
-          "Media"
-        ],
+        "tags": ["Media"],
         "summary": "Get user media status",
         "description": "Returns user status for a batch of movies, TV shows, or episodes.",
         "operationId": "getMediaStatus",
@@ -2874,18 +2701,18 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-api-key",
-        "description": "DejaVu API key. pk_* = read-only; sk_* = read and write."
+        "description": "dejaVu API key. pk_* = read-only; sk_* = read and write."
       },
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "DejaVu API key sent in Authorization: Bearer <key>."
+        "description": "dejaVu API key sent in Authorization: Bearer <key>."
       },
       "SessionCookie": {
         "type": "apiKey",
         "in": "cookie",
         "name": "better-auth.session_token",
-        "description": "DejaVu user session used to approve the Device Flow in the browser."
+        "description": "dejaVu user session used to approve the Device Flow in the browser."
       }
     },
     "schemas": {
@@ -2898,10 +2725,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv"
-            ]
+            "enum": ["movie", "tv"]
           },
           "title": {
             "type": "string"
@@ -2914,17 +2738,11 @@
       },
       "MediaInput": {
         "type": "object",
-        "required": [
-          "type",
-          "id"
-        ],
+        "required": ["type", "id"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv"
-            ]
+            "enum": ["movie", "tv"]
           },
           "id": {
             "type": "integer",
@@ -2959,17 +2777,11 @@
       },
       "CollectionInput": {
         "type": "object",
-        "required": [
-          "type",
-          "id"
-        ],
+        "required": ["type", "id"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv"
-            ]
+            "enum": ["movie", "tv"]
           },
           "id": {
             "type": "integer",
@@ -3019,17 +2831,11 @@
       },
       "HistoryInput": {
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv",
-              "episode"
-            ]
+            "enum": ["movie", "tv", "episode"]
           },
           "id": {
             "type": "integer",
@@ -3093,19 +2899,11 @@
       },
       "RatingInput": {
         "type": "object",
-        "required": [
-          "type",
-          "rating"
-        ],
+        "required": ["type", "rating"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv",
-              "season",
-              "episode"
-            ]
+            "enum": ["movie", "tv", "season", "episode"]
           },
           "id": {
             "type": "integer",
@@ -3166,17 +2964,11 @@
       },
       "WatchlistInput": {
         "type": "object",
-        "required": [
-          "type",
-          "id"
-        ],
+        "required": ["type", "id"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv"
-            ]
+            "enum": ["movie", "tv"]
           },
           "id": {
             "type": "integer"
@@ -3198,10 +2990,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "episode"
-            ]
+            "enum": ["movie", "episode"]
           },
           "mediaId": {
             "type": "integer"
@@ -3229,18 +3018,11 @@
       },
       "ScrobbleInput": {
         "type": "object",
-        "required": [
-          "type",
-          "progress",
-          "duration"
-        ],
+        "required": ["type", "progress", "duration"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "episode"
-            ]
+            "enum": ["movie", "episode"]
           },
           "id": {
             "type": "integer",
@@ -3329,11 +3111,7 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "PRIVATE",
-              "PUBLIC",
-              "SHARED"
-            ]
+            "enum": ["PRIVATE", "PUBLIC", "SHARED"]
           },
           "itemCount": {
             "type": "integer"
@@ -3350,9 +3128,7 @@
       },
       "ListInput": {
         "type": "object",
-        "required": [
-          "name"
-        ],
+        "required": ["name"],
         "properties": {
           "name": {
             "type": "string",
@@ -3363,19 +3139,12 @@
           },
           "visibility": {
             "type": "string",
-            "enum": [
-              "PRIVATE",
-              "PUBLIC",
-              "SHARED"
-            ],
+            "enum": ["PRIVATE", "PUBLIC", "SHARED"],
             "default": "PRIVATE"
           },
           "kind": {
             "type": "string",
-            "enum": [
-              "media",
-              "episode"
-            ]
+            "enum": ["media", "episode"]
           }
         }
       },
@@ -3405,17 +3174,11 @@
       },
       "ListItemInput": {
         "type": "object",
-        "required": [
-          "type"
-        ],
+        "required": ["type"],
         "properties": {
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv",
-              "episode"
-            ]
+            "enum": ["movie", "tv", "episode"]
           },
           "id": {
             "type": "integer",
@@ -3465,10 +3228,7 @@
       },
       "Error": {
         "type": "object",
-        "required": [
-          "error",
-          "message"
-        ],
+        "required": ["error", "message"],
         "properties": {
           "error": {
             "type": "string",
@@ -3482,9 +3242,7 @@
       },
       "SuccessResponse": {
         "type": "object",
-        "required": [
-          "success"
-        ],
+        "required": ["success"],
         "properties": {
           "success": {
             "type": "boolean"
@@ -3496,11 +3254,7 @@
       },
       "PaginatedSuccessResponse": {
         "type": "object",
-        "required": [
-          "success",
-          "data",
-          "pagination"
-        ],
+        "required": ["success", "data", "pagination"],
         "properties": {
           "success": {
             "type": "boolean"
@@ -3564,29 +3318,20 @@
       },
       "DeviceTokenRequest": {
         "type": "object",
-        "required": [
-          "device_code",
-          "grant_type"
-        ],
+        "required": ["device_code", "grant_type"],
         "properties": {
           "device_code": {
             "type": "string"
           },
           "grant_type": {
             "type": "string",
-            "enum": [
-              "urn:ietf:params:oauth:grant-type:device_code"
-            ]
+            "enum": ["urn:ietf:params:oauth:grant-type:device_code"]
           }
         }
       },
       "DeviceTokenResponse": {
         "type": "object",
-        "required": [
-          "access_token",
-          "token_type",
-          "expires_in"
-        ],
+        "required": ["access_token", "token_type", "expires_in"],
         "properties": {
           "access_token": {
             "type": "string"
@@ -3632,11 +3377,7 @@
           },
           "type": {
             "type": "string",
-            "enum": [
-              "movie",
-              "tv",
-              "episode"
-            ]
+            "enum": ["movie", "tv", "episode"]
           },
           "title": {
             "type": "string"
@@ -3694,11 +3435,7 @@
               "properties": {
                 "type": {
                   "type": "string",
-                  "enum": [
-                    "movie",
-                    "tv",
-                    "episode"
-                  ]
+                  "enum": ["movie", "tv", "episode"]
                 },
                 "id": {
                   "type": "integer"
@@ -3735,11 +3472,7 @@
       },
       "ConnectorSubmission": {
         "type": "object",
-        "required": [
-          "name",
-          "domains",
-          "definition"
-        ],
+        "required": ["name", "domains", "definition"],
         "properties": {
           "name": {
             "type": "string"
@@ -3759,11 +3492,7 @@
       },
       "KodiImportRequest": {
         "type": "object",
-        "required": [
-          "importSessionId",
-          "chunk",
-          "totalChunks"
-        ],
+        "required": ["importSessionId", "chunk", "totalChunks"],
         "properties": {
           "source": {
             "type": "string"

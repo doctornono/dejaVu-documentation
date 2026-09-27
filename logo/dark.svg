@@ -4,6 +4,6 @@
 <circle cx="27" cy="28" r="9" fill="#7B2820"/>
 <path d="M27 7l2.7 7.1L37 17l-7.3 2.9L27 27l-2.7-7.1L17 17l7.3-2.9L27 7Z" fill="#fff"/>
 </g>
-<text x="70" y="48" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="700" fill="#fff">DejaVu</text>
+<text x="70" y="48" font-family="Inter,Arial,sans-serif" font-size="34" font-weight="700" fill="#fff">dejaVu</text>
 <text x="204" y="48" font-family="Inter,Arial,sans-serif" font-size="22" font-weight="500" fill="#7B2820">API</text>
 </svg>

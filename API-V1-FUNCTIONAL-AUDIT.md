@@ -4,9 +4,10 @@ Date de contrôle : 27 septembre 2026
 
 ## Méthode
 
-Chaque opération OpenAPI a été confrontée aux handlers réels `app/api/v1/**/route.ts` du dépôt DejaVu.
+Chaque opération OpenAPI a été confrontée aux handlers réels `app/api/v1/**/route.ts` du dépôt dejaVu.
 
 Le contrôle porte sur :
+
 - méthode et chemin ;
 - authentification ;
 - paramètres query/path ;
@@ -23,78 +24,79 @@ Le contrôle porte sur :
 
 ### Authentification / Device Flow
 
-| Endpoint | Contrôle |
-|---|---|
-| POST /auth/device/code | Conforme : body optionnel, client_id/client_name, expiration 5 min, polling 5 s |
-| POST /auth/device/token | Conforme : device_code + grant_type, erreurs OAuth, token Bearer, expiration 90 jours |
-| GET /auth/device/verify | Conforme : user_code, endpoint public |
-| POST /auth/device/approve | Conforme : user_code et session navigateur DejaVu |
-| GET /auth/device/qr | Conforme : user_code, image PNG, endpoint public |
+| Endpoint                  | Contrôle                                                                              |
+| ------------------------- | ------------------------------------------------------------------------------------- |
+| POST /auth/device/code    | Conforme : body optionnel, client_id/client_name, expiration 5 min, polling 5 s       |
+| POST /auth/device/token   | Conforme : device_code + grant_type, erreurs OAuth, token Bearer, expiration 90 jours |
+| GET /auth/device/verify   | Conforme : user_code, endpoint public                                                 |
+| POST /auth/device/approve | Conforme : user_code et session navigateur dejaVu                                     |
+| GET /auth/device/qr       | Conforme : user_code, image PNG, endpoint public                                      |
 
 ### Données utilisateur
 
-| Endpoint | Contrôle |
-|---|---|
-| GET /me | Conforme |
-| GET /collection | Conforme après ajout des contraintes de tri/pagination |
-| POST /collection | Conforme |
-| DELETE /collection | Conforme |
-| GET /history | Corrigé : pageSize documenté |
-| POST /history | Corrigé : résolution épisode par id ou contexte série/saison/épisode |
-| DELETE /history | Corrigé : suppression épisode par id ou contexte épisode |
-| GET /favorites | Corrigé : pagination documentée |
-| POST /favorites | Conforme |
-| DELETE /favorites | Conforme |
-| GET /ratings | Corrigé : pagination documentée |
-| POST /ratings | Corrigé : contexte saison/épisode complété |
-| DELETE /ratings | corrigé avec le même contexte conditionnel que POST |
-| GET /watchlist | Corrigé : pagination documentée |
-| POST /watchlist | Conforme |
-| DELETE /watchlist | Conforme |
-| GET /scrobble | Corrigé : type, pagination et minimal documentés |
-| POST /scrobble | Corrigé : id/tmdbId et contexte épisode documentés |
-| DELETE /scrobble | Corrigé : contexte épisode documenté |
-| GET /upnext | Corrigé : suppression du paramètre obsolète limit et ajout page/pageSize/minimal |
+| Endpoint           | Contrôle                                                                         |
+| ------------------ | -------------------------------------------------------------------------------- |
+| GET /me            | Conforme                                                                         |
+| GET /collection    | Conforme après ajout des contraintes de tri/pagination                           |
+| POST /collection   | Conforme                                                                         |
+| DELETE /collection | Conforme                                                                         |
+| GET /history       | Corrigé : pageSize documenté                                                     |
+| POST /history      | Corrigé : résolution épisode par id ou contexte série/saison/épisode             |
+| DELETE /history    | Corrigé : suppression épisode par id ou contexte épisode                         |
+| GET /favorites     | Corrigé : pagination documentée                                                  |
+| POST /favorites    | Conforme                                                                         |
+| DELETE /favorites  | Conforme                                                                         |
+| GET /ratings       | Corrigé : pagination documentée                                                  |
+| POST /ratings      | Corrigé : contexte saison/épisode complété                                       |
+| DELETE /ratings    | corrigé avec le même contexte conditionnel que POST                              |
+| GET /watchlist     | Corrigé : pagination documentée                                                  |
+| POST /watchlist    | Conforme                                                                         |
+| DELETE /watchlist  | Conforme                                                                         |
+| GET /scrobble      | Corrigé : type, pagination et minimal documentés                                 |
+| POST /scrobble     | Corrigé : id/tmdbId et contexte épisode documentés                               |
+| DELETE /scrobble   | Corrigé : contexte épisode documenté                                             |
+| GET /upnext        | Corrigé : suppression du paramètre obsolète limit et ajout page/pageSize/minimal |
 
 ### Dashboard
 
-| Endpoint | Contrôle |
-|---|---|
-| GET /dashboard | Conforme |
+| Endpoint              | Contrôle                                                              |
+| --------------------- | --------------------------------------------------------------------- |
+| GET /dashboard        | Conforme                                                              |
 | GET /dashboard/widget | Corrigé : pageSize ajouté ; types de widgets vérifiés dans le handler |
 
 ### Lists
 
-| Endpoint | Contrôle |
-|---|---|
-| GET /lists | Corrigé : pagination et minimal documentés |
-| POST /lists | Conforme : kind media/episode et visibilité PRIVATE/PUBLIC/SHARED |
-| GET /lists/{id}/items | Corrigé : pageSize documenté |
-| POST /lists/{id}/items | Corrigé : épisodes et contexte série/saison/épisode documentés |
-| DELETE /lists/{id}/items | Corrigé : type episode et paramètre id réel documentés |
+| Endpoint                 | Contrôle                                                          |
+| ------------------------ | ----------------------------------------------------------------- |
+| GET /lists               | Corrigé : pagination et minimal documentés                        |
+| POST /lists              | Conforme : kind media/episode et visibilité PRIVATE/PUBLIC/SHARED |
+| GET /lists/{id}/items    | Corrigé : pageSize documenté                                      |
+| POST /lists/{id}/items   | Corrigé : épisodes et contexte série/saison/épisode documentés    |
+| DELETE /lists/{id}/items | Corrigé : type episode et paramètre id réel documentés            |
 
 ### Channels / Connectors
 
-| Endpoint | Contrôle |
-|---|---|
-| GET /channels | Conforme : pagination, type et scope |
-| GET /channels/{id} | Conforme |
-| GET /connectors | Conforme : public, ETag et 304 |
+| Endpoint                | Contrôle                                                                                        |
+| ----------------------- | ----------------------------------------------------------------------------------------------- |
+| GET /channels           | Conforme : pagination, type et scope                                                            |
+| GET /channels/{id}      | Conforme                                                                                        |
+| GET /connectors         | Conforme : public, ETag et 304                                                                  |
 | POST /connectors/submit | Conforme : name/domains/definition, maximum 10 domaines, extractors et limitation des wildcards |
 
 ### Kodi / Media
 
-| Endpoint | Contrôle |
-|---|---|
-| POST /kodi/import | Conforme : import par chunks, options et lots limités |
-| POST /media/resolve | Conforme : IMDb/TMDB/titre/contexte épisode |
-| POST /media/status | Corrigé : batch movie/tv/episode et variantes de contexte |
+| Endpoint            | Contrôle                                                  |
+| ------------------- | --------------------------------------------------------- |
+| POST /kodi/import   | Conforme : import par chunks, options et lots limités     |
+| POST /media/resolve | Conforme : IMDb/TMDB/titre/contexte épisode               |
+| POST /media/status  | Corrigé : batch movie/tv/episode et variantes de contexte |
 
 ## Points fonctionnels importants désormais explicités
 
 ### Épisodes
 
 Les endpoints concernés acceptent désormais dans l'OpenAPI le choix entre :
+
 - ID TMDB de l'épisode ;
 - ou contexte `tvShowId + seasonNumber + episodeNumber`.
 

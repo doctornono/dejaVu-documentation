@@ -1,10 +1,10 @@
-# Contribuer à la documentation DejaVu API
+# Contribuer à la documentation dejaVu API
 
-Merci de contribuer à la documentation de l’API DejaVu v1.
+Merci de contribuer à la documentation de l’API dejaVu v1.
 
 ## Avant de modifier une page
 
-Vérifiez le comportement réel de l’endpoint concerné dans le dépôt DejaVu et utilisez `api-reference/openapi.json` comme contrat documentaire.
+Vérifiez le comportement réel de l’endpoint concerné dans le dépôt dejaVu et utilisez `api-reference/openapi.json` comme contrat documentaire.
 
 Une modification d’API doit être répercutée de façon cohérente dans :
 

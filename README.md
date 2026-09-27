@@ -1,8 +1,8 @@
-# DejaVu API Documentation
+# dejaVu API Documentation
 
-Documentation officielle de l’API publique **DejaVu v1**.
+Documentation officielle de l’API publique **dejaVu v1**.
 
-DejaVu est un service de suivi de films et séries. Cette documentation décrit le contrat HTTP public permettant d’intégrer DejaVu dans des applications, extensions et clients comme Kodi.
+dejaVu est un service de suivi de films et séries. Cette documentation décrit le contrat HTTP public permettant d’intégrer dejaVu dans des applications, extensions et clients comme Kodi.
 
 ## Contenu
 
@@ -86,10 +86,10 @@ Les changements de contrat API doivent être répercutés dans l’OpenAPI, les 
 
 Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le workflow de contribution.
 
-## DejaVu
+## dejaVu
 
 - Site : https://dejavu.plus
 - API : documentation de la version publique v1
 - Dépôt : https://github.com/doctornono/dejaVu
 
-Le site de documentation est publié avec Mintlify ; le contenu de ce dépôt reste centré sur **l’API DejaVu**, et non sur la documentation du produit Mintlify.
+Le site de documentation est publié avec Mintlify ; le contenu de ce dépôt reste centré sur **l’API dejaVu**, et non sur la documentation du produit Mintlify.

@@ -4,7 +4,7 @@ Date: 2026-09-27
 
 ## Scope
 
-Deep content audit of the DejaVu API v1 documentation repository, covering the canonical French and English OpenAPI documents, Mintlify navigation, all 39 API operations, all 39 French endpoint pages, all 39 English endpoint pages, introduction and authentication pages, endpoint security declarations, documented query parameters and examples, French/English consistency, and obsolete starter content.
+Deep content audit of the dejaVu API v1 documentation repository, covering the canonical French and English OpenAPI documents, Mintlify navigation, all 39 API operations, all 39 French endpoint pages, all 39 English endpoint pages, introduction and authentication pages, endpoint security declarations, documented query parameters and examples, French/English consistency, and obsolete starter content.
 
 ## Contract baseline
 
@@ -25,7 +25,7 @@ The English endpoint pages contained substantial mixed French/English prose and,
 
 ### 2. Device approval authentication was documented incorrectly
 
-The device approval endpoint is protected by the authenticated DejaVu session cookie (SessionCookie), not by an API key and not as a public endpoint.
+The device approval endpoint is protected by the authenticated dejaVu session cookie (SessionCookie), not by an API key and not as a public endpoint.
 
 **Action:** both French and English pages now explicitly document session authentication and provide a session-cookie example.
 
@@ -51,11 +51,11 @@ The previous examples for GET /dashboard and GET /me included page and pageSize,
 
 Several endpoint pages only said that authentication was required, without making the read/write key distinction explicit.
 
-**Action:** English write-operation pages now state that write access requires the permissions associated with a secret key (sk_), consistent with the OpenAPI error contract.
+**Action:** English write-operation pages now state that write access requires the permissions associated with a secret key (sk\_), consistent with the OpenAPI error contract.
 
 ## Structural verification
 
-The existing validator continues to enforce exact OpenAPI operation parity, exact French/English operation parity, exact schema-set parity, explicit operation security declarations, complete endpoint-page coverage, absence of obsolete /collection/batch, absence of starter/duplicate files, and DejaVu branding/navbar constraints.
+The existing validator continues to enforce exact OpenAPI operation parity, exact French/English operation parity, exact schema-set parity, explicit operation security declarations, complete endpoint-page coverage, absence of obsolete /collection/batch, absence of starter/duplicate files, and dejaVu branding/navbar constraints.
 
 The validator was strengthened with content-level checks for:
 

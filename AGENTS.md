@@ -1,12 +1,12 @@
 # Instructions pour les agents
 
-Ce dépôt contient la documentation publique de l’**API DejaVu v1**.
+Ce dépôt contient la documentation publique de l’**API dejaVu v1**.
 
 ## Source de vérité
 
 - `api-reference/openapi.json` est le contrat OpenAPI canonique.
 - `api-reference/en/openapi.json` doit rester structurellement aligné avec le contrat canonique.
-- Les routes réelles de DejaVu et les tests d’intégration servent à vérifier le comportement de l’API.
+- Les routes réelles de dejaVu et les tests d’intégration servent à vérifier le comportement de l’API.
 - Les pages MDX FR et EN documentent les opérations du contrat.
 
 ## Règles obligatoires
@@ -18,16 +18,16 @@ Ce dépôt contient la documentation publique de l’**API DejaVu v1**.
 5. Les textes descriptifs peuvent être traduits.
 6. Ne pas réintroduire `/collection/batch` ni `ApiKeyQuery`.
 7. Ne pas ajouter de contenu de démonstration provenant du starter Mintlify.
-8. Conserver l’identité visuelle DejaVu.
+8. Conserver l’identité visuelle dejaVu.
 9. Après toute modification du contrat ou de la navigation, exécuter :
    `node scripts/validate-api-v1-docs.mjs`
-10. Pour une évolution de l’API, vérifier également les routes et tests du dépôt DejaVu avant de modifier le contrat documentaire.
+10. Pour une évolution de l’API, vérifier également les routes et tests du dépôt dejaVu avant de modifier le contrat documentaire.
 
 ## Périmètre
 
-Ce dépôt documente l’API publique DejaVu.
+Ce dépôt documente l’API publique dejaVu.
 
-Il ne doit pas devenir une documentation générale de l’application DejaVu, de son administration interne ou de Mintlify.
+Il ne doit pas devenir une documentation générale de l’application dejaVu, de son administration interne ou de Mintlify.
 
 ## Style
 

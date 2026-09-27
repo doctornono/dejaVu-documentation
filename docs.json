@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "aspen",
-  "name": "DejaVu API v1",
+  "name": "dejaVu API v1",
   "colors": {
     "primary": "#7B2820",
     "light": "#7B2820",
@@ -269,7 +269,7 @@
   "navbar": {
     "primary": {
       "type": "button",
-      "label": "Ouvrir DejaVu",
+      "label": "Ouvrir dejaVu",
       "href": "https://dejavu.plus"
     }
   },

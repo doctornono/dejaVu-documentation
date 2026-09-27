@@ -1,6 +1,6 @@
-# HOW-TO — Mettre à jour la documentation de l’API DejaVu v1
+# HOW-TO — Mettre à jour la documentation de l’API dejaVu v1
 
-Ce guide décrit la procédure à suivre pour modifier, compléter ou corriger la documentation publique de l’API DejaVu v1.
+Ce guide décrit la procédure à suivre pour modifier, compléter ou corriger la documentation publique de l’API dejaVu v1.
 
 ## 1. Comprendre la structure du dépôt
 
@@ -52,7 +52,7 @@ Ne pas recréer un ancien chemin de type `api-reference/en/openapi.json`.
 
 ## 2. Avant toute modification
 
-Pour une modification liée au comportement de l’API, commencer par vérifier le dépôt principal DejaVu :
+Pour une modification liée au comportement de l’API, commencer par vérifier le dépôt principal dejaVu :
 
 ```text
 https://github.com/doctornono/dejaVu
@@ -240,7 +240,7 @@ Ne jamais publier :
 
 L’authentification documentée doit correspondre à OpenAPI et à l’implémentation.
 
-DejaVu v1 utilise notamment :
+dejaVu v1 utilise notamment :
 
 - `ApiKeyHeader` ;
 - `BearerAuth` ;
@@ -420,7 +420,7 @@ Une fois la validation locale passée :
 git status
 git diff
 git add .
-git commit -m "docs: update DejaVu API documentation"
+git commit -m "docs: update dejaVu API documentation"
 git push
 ```
 
@@ -510,10 +510,10 @@ Pour une modification courante, la procédure minimale est :
 
 # Règle essentielle
 
-**Le code DejaVu définit le comportement.  
+**Le code dejaVu définit le comportement.  
 OpenAPI définit le contrat documentaire.  
 Les pages FR/EN expliquent ce contrat.  
 Le validateur vérifie leur cohérence.  
 Mintlify publie le résultat.**
 
-En cas de divergence, ne pas adapter la documentation pour masquer une différence avec l’API : vérifier d’abord l’implémentation et les tests du dépôt DejaVu.
+En cas de divergence, ne pas adapter la documentation pour masquer une différence avec l’API : vérifier d’abord l’implémentation et les tests du dépôt dejaVu.
