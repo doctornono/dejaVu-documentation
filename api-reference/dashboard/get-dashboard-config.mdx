@@ -2,3 +2,27 @@
 title: "Configuration du tableau de bord"
 openapi: "GET /dashboard"
 ---
+
+## Utilisation
+
+Retourne la configuration du tableau de bord de l’utilisateur.
+
+L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
+
+## Exemple
+
+```bash
+curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/dashboard?page=1&pageSize=20"
+```
+
+## Paramètres et réponse
+
+Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page. Utilisez les champs du schéma pour construire la requête.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération. Une réponse `401` indique une authentification absente ou invalide.
+
+## Notes
+
+N’exposez jamais une clé API `sk_` dans du code client ou un dépôt public.
