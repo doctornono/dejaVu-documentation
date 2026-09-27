@@ -47,7 +47,7 @@ Le contrôle porte sur :
 | DELETE /favorites | Conforme |
 | GET /ratings | Corrigé : pagination documentée |
 | POST /ratings | Corrigé : contexte saison/épisode complété |
-| DELETE /ratings | À compléter avec le même contexte conditionnel que POST |
+| DELETE /ratings | corrigé avec le même contexte conditionnel que POST |
 | GET /watchlist | Corrigé : pagination documentée |
 | POST /watchlist | Conforme |
 | DELETE /watchlist | Conforme |
