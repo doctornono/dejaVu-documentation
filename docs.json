@@ -3,9 +3,9 @@
   "theme": "aspen",
   "name": "DejaVu API v1",
   "colors": {
-    "primary": "#a0020f",
-    "light": "#a0020f",
-    "dark": "#a0020f"
+    "primary": "#7B2820",
+    "light": "#7B2820",
+    "dark": "#7B2820"
   },
   "favicon": "/favicon.svg",
   "navigation": {
@@ -279,12 +279,6 @@
     "dark": "/logo/dark.svg"
   },
   "navbar": {
-    "links": [
-      {
-        "label": "DejaVu",
-        "href": "https://dejavu.plus"
-      }
-    ],
     "primary": {
       "type": "button",
       "label": "Ouvrir DejaVu",
