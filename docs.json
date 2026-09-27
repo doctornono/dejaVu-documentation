@@ -1,7 +1,7 @@
 {
   "$schema": "https://mintlify.com/docs.json",
   "theme": "aspen",
-  "name": "dejaVu API v1",
+  "name": "DejaVu API v1",
   "colors": {
     "primary": "#a0020f",
     "light": "#a0020f",
@@ -11,7 +11,7 @@
   "navigation": {
     "tabs": [
       {
-        "tab": "API reference",
+        "tab": "Référence API",
         "groups": [
           {
             "group": "Introduction",
