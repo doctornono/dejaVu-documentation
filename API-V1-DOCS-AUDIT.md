@@ -1,10 +1,22 @@
 # Audit documentation API v1 — DejaVu
 
-## Constats vérifiés
+## État vérifié
 
-### Routes actuelles
+La documentation API v1 a maintenant été réalignée sur le contrat OpenAPI présent dans ce dépôt.
 
-Le dépôt `doctornono/dejaVu` contient actuellement 24 fichiers `route.ts` sous `app/api/v1/`, couvrant notamment :
+### Contrat OpenAPI
+
+`api-reference/openapi.json` contient actuellement :
+
+- **24 chemins**
+- **39 opérations**
+- **29 schémas**
+- aucune référence `$ref` vers un schéma inexistant
+- authentification par `ApiKeyHeader` et `BearerAuth`
+- déclaration `security` explicite sur chaque opération
+- cinq opérations publiques du Device Flow / Connectors sans authentification API
+
+Les endpoints couverts comprennent notamment :
 
 - Device Flow : code, token, verify, approve, QR
 - collection
@@ -20,69 +32,83 @@ Le dépôt `doctornono/dejaVu` contient actuellement 24 fichiers `route.ts` sous
 - channels
 - connectors et soumission
 - Kodi import
-- media resolve
-- media status
+- media resolve/status
 
-### Documentation actuelle
+L'ancien endpoint `/collection/batch` n'est plus présent dans l'OpenAPI.
 
-Le `api-reference/openapi.json` du dépôt de documentation décrivait 17 chemins et 32 opérations.
+### Navigation Mintlify
 
-Écarts importants :
+La navigation API reference couvre les groupes :
 
-1. `/auth/device/qr` absent.
-2. `/channels` et `/channels/{id}` absents.
-3. `/connectors` et `/connectors/submit` absents.
-4. `/kodi/import` absent.
-5. `/media/resolve` et `/media/status` absents.
-6. `/collection/batch` était encore documenté alors qu'aucune route correspondante n'est présente dans `app/api/v1`.
-7. `api_key` en query string était encore déclaré dans OpenAPI alors que l'API v1 actuelle accepte les clés par `x-api-key` ou `Authorization: Bearer`.
-8. Le Device Token Flow documentait une enveloppe `success/data` qui ne correspond plus à la réponse réelle.
-9. Le Device Token Flow exige maintenant `grant_type` en plus de `device_code`.
-10. L'approbation d'un device utilise la session navigateur DejaVu, pas un Bearer API classique.
-11. Les listes utilisent `SHARED` plutôt que `FRIENDS`, et le modèle de création accepte `kind`.
-12. Les éléments de listes peuvent désormais être de type `episode`.
+- Introduction
+- Auth
+- Collection
+- History
+- Favorites
+- Ratings
+- Watchlist
+- Scrobble
+- Up Next
+- Dashboard
+- Lists
+- User
+- Media
+- Channels
+- Connectors
+- Kodi
 
-## Sources de vérité vérifiées
+La page obsolète `collection/batch-add-to-collection` a été retirée de la navigation.
 
-- Routes réelles `app/api/v1/**/route.ts`
-- `lib/api-v1-helper.ts`
-- tests d'intégration API v1
-- `app/admin/api-test/page.tsx`, qui contient déjà un inventaire beaucoup plus complet des endpoints
+### Authentification documentée
 
-## Architecture recommandée
+La documentation utilise désormais :
 
-```text
-API v1
-  │
-  ├── tests d'intégration
-  │
-  ├── contrat OpenAPI
-  │       ├── Mintlify
-  │       └── playground
-  │
-  └── documentation guides FR/EN
-```
+- `x-api-key`
+- `Authorization: Bearer`
 
-Mintlify supporte directement les références OpenAPI interactives et le playground ; conserver l'OpenAPI comme contrat réduit fortement le risque de dérive.
+La query string `api_key` n'est pas documentée comme mécanisme d'authentification.
 
-## Correctif fourni
+Le Device Flow est documenté comme un flux en plusieurs étapes : création du device code, présentation du code/QR, approbation, échange contre un token, puis utilisation du token.
 
-`scripts/sync-api-v1-docs.mjs` :
+## Outil de synchronisation
 
-- supprime `/collection/batch`
-- supprime `api_key` comme mécanisme d'authentification
-- aligne les security schemes
-- corrige le Device Flow
-- ajoute QR, Channels, Connectors, Kodi et Media
-- corrige les modèles de listes
-- ajoute les pages Mintlify manquantes
-- met à jour la navigation
+`scripts/sync-api-v1-docs.mjs` reste l'outil de mise à jour du contrat et des pages lorsque l'API évolue.
 
-## À faire ensuite
+## Validation automatique
 
-1. Exécuter le script dans `dejaVu-documentation`.
-2. Vérifier le diff.
-3. Lancer le build/dev Mintlify.
-4. Tester les exemples contre une clé API de test.
-5. Créer ensuite une structure FR/EN propre.
-6. Ajouter une génération/validation CI pour empêcher le retour de la dérive.
+`scripts/validate-api-v1-docs.mjs` vérifie :
+
+- la validité JSON de l'OpenAPI et de `docs.json`
+- la présence d'un `operationId` et de réponses pour chaque opération
+- la présence d'une déclaration `security` explicite
+- les security schemes `ApiKeyHeader` et `BearerAuth`
+- l'absence de `/collection/batch`
+- l'existence de chaque page référencée dans la navigation
+- la correspondance bidirectionnelle OpenAPI ↔ pages Mintlify
+- l'égalité du nombre d'opérations OpenAPI et de pages endpoint
+
+## CI
+
+`.github/workflows/validate-api-v1-docs.yml` exécute automatiquement cette validation sur :
+
+- chaque push vers `main`
+- chaque pull request vers `main`
+
+## Prochaines vérifications
+
+1. Laisser GitHub Actions exécuter la validation.
+2. Vérifier le résultat du workflow.
+3. Lancer un build Mintlify local ou depuis l'environnement de documentation.
+4. Vérifier les exemples de requêtes avec une clé de test.
+5. Compléter ensuite les guides pratiques FR/EN autour de l'API v1.
+
+## Sources de vérité
+
+L'alignement doit rester piloté par :
+
+1. les routes réelles `app/api/v1/**/route.ts` du dépôt DejaVu ;
+2. les tests d'intégration API v1 ;
+3. `api-reference/openapi.json` comme contrat documentaire ;
+4. les pages Mintlify et leur validation CI.
+
+L'objectif est d'éviter toute divergence entre comportement réel, contrat OpenAPI et documentation publique.
