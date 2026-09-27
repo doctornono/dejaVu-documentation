@@ -312,14 +312,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
@@ -702,14 +702,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
@@ -940,14 +940,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
@@ -1152,14 +1152,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
@@ -1196,10 +1196,38 @@
           {
             "name": "id",
             "in": "query",
-            "required": true,
+            "required": false,
             "schema": {
               "type": "integer"
-            }
+            },
+            "description": "ID TMDB du média ou de l'épisode. Facultatif si le contexte saison/épisode est fourni."
+          },
+          {
+            "name": "tvShowId",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "ID TMDB de la série pour cibler une saison ou un épisode."
+          },
+          {
+            "name": "seasonNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 0
+            },
+            "description": "Numéro de saison."
+          },
+          {
+            "name": "episodeNumber",
+            "in": "query",
+            "schema": {
+              "type": "integer",
+              "minimum": 1
+            },
+            "description": "Numéro d'épisode."
           }
         ],
         "responses": {
@@ -1372,14 +1400,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
@@ -1579,14 +1607,14 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
           "403": {
             "$ref": "#/components/responses/Forbidden"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
@@ -2074,6 +2102,9 @@
               }
             }
           },
+          "400": {
+            "$ref": "#/components/responses/UnprocessableEntity"
+          },
           "401": {
             "$ref": "#/components/responses/Unauthorized"
           },
@@ -2082,9 +2113,6 @@
           },
           "404": {
             "$ref": "#/components/responses/NotFound"
-          },
-          "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
           }
         },
         "security": [
