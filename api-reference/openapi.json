@@ -280,7 +280,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -325,13 +326,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           }
         },
         "security": [
@@ -391,13 +395,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -461,7 +468,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -551,7 +559,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -668,7 +677,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -720,13 +730,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           }
         },
         "security": [
@@ -813,13 +826,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -911,7 +927,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -962,13 +979,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           }
         },
         "security": [
@@ -1027,13 +1047,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -1127,7 +1150,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -1179,13 +1203,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           }
         },
         "security": [
@@ -1274,13 +1301,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -1380,7 +1410,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -1432,13 +1463,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           }
         },
         "security": [
@@ -1497,13 +1531,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -1552,7 +1589,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -1645,13 +1683,16 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           }
         },
         "security": [
@@ -1735,13 +1776,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -1818,7 +1862,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -1863,7 +1908,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -1912,7 +1958,8 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         },
         "security": [
@@ -1987,13 +2034,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "422": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Données valides syntaxiquement mais impossibles à traiter."
           }
         },
         "security": [
@@ -2085,10 +2135,12 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -2149,16 +2201,20 @@
             }
           },
           "400": {
-            "$ref": "#/components/responses/UnprocessableEntity"
+            "$ref": "#/components/responses/UnprocessableEntity",
+            "description": "Requête invalide : paramètre ou corps de requête incorrect."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -2227,13 +2283,16 @@
             }
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           },
           "403": {
-            "$ref": "#/components/responses/Forbidden"
+            "$ref": "#/components/responses/Forbidden",
+            "description": "Clé API valide mais permissions insuffisantes pour cette opération."
           },
           "404": {
-            "$ref": "#/components/responses/NotFound"
+            "$ref": "#/components/responses/NotFound",
+            "description": "Ressource demandée introuvable."
           }
         },
         "security": [
@@ -2354,7 +2413,8 @@
             "description": "Code invalide ou expiré."
           },
           "401": {
-            "$ref": "#/components/responses/Unauthorized"
+            "$ref": "#/components/responses/Unauthorized",
+            "description": "Authentification absente, invalide ou clé API non autorisée."
           }
         }
       }
