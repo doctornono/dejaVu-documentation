@@ -1,34 +1,58 @@
-> **Customize this file**: Tailor this template to your project by noting specific contribution types you're looking for, adding a Code of Conduct, or adjusting the writing guidelines to match your style.
+# Contribuer à la documentation DejaVu API
 
-# Contribute to the documentation
+Merci de contribuer à la documentation de l’API DejaVu v1.
 
-Thank you for your interest in contributing to our documentation! This guide will help you get started.
+## Avant de modifier une page
 
-## How to contribute
+Vérifiez le comportement réel de l’endpoint concerné dans le dépôt DejaVu et utilisez `api-reference/openapi.json` comme contrat documentaire.
 
-### Option 1: Edit directly on GitHub
+Une modification d’API doit être répercutée de façon cohérente dans :
 
-1. Navigate to the page you want to edit
-2. Click the "Edit this file" button (the pencil icon)
-3. Make your changes and submit a pull request
+1. l’OpenAPI canonique français ;
+2. l’OpenAPI anglais ;
+3. la page endpoint française ;
+4. la page endpoint anglaise.
 
-### Option 2: Local development
+## Développement local
 
-1. Fork and clone this repository
-2. Install the Mintlify CLI: `npm i -g mint`
-3. Create a branch for your changes
-4. Make changes
-5. Navigate to the docs directory and run `mint dev`
-6. Preview your changes at `http://localhost:3000`
-7. Commit your changes and submit a pull request
+Installer Mintlify :
 
-For more details on local development, see our [development guide](development.mdx).
+```bash
+npm install -g mint
+```
 
-## Writing guidelines
+Lancer l’aperçu :
 
-- **Use active voice**: "Run the command" not "The command should be run"
-- **Address the reader directly**: Use "you" instead of "the user"
-- **Keep sentences concise**: Aim for one idea per sentence
-- **Lead with the goal**: Start instructions with what the user wants to accomplish
-- **Use consistent terminology**: Don't alternate between synonyms for the same concept
-- **Include examples**: Show, don't just tell
+```bash
+mint dev
+```
+
+## Validation obligatoire
+
+Avant de pousser :
+
+```bash
+node scripts/validate-api-v1-docs.mjs
+```
+
+La validation contrôle la parité du contrat OpenAPI, la navigation FR/EN et la correspondance entre opérations et pages.
+
+## Règles de rédaction
+
+- Décrire le comportement réellement implémenté.
+- Utiliser les noms techniques exacts de l’API.
+- Ne pas traduire les routes, `operationId`, noms de propriétés, enums ou exemples techniques.
+- Garder les explications concises.
+- Fournir des exemples utiles lorsque le comportement le nécessite.
+- Ne jamais publier de clé API ou de donnée utilisateur réelle.
+
+## Pull requests
+
+Une pull request doit indiquer clairement :
+
+- les endpoints ou schémas concernés ;
+- si le contrat OpenAPI a changé ;
+- si les versions FR et EN ont été mises à jour ;
+- le résultat de la validation locale.
+
+Les changements purement documentaires restent compatibles avec le contrat existant ; les changements de contrat doivent être justifiés par le comportement de l’API.
