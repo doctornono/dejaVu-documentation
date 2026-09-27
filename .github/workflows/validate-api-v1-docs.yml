@@ -1,0 +1,22 @@
+name: Validate API v1 documentation
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+permissions:
+  contents: read
+
+jobs:
+  validate-api-v1-docs:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Validate API/OpenAPI/Mintlify alignment
+        run: node scripts/validate-api-v1-docs.mjs
