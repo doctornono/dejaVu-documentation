@@ -205,7 +205,8 @@
               "type": "integer",
               "minimum": 1,
               "default": 1
-            }
+            },
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -216,7 +217,8 @@
               "minimum": 1,
               "maximum": 100,
               "default": 20
-            }
+            },
+            "example": 20
           },
           {
             "name": "sort",
@@ -291,8 +293,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20"
+        ]
       },
       "post": {
         "tags": [
@@ -499,7 +500,8 @@
             "description": "Type de widget",
             "schema": {
               "type": "string"
-            }
+            },
+            "example": "up_next"
           },
           {
             "name": "listId",
@@ -515,7 +517,8 @@
             "schema": {
               "type": "integer",
               "default": 1
-            }
+            },
+            "example": 1
           },
           {
             "name": "minimal",
@@ -532,7 +535,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           }
         ],
         "responses": {
@@ -571,8 +575,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "type=up_next&page=1&pageSize=20"
+        ]
       }
     },
     "/history": {
@@ -596,7 +599,8 @@
                 "episode"
               ],
               "default": "all"
-            }
+            },
+            "example": "movie"
           },
           {
             "name": "page",
@@ -605,7 +609,8 @@
               "type": "integer",
               "minimum": 1,
               "default": 1
-            }
+            },
+            "example": 1
           },
           {
             "name": "sort",
@@ -617,7 +622,8 @@
                 "watchedAt:asc",
                 "watchedAt:desc"
               ]
-            }
+            },
+            "example": "watchedAt:desc"
           },
           {
             "name": "minimal",
@@ -644,7 +650,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           }
         ],
         "responses": {
@@ -690,8 +697,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20&type=movie&sort=watchedAt:desc"
+        ]
       },
       "post": {
         "tags": [
@@ -890,7 +896,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -899,7 +906,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           }
         ],
         "responses": {
@@ -941,8 +949,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20"
+        ]
       },
       "post": {
         "tags": [
@@ -1114,7 +1121,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -1123,7 +1131,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           }
         ],
         "responses": {
@@ -1165,8 +1174,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20"
+        ]
       },
       "post": {
         "tags": [
@@ -1375,7 +1383,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -1384,7 +1393,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           }
         ],
         "responses": {
@@ -1426,8 +1436,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20"
+        ]
       },
       "post": {
         "tags": [
@@ -1618,7 +1627,8 @@
                 "movie",
                 "episode"
               ]
-            }
+            },
+            "example": "episode"
           },
           {
             "name": "page",
@@ -1627,7 +1637,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -1636,7 +1647,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           },
           {
             "name": "minimal",
@@ -1644,10 +1656,10 @@
             "schema": {
               "type": "boolean",
               "default": false
-            }
+            },
+            "example": true
           }
-        ],
-        "x-example-query": "type=episode&page=1&pageSize=20&minimal=true"
+        ]
       },
       "post": {
         "tags": [
@@ -1821,7 +1833,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -1830,7 +1843,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           },
           {
             "name": "minimal",
@@ -1838,7 +1852,8 @@
             "schema": {
               "type": "boolean",
               "default": false
-            }
+            },
+            "example": true
           }
         ],
         "responses": {
@@ -1880,8 +1895,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20&minimal=true"
+        ]
       }
     },
     "/me": {
@@ -1986,7 +2000,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "pageSize",
@@ -1995,7 +2010,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           },
           {
             "name": "minimal",
@@ -2004,10 +2020,10 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Retourne une représentation minimale des listes."
+            "description": "Retourne une représentation minimale des listes.",
+            "example": true
           }
-        ],
-        "x-example-query": "page=1&pageSize=20&minimal=true"
+        ]
       },
       "post": {
         "tags": [
@@ -2091,7 +2107,8 @@
               "minimum": 1,
               "default": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Numéro de page (à partir de 1).",
+            "example": 1
           },
           {
             "name": "minimal",
@@ -2100,7 +2117,8 @@
             "schema": {
               "type": "boolean",
               "default": false
-            }
+            },
+            "example": true
           },
           {
             "name": "pageSize",
@@ -2109,7 +2127,8 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Nombre d'éléments par page (1 à 100)."
+            "description": "Nombre d'éléments par page (1 à 100).",
+            "example": 20
           }
         ],
         "responses": {
@@ -2159,8 +2178,7 @@
           {
             "BearerAuth": []
           }
-        ],
-        "x-example-query": "page=1&pageSize=20&minimal=true"
+        ]
       },
       "post": {
         "tags": [
