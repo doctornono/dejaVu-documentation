@@ -1,0 +1,28 @@
+---
+title: "Submitstre un connector"
+openapi: "POST /connectors/submit"
+---
+
+## Usage
+
+Submits une définition de connector pour examen.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X POST -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/connectors/submit"
+```
+
+## Parameters and response
+
+Request parameters, request schemas, and responses are defined by the OpenAPI specification displayed on this page.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats.
+
+## Notes
+
+La définition soumise est validée par l’API avant traitement.
