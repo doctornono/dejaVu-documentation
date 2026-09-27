@@ -354,7 +354,7 @@
           "Collection"
         ],
         "summary": "Remove from collection",
-        "description": "Retire un élément de votre collection. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Removes an item from your collection. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromCollection",
         "parameters": [
           {
@@ -535,7 +535,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           }
         ],
@@ -641,7 +641,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1)."
+            "description": "Page number (starting at 1)."
           },
           {
             "name": "pageSize",
@@ -650,7 +650,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           }
         ],
@@ -703,8 +703,8 @@
         "tags": [
           "History"
         ],
-        "summary": "Ajouter à l'historique",
-        "description": "Enregistre un visionnage dans l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "summary": "Add to history",
+        "description": "Records a watch in history. **Requires a secret key** (`sk_...`).",
         "operationId": "addToHistory",
         "requestBody": {
           "required": true,
@@ -723,7 +723,7 @@
         },
         "responses": {
           "200": {
-            "description": "Visionnage enregistré",
+            "description": "Watch recorded",
             "content": {
               "application/json": {
                 "schema": {
@@ -764,8 +764,8 @@
         "tags": [
           "History"
         ],
-        "summary": "Supprimer de l'historique",
-        "description": "Supprime une entrée de l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "summary": "Remove from history",
+        "description": "Removes a history entry. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromHistory",
         "parameters": [
           {
@@ -788,7 +788,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "ID TMDB du média ou de l'épisode. Facultatif si un contexte d'épisode est fourni.",
+            "description": "TMDB ID of the media or episode. Optional if episode context is provided.",
             "required": false
           },
           {
@@ -798,7 +798,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "ID TMDB de la série pour cibler un épisode."
+            "description": "TMDB ID of the TV show to target an episode."
           },
           {
             "name": "seasonNumber",
@@ -819,7 +819,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Entrée supprimée de l'historique",
+            "description": "History entry removed",
             "content": {
               "application/json": {
                 "schema": {
@@ -863,13 +863,13 @@
           "Favorites"
         ],
         "summary": "Get favorites",
-        "description": "Retourne la liste des favoris de l'utilisateur.",
+        "description": "Returns the user's favorites.",
         "operationId": "getFavorites",
         "parameters": [
           {
             "name": "type",
             "in": "query",
-            "description": "Filtrer par type",
+            "description": "Filter by type",
             "schema": {
               "type": "string",
               "enum": [
@@ -896,7 +896,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
@@ -906,13 +906,13 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           }
         ],
         "responses": {
           "200": {
-            "description": "Liste des favoris",
+            "description": "Favorites list",
             "content": {
               "application/json": {
                 "schema": {
@@ -956,7 +956,7 @@
           "Favorites"
         ],
         "summary": "Add to favorites",
-        "description": "Ajoute un film ou une série aux favoris. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Adds a movie or TV show to favorites. **Requires a secret key** (`sk_...`).",
         "operationId": "addToFavorites",
         "requestBody": {
           "required": true,
@@ -974,7 +974,7 @@
         },
         "responses": {
           "200": {
-            "description": "Ajouté aux favoris",
+            "description": "Added to favorites",
             "content": {
               "application/json": {
                 "schema": {
@@ -1016,7 +1016,7 @@
           "Favorites"
         ],
         "summary": "Remove from favorites",
-        "description": "Retire un élément des favoris. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Removes an item from favorites. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromFavorites",
         "parameters": [
           {
@@ -1042,7 +1042,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Retiré des favoris",
+            "description": "Removed from favorites",
             "content": {
               "application/json": {
                 "schema": {
@@ -1086,13 +1086,13 @@
           "Ratings"
         ],
         "summary": "Get ratings",
-        "description": "Retourne les notes données par l'utilisateur.",
+        "description": "Returns ratings given by the user.",
         "operationId": "getRatings",
         "parameters": [
           {
             "name": "type",
             "in": "query",
-            "description": "Filtrer par type",
+            "description": "Filter by type",
             "schema": {
               "type": "string",
               "enum": [
@@ -1121,7 +1121,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
@@ -1131,13 +1131,13 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           }
         ],
         "responses": {
           "200": {
-            "description": "Liste des notes",
+            "description": "Ratings list",
             "content": {
               "application/json": {
                 "schema": {
@@ -1181,7 +1181,7 @@
           "Ratings"
         ],
         "summary": "Ajouter ou modifier une note",
-        "description": "Attribue ou met à jour une note (1-10) avec avis optionnel. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Assigns or updates a rating (1-10) with an optional review. **Requires a secret key** (`sk_...`).",
         "operationId": "upsertRating",
         "requestBody": {
           "required": true,
@@ -1200,7 +1200,7 @@
         },
         "responses": {
           "200": {
-            "description": "Note enregistrée",
+            "description": "Rating saved",
             "content": {
               "application/json": {
                 "schema": {
@@ -1242,7 +1242,7 @@
           "Ratings"
         ],
         "summary": "Remove a rating",
-        "description": "Supprime une note existante. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Removes an existing rating. **Requires a secret key** (`sk_...`).",
         "operationId": "deleteRating",
         "parameters": [
           {
@@ -1266,7 +1266,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "ID TMDB du média ou de l'épisode. Facultatif si le contexte saison/épisode est fourni."
+            "description": "TMDB ID of the media or episode. Optional if season/episode context is provided."
           },
           {
             "name": "tvShowId",
@@ -1275,7 +1275,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "ID TMDB de la série pour cibler une saison ou un épisode."
+            "description": "TMDB ID of the TV show to target a season or episode."
           },
           {
             "name": "seasonNumber",
@@ -1284,7 +1284,7 @@
               "type": "integer",
               "minimum": 0
             },
-            "description": "Numéro de saison."
+            "description": "Season number."
           },
           {
             "name": "episodeNumber",
@@ -1293,12 +1293,12 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro d'épisode."
+            "description": "Episode number."
           }
         ],
         "responses": {
           "200": {
-            "description": "Note supprimée",
+            "description": "Rating removed",
             "content": {
               "application/json": {
                 "schema": {
@@ -1342,13 +1342,13 @@
           "Watchlist"
         ],
         "summary": "Get watchlist",
-        "description": "Retourne la liste des contenus à regarder.",
+        "description": "Returns the list of content to watch.",
         "operationId": "getWatchlist",
         "parameters": [
           {
             "name": "type",
             "in": "query",
-            "description": "Filtrer par type",
+            "description": "Filter by type",
             "schema": {
               "type": "string",
               "enum": [
@@ -1383,7 +1383,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
@@ -1393,13 +1393,13 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           }
         ],
         "responses": {
           "200": {
-            "description": "Watchlist de l'utilisateur",
+            "description": "User watchlist",
             "content": {
               "application/json": {
                 "schema": {
@@ -1443,7 +1443,7 @@
           "Watchlist"
         ],
         "summary": "Add to watchlist",
-        "description": "Ajoute un film ou une série à la watchlist. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Adds a movie or TV show to the watchlist. **Requires a secret key** (`sk_...`).",
         "operationId": "addToWatchlist",
         "requestBody": {
           "required": true,
@@ -1462,7 +1462,7 @@
         },
         "responses": {
           "200": {
-            "description": "Ajouté à la watchlist",
+            "description": "Added to watchlist",
             "content": {
               "application/json": {
                 "schema": {
@@ -1504,7 +1504,7 @@
           "Watchlist"
         ],
         "summary": "Remove from watchlist",
-        "description": "Retire un élément de la watchlist. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Removes an item from the watchlist. **Requires a secret key** (`sk_...`).",
         "operationId": "removeFromWatchlist",
         "parameters": [
           {
@@ -1530,7 +1530,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Retiré de la watchlist",
+            "description": "Removed from watchlist",
             "content": {
               "application/json": {
                 "schema": {
@@ -1573,8 +1573,8 @@
         "tags": [
           "Scrobble"
         ],
-        "summary": "Sessions de lecture en cours",
-        "description": "Retourne les sessions de lecture actives (lecture en cours).",
+        "summary": "Active playback sessions",
+        "description": "Returns active playback sessions (currently playing).",
         "operationId": "getScrobbleSessions",
         "responses": {
           "200": {
@@ -1637,7 +1637,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
@@ -1647,7 +1647,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           },
           {
@@ -1665,8 +1665,8 @@
         "tags": [
           "Scrobble"
         ],
-        "summary": "Mettre à jour la progression de lecture",
-        "description": "Met à jour la progression de lecture d'un film ou épisode. Si la progression dépasse **90%**, le contenu est automatiquement marqué comme vu dans l'historique. **Requiert une clé secrète** (`sk_...`).",
+        "summary": "Update playback progress",
+        "description": "Updates playback progress for a movie or episode. If progress exceeds **90%**, the content is automatically marked as watched in history. **Requires a secret key** (`sk_...`).",
         "operationId": "updateScrobble",
         "requestBody": {
           "required": true,
@@ -1686,7 +1686,7 @@
         },
         "responses": {
           "200": {
-            "description": "Progression mise à jour. Si > 90%, marqué comme vu automatiquement.",
+            "description": "Progress updated. If > 90%, automatically marked as watched.",
             "content": {
               "application/json": {
                 "schema": {
@@ -1727,8 +1727,8 @@
         "tags": [
           "Scrobble"
         ],
-        "summary": "Supprimer une session de lecture",
-        "description": "Met fin à une session de lecture sans la marquer comme vue. **Requiert une clé secrète** (`sk_...`).",
+        "summary": "Remove a playback session",
+        "description": "Ends a playback session without marking it as watched. **Requires a secret key** (`sk_...`).",
         "operationId": "deleteScrobble",
         "parameters": [
           {
@@ -1779,7 +1779,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Session supprimée",
+            "description": "Session removed",
             "content": {
               "application/json": {
                 "schema": {
@@ -1822,8 +1822,8 @@
         "tags": [
           "Up Next"
         ],
-        "summary": "Séries à suivre (Up Next)",
-        "description": "Retourne les prochains épisodes à regarder pour les séries en cours.",
+        "summary": "Shows to follow (Up Next)",
+        "description": "Returns the next episodes to watch for shows in progress.",
         "operationId": "getUpNext",
         "parameters": [
           {
@@ -1833,7 +1833,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
@@ -1843,7 +1843,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           },
           {
@@ -1858,7 +1858,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Prochains épisodes à regarder",
+            "description": "Next episodes to watch",
             "content": {
               "application/json": {
                 "schema": {
@@ -1903,12 +1903,12 @@
         "tags": [
           "User"
         ],
-        "summary": "Récupérer le profil et les statistiques du compte",
-        "description": "Retourne les informations du profil utilisateur ainsi que ses statistiques globales (temps passé, nombre de films, etc.).",
+        "summary": "Get account profile and statistics",
+        "description": "Returns user profile information and overall statistics (time spent, number of movies, etc.).",
         "operationId": "getMe",
         "responses": {
           "200": {
-            "description": "Profil et statistiques utilisateur",
+            "description": "User profile and statistics",
             "content": {
               "application/json": {
                 "schema": {
@@ -1950,11 +1950,11 @@
           "Lists"
         ],
         "summary": "Get lists",
-        "description": "Retourne toutes les listes personnalisées de l'utilisateur.",
+        "description": "Returns all of the user's custom lists.",
         "operationId": "getLists",
         "responses": {
           "200": {
-            "description": "Listes de l'utilisateur",
+            "description": "User lists",
             "content": {
               "application/json": {
                 "schema": {
@@ -2000,7 +2000,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
@@ -2010,7 +2010,7 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           },
           {
@@ -2020,7 +2020,7 @@
               "type": "boolean",
               "default": false
             },
-            "description": "Retourne une représentation minimale des listes.",
+            "description": "Returns a minimal representation of the lists.",
             "example": true
           }
         ]
@@ -2030,7 +2030,7 @@
           "Lists"
         ],
         "summary": "Create a list",
-        "description": "Crée une nouvelle liste personnalisée. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Creates a new custom list. **Requires a secret key** (`sk_...`).",
         "operationId": "createList",
         "requestBody": {
           "required": true,
@@ -2049,7 +2049,7 @@
         },
         "responses": {
           "201": {
-            "description": "Liste créée",
+            "description": "List created",
             "content": {
               "application/json": {
                 "schema": {
@@ -2068,7 +2068,7 @@
           },
           "422": {
             "$ref": "#/components/responses/UnprocessableEntity",
-            "description": "Données valides syntaxiquement mais impossibles à traiter."
+            "description": "Syntactically valid data that cannot be processed."
           }
         },
         "security": [
@@ -2087,14 +2087,14 @@
           "Lists"
         ],
         "summary": "Get list items",
-        "description": "Retourne les éléments d'une liste avec pagination.",
+        "description": "Returns the items in a list with pagination.",
         "operationId": "getListItems",
         "parameters": [
           {
             "name": "id",
             "in": "path",
             "required": true,
-            "description": "Identifiant de la liste",
+            "description": "List identifier",
             "schema": {
               "type": "string"
             }
@@ -2107,13 +2107,13 @@
               "minimum": 1,
               "default": 1
             },
-            "description": "Numéro de page (à partir de 1).",
+            "description": "Page number (starting at 1).",
             "example": 1
           },
           {
             "name": "minimal",
             "in": "query",
-            "description": "Retourne une représentation minimale des éléments.",
+            "description": "Returns a minimal representation of the items.",
             "schema": {
               "type": "boolean",
               "default": false
@@ -2127,13 +2127,13 @@
               "type": "integer",
               "minimum": 1
             },
-            "description": "Number of items per page (1 à 100).",
+            "description": "Number of items per page (1 to 100).",
             "example": 20
           }
         ],
         "responses": {
           "200": {
-            "description": "Éléments de la liste",
+            "description": "List items",
             "content": {
               "application/json": {
                 "schema": {
@@ -2185,7 +2185,7 @@
           "Lists"
         ],
         "summary": "Add an item to a list",
-        "description": "Ajoute un film ou une série à une liste. **Requiert une clé secrète** (`sk_...`).",
+        "description": "Adds a movie or TV show to a list. **Requires a secret key** (`sk_...`).",
         "operationId": "addItemToList",
         "parameters": [
           {
@@ -2213,7 +2213,7 @@
         },
         "responses": {
           "200": {
-            "description": "Élément ajouté à la liste",
+            "description": "Item added to list",
             "content": {
               "application/json": {
                 "schema": {
@@ -2258,8 +2258,8 @@
         "tags": [
           "Lists"
         ],
-        "summary": "Retirer un élément d'une liste",
-        "description": "Retire un film ou une série d'une liste. **Requiert une clé secrète** (`sk_...`).",
+        "summary": "Remove an item from a list",
+        "description": "Removes a movie or TV show from a list. **Requires a secret key** (`sk_...`).",
         "operationId": "removeItemFromList",
         "parameters": [
           {
@@ -2287,7 +2287,7 @@
             "name": "id",
             "in": "query",
             "required": true,
-            "description": "ID TMDB du média ou de l'épisode.",
+            "description": "TMDB ID of the media or episode.",
             "schema": {
               "type": "integer"
             }
@@ -2295,7 +2295,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Élément retiré de la liste",
+            "description": "Item removed from list",
             "content": {
               "application/json": {
                 "schema": {
@@ -2338,8 +2338,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Vérifier le code utilisateur",
-        "description": "Appelé par le navigateur utilisateur pour valider un `user_code` avant de l'approuver.",
+        "summary": "Verify user code",
+        "description": "Called by the user's browser to validate a `user_code` before approval.",
         "operationId": "verifyDeviceCode",
         "parameters": [
           {
@@ -2353,7 +2353,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Code valide, informations de l'appareil retournées",
+            "description": "Valid code, device information returned",
             "content": {
               "application/json": {
                 "schema": {
@@ -2380,7 +2380,7 @@
             }
           },
           "400": {
-            "description": "Code manquant, déjà utilisé ou expiré."
+            "description": "Code missing, already used, or expired."
           }
         },
         "security": []
@@ -2391,8 +2391,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Approuver le code utilisateur",
-        "description": "Appelé depuis le compte utilisateur. Requiert la session DejaVu du navigateur.",
+        "summary": "Approve user code",
+        "description": "Called from the user account. Requires the DejaVu browser session.",
         "operationId": "approveDeviceCode",
         "security": [
           {
@@ -2422,7 +2422,7 @@
         },
         "responses": {
           "200": {
-            "description": "Appareil autorisé avec succès",
+            "description": "Device authorized successfully",
             "content": {
               "application/json": {
                 "schema": {
@@ -2438,7 +2438,7 @@
             }
           },
           "400": {
-            "description": "Code invalide ou expiré."
+            "description": "Invalid or expired code."
           },
           "401": {
             "$ref": "#/components/responses/Unauthorized",
@@ -2452,8 +2452,8 @@
         "tags": [
           "Auth"
         ],
-        "summary": "Obtenir le QR code d’un appareil",
-        "description": "Retourne un PNG contenant l’URL de vérification associée à un user_code encore en attente.",
+        "summary": "Get a device QR code",
+        "description": "Returns a PNG containing the verification URL associated with a pending user_code.",
         "operationId": "getDeviceQr",
         "security": [],
         "parameters": [
@@ -2482,10 +2482,10 @@
             "description": "user_code invalide"
           },
           "404": {
-            "description": "Code introuvable ou expiré"
+            "description": "Code not found or expired"
           },
           "429": {
-            "description": "Trop de demandes"
+            "description": "Too many requests"
           }
         }
       }
@@ -2495,7 +2495,7 @@
         "tags": [
           "Channels"
         ],
-        "summary": "Lister les chaînes",
+        "summary": "List channels",
         "operationId": "getChannels",
         "parameters": [
           {
@@ -2547,7 +2547,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Liste paginée",
+            "description": "Paginated list",
             "content": {
               "application/json": {
                 "schema": {
@@ -2557,7 +2557,7 @@
             }
           },
           "400": {
-            "description": "Paramètres invalides"
+            "description": "Invalid parameters"
           },
           "500": {
             "description": "Server error"
@@ -2592,7 +2592,7 @@
         ],
         "responses": {
           "200": {
-            "description": "Chaîne",
+            "description": "Channel",
             "content": {
               "application/json": {
                 "schema": {
@@ -2602,7 +2602,7 @@
             }
           },
           "404": {
-            "description": "Chaîne introuvable"
+            "description": "Channel introuvable"
           },
           "500": {
             "description": "Server error"
@@ -2623,13 +2623,13 @@
         "tags": [
           "Connectors"
         ],
-        "summary": "Lister les connecteurs approuvés",
-        "description": "Endpoint public utilisé par l’extension navigateur.",
+        "summary": "List approved connectors",
+        "description": "Public endpoint used by the browser extension.",
         "operationId": "getConnectors",
         "security": [],
         "responses": {
           "200": {
-            "description": "Connecteurs approuvés",
+            "description": "Approved connectors",
             "content": {
               "application/json": {
                 "schema": {
@@ -2639,7 +2639,7 @@
             }
           },
           "304": {
-            "description": "Aucune modification depuis l’ETag fourni"
+            "description": "No changes since the provided ETag"
           },
           "500": {
             "description": "Server error"
@@ -2653,7 +2653,7 @@
           "Connectors"
         ],
         "summary": "Submit a connector",
-        "description": "Soumet un connecteur pour revue. Limite : 5 soumissions par heure et par utilisateur.",
+        "description": "Submits a connector for review. Limit: 5 submissions per hour per user.",
         "operationId": "submitConnector",
         "requestBody": {
           "required": true,
@@ -2686,7 +2686,7 @@
             }
           },
           "400": {
-            "description": "Données invalides"
+            "description": "Invalid data"
           },
           "429": {
             "description": "Limite atteinte"
@@ -2730,7 +2730,7 @@
         },
         "responses": {
           "200": {
-            "description": "Lot importé",
+            "description": "Batch imported",
             "content": {
               "application/json": {
                 "schema": {
@@ -2740,7 +2740,7 @@
             }
           },
           "400": {
-            "description": "Lot ou paramètres invalides"
+            "description": "Invalid batch or parameters"
           },
           "500": {
             "description": "Server error"
@@ -2762,7 +2762,7 @@
           "Media"
         ],
         "summary": "Resolve media",
-        "description": "Recherche un média à partir d’un IMDb ID, d’un TMDB ID et type, d’un titre/année ou du contexte d’un épisode.",
+        "description": "Finds a media item from an IMDb ID, a TMDB ID and type, a title/year, or episode context.",
         "operationId": "resolveMedia",
         "requestBody": {
           "required": true,
@@ -2780,7 +2780,7 @@
         },
         "responses": {
           "200": {
-            "description": "Média résolu",
+            "description": "Media resolved",
             "content": {
               "application/json": {
                 "schema": {
@@ -2790,10 +2790,10 @@
             }
           },
           "400": {
-            "description": "Identifiants ou contexte invalides"
+            "description": "Invalid identifiers or context"
           },
           "404": {
-            "description": "Média introuvable"
+            "description": "Media not found"
           },
           "500": {
             "description": "Server error"
@@ -2814,8 +2814,8 @@
         "tags": [
           "Media"
         ],
-        "summary": "Récupérer le statut utilisateur de médias",
-        "description": "Retourne le statut utilisateur pour un lot de films, séries ou épisodes.",
+        "summary": "Get user media status",
+        "description": "Returns user status for a batch of movies, TV shows, or episodes.",
         "operationId": "getMediaStatus",
         "requestBody": {
           "required": true,
@@ -2841,7 +2841,7 @@
         },
         "responses": {
           "200": {
-            "description": "Statuts retournés",
+            "description": "Statuses returned",
             "content": {
               "application/json": {
                 "schema": {
@@ -2851,7 +2851,7 @@
             }
           },
           "400": {
-            "description": "Aucun élément valide"
+            "description": "No valid items"
           },
           "500": {
             "description": "Server error"
@@ -2874,18 +2874,18 @@
         "type": "apiKey",
         "in": "header",
         "name": "x-api-key",
-        "description": "Clé API DejaVu. pk_* = lecture seule ; sk_* = lecture et écriture."
+        "description": "DejaVu API key. pk_* = read-only; sk_* = read and write."
       },
       "BearerAuth": {
         "type": "http",
         "scheme": "bearer",
-        "description": "Clé API DejaVu envoyée dans Authorization: Bearer <key>."
+        "description": "DejaVu API key sent in Authorization: Bearer <key>."
       },
       "SessionCookie": {
         "type": "apiKey",
         "in": "cookie",
         "name": "better-auth.session_token",
-        "description": "Session utilisateur DejaVu utilisée par l’approbation du Device Flow dans le navigateur."
+        "description": "DejaVu user session used to approve the Device Flow in the browser."
       }
     },
     "schemas": {
@@ -2942,7 +2942,7 @@
             "properties": {
               "format": {
                 "type": "string",
-                "description": "Format de stockage (Blu-ray, DVD, etc.)",
+                "description": "Storage format (Blu-ray, DVD, etc.)",
                 "nullable": true
               },
               "notes": {
@@ -2977,7 +2977,7 @@
           },
           "format": {
             "type": "string",
-            "description": "Format de stockage (ex: Blu-ray, DVD, digital)"
+            "description": "Storage format (e.g. Blu-ray, DVD, digital)"
           },
           "notes": {
             "type": "string"
@@ -2998,7 +2998,7 @@
               },
               "count": {
                 "type": "integer",
-                "description": "Nombre de fois vu",
+                "description": "Number of times watched",
                 "default": 1
               },
               "episodeId": {
@@ -3033,38 +3033,38 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB du film ou de l'épisode. Pour un épisode, peut être remplacé par tvShowId + seasonNumber + episodeNumber."
+            "description": "TMDB ID of the movie or episode. For an episode, it can be replaced by tvShowId + seasonNumber + episodeNumber."
           },
           "count": {
             "type": "integer",
             "default": 1,
-            "description": "Nombre de visionnages à enregistrer"
+            "description": "Number of watches to record"
           },
           "watchedAt": {
             "type": "string",
             "format": "date-time",
-            "description": "Date et heure du visionnage (défaut: maintenant)"
+            "description": "Watch date and time (default: now)"
           },
           "tmdbId": {
             "type": "integer",
-            "description": "Alias du TMDB ID de la série pour résoudre un épisode par contexte."
+            "description": "Alias for the TV show TMDB ID used to resolve an episode by context."
           },
           "tvShowId": {
             "type": "integer",
-            "description": "ID TMDB de la série, utilisé pour résoudre un épisode."
+            "description": "TV show TMDB ID, used to resolve an episode."
           },
           "seasonNumber": {
             "type": "integer",
             "minimum": 0,
-            "description": "Numéro de saison pour la résolution d'un épisode."
+            "description": "Season number for episode resolution."
           },
           "episodeNumber": {
             "type": "integer",
             "minimum": 1,
-            "description": "Numéro d'épisode pour la résolution d'un épisode."
+            "description": "Episode number for episode resolution."
           }
         },
-        "description": "Ajoute un film ou un épisode à l'historique. Les séries TV ne constituent pas une entrée d'historique autonome : utilisez type=episode."
+        "description": "Adds a movie or episode to history. TV shows are not standalone history entries: use type=episode."
       },
       "RatingItem": {
         "allOf": [
@@ -3109,7 +3109,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB du média ou de l'épisode. Pour une saison/épisode, le contexte de série peut être nécessaire."
+            "description": "TMDB ID of the media or episode. Pour une saison/épisode, le contexte de série peut être nécessaire."
           },
           "rating": {
             "type": "integer",
@@ -3149,7 +3149,7 @@
             "properties": {
               "priority": {
                 "type": "integer",
-                "description": "Ordre de priorité",
+                "description": "Priority order",
                 "nullable": true
               },
               "notes": {
@@ -3419,7 +3419,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "ID TMDB du média ou de l'épisode. Pour un épisode, peut être remplacé par le contexte tvShowId + seasonNumber + episodeNumber."
+            "description": "TMDB ID of the media or episode. Pour un épisode, peut être remplacé par le contexte tvShowId + seasonNumber + episodeNumber."
           },
           "notes": {
             "type": "string"
@@ -3431,7 +3431,7 @@
           "tvShowId": {
             "type": "integer",
             "minimum": 1,
-            "description": "ID TMDB de la série, utilisé pour résoudre un épisode."
+            "description": "TV show TMDB ID, used to resolve an episode."
           },
           "seasonNumber": {
             "type": "integer",
