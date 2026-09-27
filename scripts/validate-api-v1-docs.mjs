@@ -110,7 +110,7 @@ if (docs.colors?.primary !== "#7B2820" || docs.colors?.light !== "#7B2820" || do
 }
 if (docs.navbar?.links?.length) fail("Navbar contains extra links; keep only the primary DejaVu CTA");
 if (docs.navbar?.primary?.label !== "Ouvrir DejaVu") fail("Missing primary DejaVu navbar CTA");
-\nif (process.exitCode) process.exit(process.exitCode);
+if (process.exitCode) throw new Error("Validation failed");
 console.log(`OK: ${operations.length} OpenAPI operations`);
 console.log(`OK: ${Object.keys(spec.paths ?? {}).length} OpenAPI paths`);
 console.log(`OK: ${french.keys.length} French endpoint pages`);
