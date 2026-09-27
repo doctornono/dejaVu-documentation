@@ -1,55 +1,92 @@
-# Mintlify Starter Kit
+# DejaVu API Documentation
 
-Use the starter kit to get your docs deployed and ready to customize.
+Documentation officielle de l’API publique **DejaVu v1**.
 
-Click the green **Use this template** button at the top of this repo to copy the Mintlify starter kit. The starter kit contains examples with
+DejaVu est un service de suivi de films et séries. Cette documentation décrit le contrat HTTP public permettant d’intégrer DejaVu dans des applications, extensions et clients comme Kodi.
 
-- Guide pages
-- Navigation
-- Customizations
-- API reference pages
-- Use of popular components
+## Contenu
 
-**[Follow the full quickstart guide](https://starter.mintlify.com/quickstart)**
+- **API Reference** : 39 opérations réparties sur 24 routes.
+- **OpenAPI** : contrat canonique disponible en français et en anglais.
+- **Authentification** : clés API et Device Flow.
+- **Intégrations** : connecteurs navigateur et import Kodi.
+- **Médias** : résolution d’identifiants et récupération des statuts utilisateur.
 
-## AI-assisted writing
+La documentation est disponible en **français** et en **anglais**.
 
-Set up your AI coding tool to work with Mintlify:
+## Contrat OpenAPI
+
+Le fichier de référence français est :
+
+`api-reference/openapi.json`
+
+La version anglaise est :
+
+`api-reference/en/openapi.json`
+
+Les deux contrats doivent conserver exactement le même ensemble d’opérations et de schémas. Les identifiants techniques, routes, `operationId`, propriétés et valeurs d’exemple restent inchangés entre les langues.
+
+## Développement local
+
+Le site utilise [Mintlify](https://mintlify.com/) comme moteur de documentation.
+
+Installer la CLI :
 
 ```bash
-npx skills add https://mintlify.com/docs
+npm install -g mint
 ```
 
-This command installs Mintlify's documentation skill for your configured AI tools like Claude Code, Cursor, Windsurf, and others. The skill includes component reference, writing standards, and workflow guidance.
+Lancer l’aperçu local depuis la racine du dépôt :
 
-See the [AI tools guides](/ai-tools) for tool-specific setup.
-
-## Development
-
-Install the [Mintlify CLI](https://www.npmjs.com/package/mint) to preview your documentation changes locally. To install, use the following command:
-
-```
-npm i -g mint
-```
-
-Run the following command at the root of your documentation, where your `docs.json` is located:
-
-```
+```bash
 mint dev
 ```
 
-View your local preview at `http://localhost:3000`.
+## Validation
 
-## Publishing changes
+La validation contractuelle est centralisée dans :
 
-Install our GitHub app from your [dashboard](https://dashboard.mintlify.com/settings/organization/github-app) to propagate changes from your repo to your deployment. Changes are deployed to production automatically after pushing to the default branch.
+```bash
+node scripts/validate-api-v1-docs.mjs
+```
 
-## Need help?
+Elle vérifie notamment :
 
-### Troubleshooting
+- la validité des deux OpenAPI et de `docs.json` ;
+- la parité FR/EN des opérations et des schémas ;
+- la présence des pages correspondant aux 39 opérations ;
+- la cohérence OpenAPI ↔ pages Mintlify ;
+- les déclarations d’authentification ;
+- l’absence de l’ancien endpoint `/collection/batch`.
 
-- If your dev environment isn't running: Run `mint update` to ensure you have the most recent version of the CLI.
-- If a page loads as a 404: Make sure you are running in a folder with a valid `docs.json`.
+GitHub Actions exécute cette validation sur les pushes vers `main` et les pull requests.
 
-### Resources
-- [Mintlify documentation](https://mintlify.com/docs)
+## Organisation
+
+```text
+api-reference/
+  *.mdx                 # référence française
+  openapi.json          # contrat OpenAPI canonique
+  en/
+    *.mdx               # référence anglaise
+    openapi.json        # contrat OpenAPI anglais
+
+scripts/
+  validate-api-v1-docs.mjs
+
+docs.json               # navigation et identité du site
+```
+
+## Contribution
+
+Les changements de contrat API doivent être répercutés dans l’OpenAPI, les pages françaises et anglaises, puis validés avant publication.
+
+Voir [CONTRIBUTING.md](CONTRIBUTING.md) pour le workflow de contribution.
+
+## DejaVu
+
+- Site : https://dejavu.plus
+- API : documentation de la version publique v1
+- Dépôt : https://github.com/doctornono/dejaVu
+
+Le site de documentation est publié avec Mintlify ; le contenu de ce dépôt reste centré sur **l’API DejaVu**, et non sur la documentation du produit Mintlify.
