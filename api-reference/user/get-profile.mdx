@@ -2,3 +2,27 @@
 title: "Récupérer le profil et les statistiques du compte"
 openapi: "GET /me"
 ---
+
+## Utilisation
+
+Retourne le profil de l’utilisateur authentifié et ses informations statistiques exposées par l’API.
+
+L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
+
+## Exemple
+
+```bash
+curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/me?page=1&pageSize=20"
+```
+
+## Paramètres et réponse
+
+Les paramètres, schémas de requête et réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
+
+## Notes
+
+N’exposez jamais une clé API `sk_` dans du code client ou un dépôt public.
