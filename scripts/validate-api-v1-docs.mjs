@@ -108,7 +108,7 @@ function inspectPage(relative, label) {
   }
 
   const requiresAuth = Array.isArray(operation.security) && operation.security.length > 0;
-  if (!requiresAuth && /Authentication is required|API key is required/i.test(content)) {
+  if (!requiresAuth && /Authentication is required|(?<!No )API key is required/i.test(content)) {
     fail(`${relative}.mdx: page requires API authentication but OpenAPI declares the operation public`);
   }
   if (requiresAuth && /This operation is public|No API key is required/i.test(content)) {
