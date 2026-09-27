@@ -2,3 +2,27 @@
 title: "Ajouter aux favoris"
 openapi: "POST /favorites"
 ---
+
+## Utilisation
+
+Ajoute un média aux favoris de l’utilisateur authentifié.
+
+L’authentification est requise via `x-api-key` ou `Authorization: Bearer`.
+
+## Exemple
+
+```bash
+curl -X POST -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/favorites"
+```
+
+## Paramètres et réponse
+
+Le corps JSON et les réponses sont définis par la spécification OpenAPI affichée sur cette page.
+
+## Erreurs
+
+Consultez **Responses** pour les codes et formats d’erreur propres à l’opération.
+
+## Notes
+
+Le média doit être identifié avec les champs prévus par le schéma de requête.
