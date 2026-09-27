@@ -1,0 +1,28 @@
+---
+title: "Séries à suivre (Up Next)"
+openapi: "GET /upnext"
+---
+
+## Usage
+
+Retourne les prochains episodes à regarder, avec pagination.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X GET -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/upnext?page=1&pageSize=20"
+```
+
+## Parameters and response
+
+Request parameters, request schemas, and responses are defined by the OpenAPI specification displayed on this page. Use the schema fields to build the request.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats. Une réponse `401` indique une authentification absente ou invalide.
+
+## Notes
+
+La pagination utilise `page` et `pageSize` ; l’ancien paramètre `limit` ne fait pas partie du contrat V1.
