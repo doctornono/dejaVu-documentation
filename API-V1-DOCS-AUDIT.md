@@ -1,44 +1,34 @@
-# Audit documentation API v1 — DejaVu
+# Audit de la documentation API v1 — DejaVu
 
-## État vérifié
+## État du contrat
 
-La documentation API v1 a maintenant été réalignée sur le contrat OpenAPI présent dans ce dépôt.
+Le dépôt documente actuellement :
 
-### Contrat OpenAPI
-
-`api-reference/openapi.json` contient actuellement :
-
-- **24 chemins**
+- **24 routes**
 - **39 opérations**
-- **29 schémas**
-- aucune référence `$ref` vers un schéma inexistant
-- authentification par `ApiKeyHeader` et `BearerAuth`
-- déclaration `security` explicite sur chaque opération
-- cinq opérations publiques du Device Flow / Connectors sans authentification API
+- **29 schémas OpenAPI**
+- une référence française et une référence anglaise
+- une authentification par `x-api-key` ou Bearer pour les opérations protégées
+- un Device Flow avec ses endpoints publics et son endpoint d’approbation par session navigateur
+- les intégrations Connectors et Kodi
+- les opérations Channels et Media
 
-Les endpoints couverts comprennent notamment :
+L’ancien endpoint `/collection/batch` est absent du contrat et de la navigation.
 
-- Device Flow : code, token, verify, approve, QR
-- collection
-- history
-- favorites
-- ratings
-- watchlist
-- scrobble
-- upnext
-- dashboard
-- lists et items
-- profile `/me`
-- channels
-- connectors et soumission
-- Kodi import
-- media resolve/status
+## Parité FR / EN
 
-L'ancien endpoint `/collection/batch` n'est plus présent dans l'OpenAPI.
+La validation automatique vérifie que :
 
-### Navigation Mintlify
+- les deux OpenAPI existent et sont valides ;
+- les ensembles d’opérations sont identiques ;
+- les ensembles de schémas sont identiques ;
+- la version OpenAPI et la version de l’API sont identiques ;
+- les 39 opérations disposent d’une page FR et d’une page EN ;
+- les références `openapi:` des pages correspondent aux opérations du contrat.
 
-La navigation API reference couvre les groupes :
+## Structure documentaire
+
+La navigation est limitée à la référence API :
 
 - Introduction
 - Auth
@@ -57,58 +47,34 @@ La navigation API reference couvre les groupes :
 - Connectors
 - Kodi
 
-La page obsolète `collection/batch-add-to-collection` a été retirée de la navigation.
+Les anciens contenus du starter Mintlify ont été supprimés lorsqu’ils n’étaient pas utilisés par la documentation DejaVu.
 
-### Authentification documentée
+## Validation
 
-La documentation utilise désormais :
+Commande locale :
 
-- `x-api-key`
-- `Authorization: Bearer`
+```bash
+node scripts/validate-api-v1-docs.mjs
+```
 
-La query string `api_key` n'est pas documentée comme mécanisme d'authentification.
+CI :
 
-Le Device Flow est documenté comme un flux en plusieurs étapes : création du device code, présentation du code/QR, approbation, échange contre un token, puis utilisation du token.
+```text
+.github/workflows/validate-api-v1-docs.yml
+```
 
-## Outil de synchronisation
+Le workflow est déclenché sur les pushes vers `main` et les pull requests.
 
-`scripts/sync-api-v1-docs.mjs` reste l'outil de mise à jour du contrat et des pages lorsque l'API évolue.
+## Règle de maintenance
 
-## Validation automatique
+Lorsqu’un endpoint évolue, mettre à jour dans cet ordre :
 
-`scripts/validate-api-v1-docs.mjs` vérifie :
+1. comportement réel et tests dans le dépôt DejaVu ;
+2. OpenAPI canonique ;
+3. OpenAPI anglais ;
+4. pages FR ;
+5. pages EN ;
+6. validation locale ;
+7. CI.
 
-- la validité JSON de l'OpenAPI et de `docs.json`
-- la présence d'un `operationId` et de réponses pour chaque opération
-- la présence d'une déclaration `security` explicite
-- les security schemes `ApiKeyHeader` et `BearerAuth`
-- l'absence de `/collection/batch`
-- l'existence de chaque page référencée dans la navigation
-- la correspondance bidirectionnelle OpenAPI ↔ pages Mintlify
-- l'égalité du nombre d'opérations OpenAPI et de pages endpoint
-
-## CI
-
-`.github/workflows/validate-api-v1-docs.yml` exécute automatiquement cette validation sur :
-
-- chaque push vers `main`
-- chaque pull request vers `main`
-
-## Prochaines vérifications
-
-1. Laisser GitHub Actions exécuter la validation.
-2. Vérifier le résultat du workflow.
-3. Lancer un build Mintlify local ou depuis l'environnement de documentation.
-4. Vérifier les exemples de requêtes avec une clé de test.
-5. Compléter ensuite les guides pratiques FR/EN autour de l'API v1.
-
-## Sources de vérité
-
-L'alignement doit rester piloté par :
-
-1. les routes réelles `app/api/v1/**/route.ts` du dépôt DejaVu ;
-2. les tests d'intégration API v1 ;
-3. `api-reference/openapi.json` comme contrat documentaire ;
-4. les pages Mintlify et leur validation CI.
-
-L'objectif est d'éviter toute divergence entre comportement réel, contrat OpenAPI et documentation publique.
+Cet audit décrit l’état documentaire ; il ne remplace pas les tests fonctionnels de l’API dans le dépôt DejaVu.
