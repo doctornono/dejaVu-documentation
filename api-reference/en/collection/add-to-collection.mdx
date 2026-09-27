@@ -1,0 +1,28 @@
+---
+title: "Add to Collection"
+openapi: "POST /collection"
+---
+
+## Usage
+
+Adds a media item to the authenticated user's collection.
+
+Authentication is required via `x-api-key` or `Authorization: Bearer`.
+
+## Example
+
+```bash
+curl -X POST -H "x-api-key: $DEJAVU_API_KEY" -H "Content-Type: application/json" "https://dejavu.plus/api/v1/collection"
+```
+
+## Parameters and response
+
+Parameters, schemas, and responses are defined by the OpenAPI specification displayed on this page. Envoyez un corps JSON conforme au schéma indiqué.
+
+## Errors
+
+See **Responses** for the operation-specific error codes and formats.
+
+## Notes
+
+For episodes, use the series, season, and episode context defined by the schema. Never expose an `sk_` API key in client-side code or a public repository.
