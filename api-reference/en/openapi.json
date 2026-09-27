@@ -1180,7 +1180,7 @@
         "tags": [
           "Ratings"
         ],
-        "summary": "Ajouter ou modifier une note",
+        "summary": "Add or update a rating",
         "description": "Assigns or updates a rating (1-10) with an optional review. **Requires a secret key** (`sk_...`).",
         "operationId": "upsertRating",
         "requestBody": {
@@ -1750,7 +1750,7 @@
             "schema": {
               "type": "integer"
             },
-            "description": "ID TMDB du film ou de l'épisode. Facultatif si le contexte d'épisode est fourni."
+            "description": "TMDB ID of the movie or episode. Optional if episode context is provided."
           },
           {
             "name": "tvShowId",
@@ -3109,7 +3109,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "TMDB ID of the media or episode. Pour une saison/épisode, le contexte de série peut être nécessaire."
+            "description": "TMDB ID of the media or episode. For a season/episode, TV show context may be required."
           },
           "rating": {
             "type": "integer",
@@ -3248,11 +3248,11 @@
           },
           "progress": {
             "type": "integer",
-            "description": "Secondes déjà lues"
+            "description": "Seconds already played"
           },
           "duration": {
             "type": "integer",
-            "description": "Durée totale du contenu en secondes"
+            "description": "Total content duration in seconds"
           },
           "tmdbId": {
             "type": "integer",
@@ -3419,7 +3419,7 @@
           },
           "id": {
             "type": "integer",
-            "description": "TMDB ID of the media or episode. Pour un épisode, peut être remplacé par le contexte tvShowId + seasonNumber + episodeNumber."
+            "description": "TMDB ID of the media or episode. For an episode, it can be replaced by tvShowId + seasonNumber + episodeNumber."
           },
           "notes": {
             "type": "string"
@@ -3436,12 +3436,12 @@
           "seasonNumber": {
             "type": "integer",
             "minimum": 0,
-            "description": "Numéro de saison pour un épisode."
+            "description": "Season number for an episode."
           },
           "episodeNumber": {
             "type": "integer",
             "minimum": 1,
-            "description": "Numéro d'épisode pour un épisode."
+            "description": "Episode number for an episode."
           }
         },
         "description": "Adds a movie, TV show, or episode to a list. Rules depend on the list kind."
